@@ -1,0 +1,2151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Little Lamplight Book &middot; Bedtime Stories for Small People</title>
+<meta name="description" content="A hand-bound collection of ten classic public-domain fairy tales and fables, gently abridged for reading aloud to toddlers aged two to four.">
+<meta name="color-scheme" content="light">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;0,900;1,400;1,700&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23FAF5ED'/><path d='M6 8h9a3 3 0 013 3v13a3 3 0 00-3-3H6z' fill='%23B23A2E'/><path d='M26 8h-9a3 3 0 00-3 3v13a3 3 0 013-3h9z' fill='%232F5D4E'/></svg>">
+
+<style>
+/* ============================================================
+   1. DESIGN TOKENS
+   ============================================================ */
+:root {
+  /* paper + ink */
+  --paper:        #FAF5ED;
+  --paper-warm:   #F4EADA;
+  --paper-card:   #FFFBF3;
+  --paper-deep:   #EDE0CC;
+  --ink:          #2C1810;
+  --ink-soft:     #5C4433;
+  --ink-faint:    #7A6656;
+
+  /* accents */
+  --red:          #B23A2E;
+  --red-deep:     #8C2A22;
+  --gold:         #D9A441;
+  --gold-ink:     #8A6015;   /* gold dark enough to read as text on paper */
+  --gold-soft:    #EFD9A6;
+  --forest:       #2F5D4E;
+  --forest-soft:  #7FA492;
+  --sky:          #A9C7D8;
+  --blush:        #E8A98F;
+
+  /* lines + shadow */
+  --rule:         rgba(44, 24, 16, 0.14);
+  --rule-strong:  rgba(44, 24, 16, 0.28);
+  --shadow-sm:    0 1px 2px rgba(44,24,16,.06), 0 2px 8px rgba(44,24,16,.05);
+  --shadow-md:    0 2px 4px rgba(44,24,16,.06), 0 10px 26px rgba(44,24,16,.10);
+  --shadow-lg:    0 6px 12px rgba(44,24,16,.08), 0 26px 60px rgba(44,24,16,.16);
+
+  /* type */
+  --font-display: "Playfair Display", "Iowan Old Style", Georgia, serif;
+  --font-body:    "Nunito", "Segoe UI", system-ui, -apple-system, sans-serif;
+
+  /* rhythm */
+  --measure:      60ch;
+  --read-size:    1.4rem;      /* 22.4px read-aloud body */
+  --radius:       14px;
+  --radius-lg:    22px;
+  --gutter:       clamp(1.1rem, 4vw, 2.75rem);
+  --ease:         cubic-bezier(.22,.61,.36,1);
+  --ease-soft:    cubic-bezier(.4,0,.2,1);
+}
+
+/* ============================================================
+   2. RESET + BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--ink);
+  background-color: var(--paper);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Paper: warm wash + fibre grain, drawn with gradients and an inline
+   SVG turbulence tile so the file stays fully self-contained. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(ellipse 80% 55% at 12% -8%,  rgba(217,164,65,.14), transparent 60%),
+    radial-gradient(ellipse 70% 50% at 92% 4%,   rgba(178,58,46,.08),  transparent 62%),
+    radial-gradient(ellipse 90% 60% at 50% 108%, rgba(47,93,78,.09),   transparent 65%);
+}
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: .40;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23g)' opacity='.42'/%3E%3C/svg%3E");
+}
+
+img, svg { display: block; max-width: 100%; }
+button { font: inherit; color: inherit; }
+
+/* Focus: a gold ring, never removed */
+:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+:focus:not(:focus-visible) { outline: none; }
+
+::selection { background: var(--gold-soft); color: var(--ink); }
+
+.skip-link {
+  position: absolute; left: 50%; top: 0;
+  transform: translate(-50%, -140%);
+  z-index: 999;
+  background: var(--ink); color: var(--paper);
+  padding: .7rem 1.4rem; border-radius: 0 0 12px 12px;
+  font-weight: 700; text-decoration: none;
+  transition: transform .2s var(--ease);
+}
+.skip-link:focus { transform: translate(-50%, 0); }
+
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* ============================================================
+   3. SHARED PIECES
+   ============================================================ */
+.shell {
+  position: relative;
+  z-index: 2;
+  width: min(1240px, 100% - (var(--gutter) * 2));
+  margin-inline: auto;
+}
+
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: .78rem;
+  font-weight: 800;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin: 0;
+}
+
+.ornament {
+  display: flex; align-items: center; justify-content: center;
+  gap: .85rem; color: var(--gold-ink);
+}
+.ornament::before, .ornament::after {
+  content: ""; height: 1px; width: clamp(2rem, 12vw, 7rem);
+  background: linear-gradient(90deg, transparent, var(--rule-strong), transparent);
+}
+
+/* --- buttons --- */
+.btn {
+  --btn-bg: var(--ink);
+  --btn-fg: var(--paper-card);
+  display: inline-flex; align-items: center; gap: .6rem;
+  padding: .82rem 1.6rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  font-weight: 800;
+  font-size: .95rem;
+  letter-spacing: .01em;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: var(--shadow-sm);
+  transition: transform .22s var(--ease), box-shadow .22s var(--ease),
+              background-color .22s var(--ease), color .22s var(--ease);
+}
+.btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.btn:active { transform: translateY(0); box-shadow: var(--shadow-sm); }
+
+.btn--primary { --btn-bg: var(--red); --btn-fg: #FFF7EE; }
+.btn--primary:hover { --btn-bg: var(--red-deep); }
+
+.btn--ghost {
+  --btn-bg: transparent; --btn-fg: var(--ink);
+  border-color: var(--rule-strong);
+  box-shadow: none;
+}
+.btn--ghost:hover { --btn-bg: var(--paper-card); border-color: var(--ink); }
+
+.btn__icon { flex: none; width: 1.05em; height: 1.05em; }
+
+/* ============================================================
+   4. MASTHEAD
+   ============================================================ */
+.masthead {
+  position: sticky; top: 0; z-index: 60;
+  background: rgba(250, 245, 237, .82);
+  backdrop-filter: saturate(1.4) blur(12px);
+  -webkit-backdrop-filter: saturate(1.4) blur(12px);
+  border-bottom: 1px solid transparent;
+  transition: border-color .3s var(--ease), box-shadow .3s var(--ease);
+}
+.masthead.is-stuck {
+  border-bottom-color: var(--rule);
+  box-shadow: 0 6px 22px rgba(44,24,16,.06);
+}
+.masthead__inner {
+  display: flex; align-items: center; gap: 1rem;
+  min-height: 68px;
+  padding-block: .6rem;
+}
+.brand {
+  display: flex; align-items: center; gap: .7rem;
+  background: none; border: 0; padding: .25rem; cursor: pointer;
+  text-align: left;
+}
+.brand__mark { flex: none; width: 34px; height: 34px; }
+.brand__text { display: flex; flex-direction: column; line-height: 1.08; }
+.brand__title {
+  font-family: var(--font-display);
+  font-weight: 700; font-size: 1.12rem; letter-spacing: .005em;
+}
+.brand__sub {
+  font-size: .66rem; font-weight: 800; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--ink-faint);
+}
+.masthead__spacer { flex: 1; }
+.masthead__actions { display: flex; align-items: center; gap: .55rem; }
+.masthead .btn { padding: .6rem 1.15rem; font-size: .86rem; }
+
+@media (max-width: 620px) {
+  .brand__sub { display: none; }
+  .masthead .btn span { display: none; }
+  .masthead .btn { padding: .6rem .8rem; }
+}
+
+/* ============================================================
+   5. VIEW SWITCHING
+   ============================================================ */
+.view { display: none; }
+.view.is-active { display: block; animation: viewIn .5s var(--ease) both; }
+@keyframes viewIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ============================================================
+   6. HERO
+   ============================================================ */
+.hero {
+  position: relative;
+  padding-block: clamp(2.5rem, 7vw, 5rem) clamp(2rem, 5vw, 3.5rem);
+  text-align: center;
+  overflow: hidden;
+}
+.hero__inner { position: relative; z-index: 2; }
+.hero__eyebrow { margin-bottom: 1.4rem; }
+.hero__title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(2.9rem, 9.5vw, 6.6rem);
+  line-height: .95;
+  letter-spacing: -.02em;
+  margin: 0 0 .1em;
+}
+.hero__title em {
+  display: block;
+  font-style: italic;
+  font-weight: 400;
+  font-size: .52em;
+  letter-spacing: .01em;
+  color: var(--red);
+  margin-top: .18em;
+}
+.hero__lede {
+  max-width: 34rem;
+  margin: 1.6rem auto 0;
+  font-size: clamp(1.05rem, 2.1vw, 1.2rem);
+  line-height: 1.75;
+  color: var(--ink-soft);
+}
+.hero__actions {
+  display: flex; flex-wrap: wrap; gap: .75rem;
+  justify-content: center;
+  margin-top: 2.2rem;
+}
+.hero__meta {
+  display: flex; flex-wrap: wrap; gap: .5rem 1.6rem;
+  justify-content: center;
+  margin-top: 2.6rem;
+  font-size: .82rem; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.hero__meta li { list-style: none; display: flex; align-items: center; gap: .5rem; }
+.hero__meta li::before {
+  content: ""; width: 5px; height: 5px; border-radius: 50%;
+  background: var(--gold);
+}
+.hero__meta { padding: 0; margin-inline: 0; }
+
+/* floating hero scenery */
+.hero__scenery {
+  position: absolute; inset: 0; z-index: 1;
+  pointer-events: none;
+  opacity: .85;
+}
+.hero__scenery svg { position: absolute; }
+.scenery-a { left: -2%;  top: 8%;   width: clamp(90px, 15vw, 190px); animation: drift 17s ease-in-out infinite; }
+.scenery-b { right: -1%; top: 16%;  width: clamp(80px, 13vw, 165px); animation: drift 21s ease-in-out infinite reverse; }
+.scenery-c { left: 8%;   bottom: 2%; width: clamp(60px, 9vw, 120px); animation: drift 25s ease-in-out infinite; }
+.scenery-d { right: 7%;  bottom: 4%; width: clamp(64px, 10vw, 130px); animation: drift 19s ease-in-out infinite reverse; }
+@keyframes drift {
+  0%, 100% { transform: translate3d(0,0,0) rotate(0deg); }
+  50%      { transform: translate3d(0,-16px,0) rotate(2.5deg); }
+}
+@media (max-width: 780px) { .hero__scenery { opacity: .4; } }
+
+/* ============================================================
+   7. TABLE OF CONTENTS
+   ============================================================ */
+.toc {
+  position: relative;
+  margin-block: clamp(2rem, 5vw, 3.5rem);
+  padding: clamp(1.6rem, 4vw, 2.8rem) clamp(1.3rem, 4vw, 3.2rem);
+  background: var(--paper-card);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+.toc::before {
+  content: ""; position: absolute; inset: 9px;
+  border: 1px solid var(--rule);
+  border-radius: calc(var(--radius-lg) - 8px);
+  pointer-events: none;
+}
+.toc__head { text-align: center; margin-bottom: 1.8rem; }
+.toc__title {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3.4vw, 2rem);
+  font-weight: 700; margin: .5rem 0 0;
+}
+.toc__list {
+  list-style: none; margin: 0; padding: 0;
+  columns: 2; column-gap: clamp(1.5rem, 5vw, 4rem);
+}
+@media (max-width: 700px) { .toc__list { columns: 1; } }
+.toc__item { break-inside: avoid; }
+.toc__link {
+  display: flex; align-items: baseline; gap: .6rem;
+  width: 100%; padding: .62rem .5rem;
+  background: none; border: 0; border-radius: 8px;
+  cursor: pointer; text-align: left;
+  transition: background-color .2s var(--ease), color .2s var(--ease);
+}
+.toc__link:hover { background: var(--paper-warm); }
+.toc__link:hover .toc__name { color: var(--red); }
+.toc__num {
+  flex: none;
+  font-family: var(--font-display);
+  font-size: .95rem; font-style: italic;
+  color: var(--gold-ink); width: 1.9rem;
+}
+.toc__name {
+  font-family: var(--font-display);
+  font-size: 1.08rem; font-weight: 500;
+  transition: color .2s var(--ease);
+}
+.toc__leader {
+  flex: 1;
+  border-bottom: 1.5px dotted var(--rule-strong);
+  transform: translateY(-.28em);
+  min-width: 1.5rem;
+}
+.toc__time {
+  flex: none;
+  font-size: .78rem; font-weight: 700;
+  color: var(--ink-faint);
+  letter-spacing: .04em;
+}
+
+/* ============================================================
+   8. SECTION HEADINGS
+   ============================================================ */
+.section-head {
+  text-align: center;
+  max-width: 44rem;
+  margin: clamp(3rem, 8vw, 5rem) auto clamp(1.8rem, 4vw, 2.8rem);
+}
+.section-head__title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700; line-height: 1.1;
+  margin: .7rem 0 0;
+  letter-spacing: -.015em;
+}
+.section-head__note {
+  margin: .9rem auto 0;
+  color: var(--ink-soft);
+  font-size: 1.02rem;
+  max-width: 32rem;
+}
+
+/* ============================================================
+   9. STORY GRID + CARDS
+   ============================================================ */
+.grid {
+  display: grid;
+  gap: clamp(1.3rem, 3vw, 2.1rem);
+  grid-template-columns: 1fr;
+  padding-bottom: clamp(3rem, 8vw, 6rem);
+}
+@media (min-width: 680px)  { .grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1040px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+
+.card {
+  position: relative;
+  display: flex; flex-direction: column;
+  background: var(--paper-card);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+  box-shadow: var(--shadow-sm);
+  transition: transform .34s var(--ease), box-shadow .34s var(--ease),
+              border-color .34s var(--ease);
+}
+.card:hover, .card:focus-visible {
+  transform: translateY(-6px) rotate(-.35deg);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--rule-strong);
+}
+.card:hover .card__title { color: var(--red); }
+.card:hover .card__cta { gap: .85rem; color: var(--red); }
+.card:hover .illus-art { transform: scale(1.035); }
+
+.card__figure {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 8 / 5;
+  background: var(--tint, var(--paper-warm));
+  border-bottom: 1px solid var(--rule);
+  overflow: hidden;
+}
+.card__body {
+  display: flex; flex-direction: column; flex: 1;
+  gap: .7rem;
+  padding: 1.35rem clamp(1.1rem, 2.4vw, 1.5rem) 1.5rem;
+}
+.card__kicker {
+  display: flex; align-items: center; gap: .55rem;
+  font-size: .7rem; font-weight: 800;
+  letter-spacing: .16em; text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.card__kicker b { color: var(--gold-ink); font-weight: 800; }
+.card__title {
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 2.6vw, 1.6rem);
+  font-weight: 700; line-height: 1.16;
+  margin: 0;
+  letter-spacing: -.01em;
+  transition: color .28s var(--ease);
+}
+.card__excerpt {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: .97rem;
+  line-height: 1.68;
+  flex: 1;
+}
+.card__cta {
+  display: inline-flex; align-items: center; gap: .5rem;
+  margin-top: .3rem;
+  font-weight: 800; font-size: .9rem;
+  color: var(--ink);
+  transition: gap .28s var(--ease), color .28s var(--ease);
+}
+.card__cta svg { width: 1em; height: 1em; }
+
+/* ============================================================
+   10. ILLUSTRATION FRAME + INK CANVAS
+   ============================================================ */
+.ink-frame { position: relative; overflow: hidden; }
+.ink-frame::after {          /* paper stands in while the ink is wet */
+  content: "";
+  position: absolute; inset: 0; z-index: 0;
+  background:
+    radial-gradient(ellipse at 50% 120%, rgba(255,255,255,.5), transparent 70%),
+    var(--paper-warm);
+}
+.illus-art {
+  position: relative; z-index: 1;
+  width: 100%; height: 100%;
+  transition: opacity .7s var(--ease-soft), transform .6s var(--ease);
+}
+.illus-art svg { width: 100%; height: 100%; }
+
+/* --- the contract from the blog --- */
+.ink-processed { opacity: 0 !important; }
+.ink-processed.ink-revealed { opacity: 1 !important; }
+
+.ink-canvas {
+  position: absolute; inset: 0; z-index: 2;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  transition: opacity .5s var(--ease-soft);
+}
+.ink-canvas.is-fading { opacity: 0; }
+
+/* ============================================================
+   11. READING VIEW
+   ============================================================ */
+.reader { padding-bottom: clamp(3rem, 9vw, 6rem); }
+.reader__bar {
+  display: flex; align-items: center; gap: 1rem;
+  padding-block: 1.4rem 0;
+}
+.reader__hero {
+  max-width: var(--measure);
+  margin: clamp(1.6rem, 4vw, 2.6rem) auto clamp(1.4rem, 3vw, 2rem);
+  text-align: center;
+}
+.reader__kicker {
+  display: flex; align-items: center; justify-content: center;
+  gap: .6rem; margin-bottom: 1rem;
+  font-size: .74rem; font-weight: 800;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.reader__kicker b { color: var(--gold-ink); }
+.reader__title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(2.3rem, 6.5vw, 4rem);
+  line-height: 1.02;
+  letter-spacing: -.02em;
+  margin: 0;
+}
+.reader__sub {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.05rem, 2.4vw, 1.3rem);
+  color: var(--red);
+  margin: .8rem 0 0;
+}
+.reader__plate {
+  position: relative;
+  max-width: 940px;
+  margin: clamp(1.5rem, 4vw, 2.6rem) auto clamp(2rem, 5vw, 3rem);
+  aspect-ratio: 16 / 9;
+  background: var(--tint, var(--paper-warm));
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+.reader__body {
+  max-width: var(--measure);
+  margin-inline: auto;
+  font-size: var(--read-size);
+  line-height: 1.86;
+  letter-spacing: .002em;
+}
+.reader__body p { margin: 0 0 1.25em; }
+.reader__body p:first-of-type::first-letter {
+  float: left;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 3.5em;
+  line-height: .82;
+  padding: .06em .1em 0 0;
+  color: var(--red);
+}
+.reader__body .aside-plate { margin-block: clamp(2rem, 5vw, 3rem); }
+
+.pull {
+  margin: clamp(2rem, 5vw, 3rem) 0;
+  padding: 1.4rem 0 1.4rem 1.6rem;
+  border-left: 3px solid var(--gold);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.15em;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+.reader__end {
+  max-width: var(--measure);
+  margin: clamp(2.5rem, 6vw, 4rem) auto 0;
+  text-align: center;
+}
+.reader__end-mark {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.5rem;
+  color: var(--gold-ink);
+  margin: 0 0 2.4rem;
+}
+.reader__moral {
+  background: var(--paper-card);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 1.5rem 1.8rem;
+  margin-bottom: 2.6rem;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+.reader__moral b {
+  display: block;
+  font-size: .72rem; font-weight: 800;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: .5rem;
+}
+
+.reader__nav {
+  display: grid; gap: .8rem;
+  grid-template-columns: 1fr;
+  margin-top: 1rem;
+  text-align: left;
+}
+@media (min-width: 620px) { .reader__nav { grid-template-columns: 1fr 1fr; } }
+.navcard {
+  display: flex; flex-direction: column; gap: .3rem;
+  padding: 1.1rem 1.3rem;
+  background: var(--paper-card);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: transform .25s var(--ease), border-color .25s var(--ease),
+              box-shadow .25s var(--ease);
+}
+.navcard:hover { transform: translateY(-3px); border-color: var(--rule-strong); box-shadow: var(--shadow-md); }
+.navcard--next { text-align: right; }
+.navcard__label {
+  font-size: .68rem; font-weight: 800;
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.navcard__title {
+  font-family: var(--font-display);
+  font-size: 1.15rem; font-weight: 700; line-height: 1.2;
+}
+
+/* ============================================================
+   12. FOOTER
+   ============================================================ */
+.footer {
+  position: relative; z-index: 2;
+  border-top: 1px solid var(--rule);
+  background: var(--paper-warm);
+  padding-block: clamp(2.5rem, 6vw, 4rem);
+  text-align: center;
+}
+.footer__title {
+  font-family: var(--font-display);
+  font-size: 1.4rem; font-weight: 700;
+  margin: 1rem 0 .6rem;
+}
+.footer__note {
+  max-width: 34rem; margin: 0 auto;
+  color: var(--ink-soft); font-size: .95rem;
+}
+.footer__fine {
+  margin-top: 1.8rem;
+  font-size: .8rem; color: var(--ink-faint);
+}
+
+/* ============================================================
+   13. BACK TO TOP
+   ============================================================ */
+.to-top {
+  position: fixed; right: clamp(1rem, 3vw, 2rem); bottom: clamp(1rem, 3vw, 2rem);
+  z-index: 70;
+  width: 50px; height: 50px;
+  display: grid; place-items: center;
+  border: 1px solid var(--rule-strong);
+  border-radius: 50%;
+  background: var(--paper-card);
+  color: var(--ink);
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  opacity: 0; visibility: hidden;
+  transform: translateY(12px) scale(.9);
+  transition: opacity .3s var(--ease), transform .3s var(--ease), visibility .3s;
+}
+.to-top.is-visible { opacity: 1; visibility: visible; transform: none; }
+.to-top:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.to-top svg { width: 20px; height: 20px; }
+
+/* ============================================================
+   14. REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+  .card:hover, .navcard:hover, .btn:hover { transform: none; }
+}
+
+/* ============================================================
+   15. PRINT
+   ============================================================ */
+@media print {
+  .masthead, .to-top, .reader__nav, .hero__actions, .footer { display: none !important; }
+  body::before, body::after { display: none; }
+  .ink-processed { opacity: 1 !important; }
+  .ink-canvas { display: none; }
+}
+
+/* ============================================================
+   16. LINKS THAT LOOK LIKE CARDS
+   ============================================================ */
+.card__link { color: inherit; text-decoration: none; }
+.card__link::after {            /* stretch the hit area over the whole card */
+  content: ""; position: absolute; inset: 0; z-index: 6;
+  border-radius: var(--radius-lg);
+}
+.card__link:focus-visible { outline: none; }
+.card__link:focus-visible::after {
+  outline: 3px solid var(--gold);
+  outline-offset: -5px;
+}
+.toc__link, .navcard, .reader__bar a { text-decoration: none; color: inherit; }
+
+/* ============================================================
+   17. MID-STORY FLOURISH
+   ============================================================ */
+.aside-plate {
+  position: relative;
+  width: min(100%, 460px);
+  margin-inline: auto;
+  aspect-ratio: 600 / 80;
+}
+.aside-plate::after { background: none; }
+.aside-plate .illus-art svg { width: 100%; height: 100%; }
+
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to the stories</a>
+
+<!-- =========================================================
+     MASTHEAD
+     ========================================================= -->
+<header class="masthead" id="masthead">
+  <div class="shell masthead__inner">
+    <button class="brand" type="button" data-action="home">
+      <svg class="brand__mark" viewBox="0 0 40 40" aria-hidden="true">
+        <rect x="1" y="4" width="38" height="32" rx="4" fill="#FFFBF3" stroke="#2C1810" stroke-width="1.6"/>
+        <path d="M20 9v24" stroke="#2C1810" stroke-width="1.6"/>
+        <path d="M17 11H8v18h9" fill="#B23A2E" opacity=".9"/>
+        <path d="M23 11h9v18h-9" fill="#2F5D4E" opacity=".9"/>
+        <circle cx="20" cy="6" r="2.4" fill="#D9A441"/>
+      </svg>
+      <span class="brand__text">
+        <span class="brand__title">The Lamplight Book</span>
+        <span class="brand__sub">Stories for small people</span>
+      </span>
+    </button>
+
+    <div class="masthead__spacer"></div>
+
+    <nav class="masthead__actions" aria-label="Primary">
+      <button class="btn btn--ghost" type="button" data-action="contents">
+        <svg class="btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path d="M4 6h16M4 12h16M4 18h10"/>
+        </svg>
+        <span>Contents</span>
+      </button>
+      <button class="btn btn--primary" type="button" data-action="random">
+        <svg class="btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3l1.9 4.6 5 .4-3.8 3.3 1.2 4.9L12 13.6 7.7 16.2l1.2-4.9L5.1 8l5-.4z"/>
+        </svg>
+        <span>Surprise me</span>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- =======================================================
+       VIEW: LIBRARY
+       ======================================================= -->
+  <section class="view is-active" id="view-library" aria-label="Story library">
+
+    <div class="hero">
+      <div class="hero__scenery" aria-hidden="true">
+        <svg class="scenery-a" viewBox="0 0 120 90"><ellipse cx="42" cy="52" rx="40" ry="24" fill="#FFFBF3"/><ellipse cx="74" cy="44" rx="30" ry="22" fill="#FFFBF3"/><ellipse cx="60" cy="60" rx="46" ry="18" fill="#FFFBF3"/></svg>
+        <svg class="scenery-b" viewBox="0 0 120 90"><ellipse cx="52" cy="48" rx="36" ry="22" fill="#FFFBF3"/><ellipse cx="80" cy="54" rx="28" ry="18" fill="#FFFBF3"/></svg>
+        <svg class="scenery-c" viewBox="0 0 100 120"><path d="M50 4l9 22 24 2-18 16 6 24-21-13-21 13 6-24-18-16 24-2z" fill="#EFD9A6"/></svg>
+        <svg class="scenery-d" viewBox="0 0 100 120"><path d="M50 8C34 26 26 40 26 54a24 24 0 0048 0c0-14-8-28-24-46z" fill="#EFD9A6"/><path d="M50 30v54" stroke="#D9A441" stroke-width="3" stroke-linecap="round"/></svg>
+      </div>
+
+      <div class="shell hero__inner">
+        <p class="eyebrow hero__eyebrow">Ten old tales &middot; gently retold</p>
+        <h1 class="hero__title">
+          Once Upon<br>a Bedtime
+          <em>a little book of read-aloud stories</em>
+        </h1>
+        <p class="hero__lede">
+          Classic fairy tales and fables, trimmed to toddler size &mdash; two or three
+          warm minutes each. Big type for tired eyes, short lines for little ears,
+          and a happy ending waiting at the bottom of every page.
+        </p>
+        <div class="hero__actions">
+          <button class="btn btn--primary" type="button" data-action="contents">
+            <svg class="btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 5.5A2.5 2.5 0 015.5 3H11v18H5.5A2.5 2.5 0 013 18.5z"/><path d="M21 5.5A2.5 2.5 0 0018.5 3H13v18h5.5a2.5 2.5 0 002.5-2.5z"/>
+            </svg>
+            Open the book
+          </button>
+          <button class="btn btn--ghost" type="button" data-action="random">
+            <svg class="btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 3l1.9 4.6 5 .4-3.8 3.3 1.2 4.9L12 13.6 7.7 16.2l1.2-4.9L5.1 8l5-.4z"/>
+            </svg>
+            Pick one for me
+          </button>
+        </div>
+        <ul class="hero__meta">
+          <li>10 stories</li>
+          <li>2&ndash;3 minutes each</li>
+          <li>Ages 2&ndash;4</li>
+          <li>Public domain</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="shell">
+      <nav class="toc" id="contents" aria-labelledby="tocTitle">
+        <div class="toc__head">
+          <p class="eyebrow ornament">Contents</p>
+          <h2 class="toc__title" id="tocTitle">What shall we read tonight?</h2>
+        </div>
+        <ol class="toc__list" id="tocList"></ol>
+      </nav>
+
+      <div class="section-head">
+        <p class="eyebrow ornament">The stories</p>
+        <h2 class="section-head__title">Ten small tales, ready to read</h2>
+        <p class="section-head__note">
+          Every picture is drawn right here in the page, and washes itself in
+          with a bloom of ink as you scroll.
+        </p>
+      </div>
+
+      <div class="grid" id="storyGrid"></div>
+    </div>
+  </section>
+
+  <!-- =======================================================
+       VIEW: READER  (filled in by script)
+       ======================================================= -->
+  <article class="view reader" id="view-reader" tabindex="-1" aria-label="Story"></article>
+
+</main>
+
+<footer class="footer">
+  <div class="shell">
+    <p class="eyebrow ornament">The end &middot; for now</p>
+    <h2 class="footer__title">Sleep well, little one</h2>
+    <p class="footer__note">
+      Every story here is in the public domain &mdash; folk tales that have been
+      told at bedsides for hundreds of years. These retellings are shortened and
+      softened for the very youngest listeners.
+    </p>
+    <p class="footer__fine">Hand-set in Playfair Display &amp; Nunito. One page, no plugins, no tracking.</p>
+  </div>
+</footer>
+
+<button class="to-top" id="toTop" type="button" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M12 19V5M5 12l7-7 7 7"/>
+  </svg>
+</button>
+
+<!-- =========================================================
+     ILLUSTRATION PLATES  (all hand-drawn SVG, no image files)
+     ========================================================= -->
+
+<template data-art="three-little-pigs">
+<svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Three little houses of straw, sticks and brick standing on green hills beneath a golden sun.">
+  <rect width="400" height="250" fill="#F7E9CD"/>
+  <circle cx="336" cy="46" r="34" fill="#EFD9A6"/><circle cx="336" cy="46" r="21" fill="#D9A441"/>
+  <ellipse cx="86" cy="42" rx="34" ry="13" fill="#FFFBF3"/><ellipse cx="112" cy="36" rx="22" ry="11" fill="#FFFBF3"/>
+  <path d="M0 168q64-34 132-8t138-4 130 14v80H0z" fill="#9FBFA9"/>
+  <path d="M0 202q104-26 208 2t192-6v52H0z" fill="#2F5D4E"/>
+  <!-- straw house -->
+  <rect x="40" y="166" width="58" height="42" fill="#E9C97C"/>
+  <path d="M30 168 69 128l39 40z" fill="#D9A441"/>
+  <path d="M46 176h46M46 186h46M46 196h46" stroke="#C08F32" stroke-width="1.6" opacity=".7"/>
+  <rect x="60" y="184" width="18" height="24" rx="2" fill="#8C6239"/>
+  <!-- stick house -->
+  <rect x="164" y="162" width="62" height="46" fill="#C08F52"/>
+  <path d="M154 164 195 122l41 42z" fill="#8C6239"/>
+  <path d="M172 162v46M186 162v46M200 162v46M214 162v46" stroke="#6E4B2A" stroke-width="2"/>
+  <rect x="185" y="182" width="20" height="26" rx="2" fill="#5C4433"/>
+  <!-- brick house -->
+  <rect x="288" y="152" width="76" height="56" fill="#C9584A"/>
+  <path d="M278 154 326 108l48 46z" fill="#8C2A22"/>
+  <g stroke="#A83E33" stroke-width="1.5">
+    <path d="M288 166h76M288 180h76M288 194h76M306 152v14M344 152v14M296 166v14M334 166v14M306 180v14M344 180v14"/>
+  </g>
+  <rect x="316" y="180" width="22" height="28" rx="2" fill="#5C4433"/>
+  <rect x="344" y="98" width="12" height="20" fill="#8C2A22"/>
+  <!-- three little pigs -->
+  <g fill="#F0AFA6">
+    <g transform="translate(118 210)">
+      <path d="M-10 12v10M0 14v9M9 12v10" stroke="#F0AFA6" stroke-width="5" stroke-linecap="round"/>
+      <path d="M-19 1c-7-3-8 6-1 6" fill="none" stroke="#F0AFA6" stroke-width="3" stroke-linecap="round"/>
+      <ellipse cx="0" cy="4" rx="19" ry="12"/>
+      <circle cx="17" cy="-4" r="11"/>
+      <path d="M10 -13l-3-9 9 5zM24 -14l7-7 1 9z"/>
+      <ellipse cx="27" cy="-1" rx="5.5" ry="4.5" fill="#DE9A91"/>
+      <circle cx="25.6" cy="-1" r="1" fill="#8C2A22"/><circle cx="28.6" cy="-1" r="1" fill="#8C2A22"/>
+      <circle cx="18" cy="-8" r="1.9" fill="#2C1810"/>
+    </g>
+    <g transform="translate(196 220) scale(.72)">
+      <path d="M-10 12v10M0 14v9M9 12v10" stroke="#F0AFA6" stroke-width="6" stroke-linecap="round"/>
+      <path d="M-19 1c-7-3-8 6-1 6" fill="none" stroke="#F0AFA6" stroke-width="4" stroke-linecap="round"/>
+      <ellipse cx="0" cy="4" rx="19" ry="12"/>
+      <circle cx="17" cy="-4" r="11"/>
+      <path d="M10 -13l-3-9 9 5zM24 -14l7-7 1 9z"/>
+      <ellipse cx="27" cy="-1" rx="5.5" ry="4.5" fill="#DE9A91"/>
+      <circle cx="25.6" cy="-1" r="1.2" fill="#8C2A22"/><circle cx="28.6" cy="-1" r="1.2" fill="#8C2A22"/>
+      <circle cx="18" cy="-8" r="2.2" fill="#2C1810"/>
+    </g>
+    <g transform="translate(252 214) scale(.86)">
+      <path d="M-10 12v10M0 14v9M9 12v10" stroke="#F0AFA6" stroke-width="5.5" stroke-linecap="round"/>
+      <path d="M-19 1c-7-3-8 6-1 6" fill="none" stroke="#F0AFA6" stroke-width="3.5" stroke-linecap="round"/>
+      <ellipse cx="0" cy="4" rx="19" ry="12"/>
+      <circle cx="17" cy="-4" r="11"/>
+      <path d="M10 -13l-3-9 9 5zM24 -14l7-7 1 9z"/>
+      <ellipse cx="27" cy="-1" rx="5.5" ry="4.5" fill="#DE9A91"/>
+      <circle cx="25.6" cy="-1" r="1.1" fill="#8C2A22"/><circle cx="28.6" cy="-1" r="1.1" fill="#8C2A22"/>
+      <circle cx="18" cy="-8" r="2" fill="#2C1810"/>
+    </g>
+  </g>
+</svg>
+</template>
+
+<template data-art="goldilocks">
+<svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Three bowls of porridge in three sizes steaming on a wooden table, with three chairs behind.">
+  <rect width="400" height="250" fill="#F2E3C9"/>
+  <rect x="0" y="0" width="400" height="150" fill="#EAD7B4"/>
+  <g stroke="#DCC69C" stroke-width="2"><path d="M40 0v150M120 0v150M200 0v150M280 0v150M360 0v150"/></g>
+  <!-- window -->
+  <rect x="272" y="24" width="86" height="70" rx="4" fill="#BCD6E2" stroke="#8C6239" stroke-width="4"/>
+  <path d="M315 24v70M272 59h86" stroke="#8C6239" stroke-width="4"/>
+  <circle cx="296" cy="44" r="9" fill="#EFD9A6"/>
+  <!-- three chairs, standing behind the table -->
+  <g fill="#A9743F">
+    <rect x="34" y="56" width="60" height="8" rx="3"/>
+    <rect x="36" y="60" width="8" height="92"/><rect x="84" y="60" width="8" height="92"/>
+    <rect x="30" y="102" width="68" height="9" rx="3"/>
+    <rect x="112" y="78" width="48" height="7" rx="3"/>
+    <rect x="114" y="82" width="7" height="70"/><rect x="151" y="82" width="7" height="70"/>
+    <rect x="108" y="116" width="56" height="8" rx="3"/>
+    <rect x="180" y="100" width="36" height="6" rx="3"/>
+    <rect x="182" y="103" width="6" height="49"/><rect x="208" y="103" width="6" height="49"/>
+    <rect x="176" y="128" width="44" height="7" rx="3"/>
+  </g>
+  <g fill="#8C6239">
+    <rect x="46" y="64" width="36" height="5" rx="2.5"/>
+    <rect x="122" y="86" width="28" height="4" rx="2"/>
+    <rect x="188" y="107" width="20" height="4" rx="2"/>
+  </g>
+  <!-- table -->
+  <rect x="20" y="150" width="360" height="16" rx="5" fill="#A9743F"/>
+  <rect x="20" y="166" width="360" height="6" fill="#8C6239"/>
+  <rect x="58" y="172" width="14" height="66" fill="#8C6239"/>
+  <rect x="328" y="172" width="14" height="66" fill="#8C6239"/>
+  <!-- big bowl -->
+  <path d="M96 116h76a38 38 0 01-38 34 38 38 0 01-38-34z" fill="#C9584A"/>
+  <ellipse cx="134" cy="116" rx="38" ry="9" fill="#F0B9A9"/>
+  <ellipse cx="134" cy="115" rx="30" ry="6" fill="#E7D3A8"/>
+  <!-- middle bowl -->
+  <path d="M186 124h56a28 28 0 01-28 26 28 28 0 01-28-26z" fill="#2F5D4E"/>
+  <ellipse cx="214" cy="124" rx="28" ry="7" fill="#7FA492"/>
+  <ellipse cx="214" cy="123" rx="21" ry="4.5" fill="#E7D3A8"/>
+  <!-- small bowl -->
+  <path d="M254 132h42a21 21 0 01-21 19 21 21 0 01-21-19z" fill="#D9A441"/>
+  <ellipse cx="275" cy="132" rx="21" ry="5.5" fill="#EFD9A6"/>
+  <ellipse cx="275" cy="131" rx="15" ry="3.5" fill="#E7D3A8"/>
+  <!-- steam -->
+  <g stroke="#FFFBF3" stroke-width="3.4" stroke-linecap="round" fill="none" opacity=".95">
+    <path d="M124 104c-7-8 7-13 0-21M144 104c-7-8 7-13 0-21"/>
+    <path d="M210 112c-6-7 6-11 0-18"/>
+    <path d="M273 122c-5-6 5-9 0-15"/>
+  </g>
+  <!-- spoon -->
+  <g fill="#C0A57A"><rect x="300" y="152" width="60" height="5" rx="2.5" transform="rotate(-8 300 152)"/><ellipse cx="300" cy="157" rx="11" ry="7" transform="rotate(-8 300 157)"/></g>
+</svg>
+</template>
+
+<template data-art="little-red-hen">
+<svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice" role="img" aria-label="A little red hen standing among golden wheat stalks beside a fresh loaf of bread.">
+  <rect width="400" height="250" fill="#FBEFD5"/>
+  <circle cx="70" cy="52" r="28" fill="#EFD9A6"/><circle cx="70" cy="52" r="17" fill="#D9A441"/>
+  <path d="M0 176q100-30 200 0t200-6v80H0z" fill="#E2C98E"/>
+  <path d="M0 206q120-20 210 6t190-10v48H0z" fill="#C9A85E"/>
+  <!-- wheat -->
+  <g stroke="#B08A3A" stroke-width="3" stroke-linecap="round" fill="#D9A441">
+    <path d="M292 210V136M320 214V148M348 210V142M266 214V152"/>
+    <g stroke="none">
+      <ellipse cx="292" cy="128" rx="7" ry="15"/><ellipse cx="320" cy="140" rx="6" ry="13"/>
+      <ellipse cx="348" cy="134" rx="7" ry="14"/><ellipse cx="266" cy="144" rx="6" ry="12"/>
+    </g>
+    <path d="M292 148l-12-10M292 162l12-10M320 158l-11-9M348 154l11-9M266 168l-10-8" stroke-width="2.4"/>
+  </g>
+  <!-- hen -->
+  <ellipse cx="150" cy="176" rx="54" ry="42" fill="#C9584A"/>
+  <path d="M104 168c-16 6-24 20-20 30 12-2 22-10 26-20z" fill="#8C2A22"/>
+  <circle cx="188" cy="136" r="26" fill="#C9584A"/>
+  <path d="M176 110c2-12 12-10 12-2 6-8 14-2 10 6 8-4 12 6 4 10z" fill="#B23A2E"/>
+  <path d="M212 134l20 8-20 8z" fill="#D9A441"/>
+  <path d="M190 154c6 6 2 14-6 12" fill="#B23A2E"/>
+  <circle cx="196" cy="130" r="4.6" fill="#2C1810"/><circle cx="197.6" cy="128.6" r="1.6" fill="#FFFBF3"/>
+  <path d="M124 200l-6 18M140 202l-2 18M164 200l6 18" stroke="#D9A441" stroke-width="5" stroke-linecap="round"/>
+  <path d="M112 220h16M132 222h16M164 220h16" stroke="#D9A441" stroke-width="5" stroke-linecap="round"/>
+  <!-- loaf -->
+  <path d="M32 214c0-20 14-32 34-32s34 12 34 32z" fill="#C98B4B"/>
+  <path d="M32 214h68v10a5 5 0 01-5 5H37a5 5 0 01-5-5z" fill="#A9743F"/>
+  <path d="M48 196l10-8M66 194l10-8M84 196l8-8" stroke="#8C6239" stroke-width="3" stroke-linecap="round"/>
+</svg>
+</template>
+
+<template data-art="tortoise-and-hare">
+<svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice" role="img" aria-label="A tortoise plodding along a winding path toward a finish flag while a hare naps under a tree.">
+  <rect width="400" height="250" fill="#EAF1E6"/>
+  <circle cx="58" cy="44" r="24" fill="#EFD9A6"/>
+  <path d="M0 150q70-24 140-4t130-8 130 10v102H0z" fill="#9FBFA9"/>
+  <path d="M0 186q110-22 200 4t200-8v68H0z" fill="#2F5D4E"/>
+  <path d="M-10 232q90-46 200-40t220-10" stroke="#E2C98E" stroke-width="22" fill="none" stroke-linecap="round"/>
+  <!-- tree with sleeping hare -->
+  <rect x="86" y="126" width="14" height="52" fill="#8C6239"/>
+  <circle cx="93" cy="118" r="34" fill="#4C7F62"/><circle cx="64" cy="130" r="22" fill="#5E9573"/><circle cx="122" cy="130" r="24" fill="#3F6E53"/>
+  <g transform="translate(120 190)">
+    <ellipse cx="-27" cy="3" rx="9" ry="7" fill="#FFFBF3"/>
+    <path d="M24 -20c1-18 9-25 15-21s-1 18-8 23zM12 -22c-3-17 3-25 10-22s3 18-3 23z" fill="#E4DAC8"/>
+    <path d="M26 -18c1-12 6-17 9-15M14 -20c-2-12 1-17 5-16" stroke="#D0BFA2" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <ellipse cx="0" cy="0" rx="28" ry="15" fill="#E4DAC8"/>
+    <circle cx="24" cy="-7" r="12" fill="#E4DAC8"/>
+    <path d="M-12 12h18" stroke="#E4DAC8" stroke-width="7" stroke-linecap="round"/>
+    <path d="M27 -9h8" stroke="#8A7566" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="36" cy="-3" r="2.6" fill="#C08F84"/>
+  </g>
+  <g stroke="#8A7566" stroke-width="2.2" stroke-linecap="round" opacity=".75" fill="none">
+    <path d="M164 168c-6-6 6-9 0-15"/><path d="M178 158c-5-5 5-8 0-13"/>
+  </g>
+  <!-- tortoise -->
+  <ellipse cx="240" cy="212" rx="42" ry="26" fill="#4C7F62"/>
+  <path d="M198 212a42 26 0 0184 0z" fill="#3F6E53"/>
+  <g fill="#2F5D4E" opacity=".8">
+    <circle cx="222" cy="200" r="9"/><circle cx="240" cy="194" r="10"/><circle cx="258" cy="200" r="9"/>
+  </g>
+  <path d="M282 208c14-4 22 2 22 8s-8 10-16 6" fill="#7FA492"/>
+  <circle cx="298" cy="212" r="2.6" fill="#2C1810"/>
+  <path d="M212 234h12M254 234h12" stroke="#7FA492" stroke-width="9" stroke-linecap="round"/>
+  <!-- finish flag -->
+  <rect x="352" y="128" width="5" height="96" fill="#5C4433"/>
+  <path d="M357 130h40v28h-40z" fill="#FFFBF3" stroke="#2C1810" stroke-width="1.5"/>
+  <g fill="#2C1810"><rect x="357" y="130" width="10" height="9"/><rect x="377" y="130" width="10" height="9"/><rect x="367" y="139" width="10" height="9"/><rect x="387" y="139" width="10" height="9"/><rect x="357" y="148" width="10" height="9"/><rect x="377" y="148" width="10" height="9"/></g>
+</svg>
+</template>
+
+<template data-art="gingerbread-man">
+<svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice" role="img" aria-label="A gingerbread man with icing buttons running away from a little cottage, with a fox watching.">
+  <rect width="400" height="250" fill="#FAEBD3"/>
+  <circle cx="330" cy="48" r="26" fill="#EFD9A6"/>
+  <path d="M0 166q80-26 160-2t240-10v96H0z" fill="#DFC793"/>
+  <path d="M0 200q120-22 220 4t180-10v56H0z" fill="#C9A85E"/>
+  <!-- cottage -->
+  <rect x="36" y="130" width="86" height="58" fill="#EDE0CC"/>
+  <path d="M24 132 79 88l55 44z" fill="#8C2A22"/>
+  <rect x="66" y="152" width="24" height="36" rx="2" fill="#8C6239"/>
+  <rect x="96" y="146" width="18" height="18" fill="#BCD6E2" stroke="#8C6239" stroke-width="2.5"/>
+  <rect x="100" y="80" width="12" height="20" fill="#8C2A22"/>
+  <g stroke="#FFFBF3" stroke-width="3" stroke-linecap="round" opacity=".9" fill="none"><path d="M106 74c-6-7 6-10 0-16"/></g>
+  <!-- gingerbread man, mid-run -->
+  <g transform="translate(208 156) rotate(-7)">
+    <g stroke="#C98B4B" stroke-width="15" stroke-linecap="round" fill="none">
+      <path d="M-14 -16L-46 -6"/><path d="M14 -16L46 -28"/>
+      <path d="M-7 16L-20 46"/><path d="M7 16L24 42"/>
+    </g>
+    <rect x="-17" y="-28" width="34" height="46" rx="13" fill="#C98B4B"/>
+    <circle cx="0" cy="-44" r="21" fill="#C98B4B"/>
+    <g fill="#FFFBF3"><circle cx="0" cy="-14" r="4.6"/><circle cx="0" cy="0" r="4.6"/><circle cx="0" cy="14" r="4.6"/></g>
+    <g fill="#2C1810"><circle cx="-7" cy="-48" r="3"/><circle cx="7" cy="-48" r="3"/></g>
+    <path d="M-8 -38q8 7 16 0" stroke="#8C2A22" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <g stroke="#FFFBF3" stroke-width="2.6" stroke-linecap="round" fill="none">
+      <path d="M-40 -8l-4 4M-32 -10l-4 4M40 -26l4 4M32 -24l4 4"/>
+      <path d="M-19 40l-4 4M-14 30l-4 4M23 38l4 4M18 28l4 4"/>
+    </g>
+  </g>
+  <g stroke="#C0A57A" stroke-width="3.5" stroke-linecap="round" opacity=".7"><path d="M150 176h26M142 192h20M158 206h22"/></g>
+  <!-- fox, watching from the bank -->
+  <g transform="translate(330 188)">
+    <path d="M24 -4c16-12 36-8 42 6-12 14-34 12-42 2z" fill="#C9584A"/>
+    <path d="M56 -2c6 2 9 6 10 8-4 5-10 7-15 7z" fill="#FFFBF3"/>
+    <path d="M-18 10v16M-4 12v14M12 10v16M24 12v14" stroke="#8C2A22" stroke-width="6" stroke-linecap="round"/>
+    <ellipse cx="0" cy="0" rx="30" ry="16" fill="#C9584A"/>
+    <circle cx="-28" cy="-12" r="14" fill="#C9584A"/>
+    <path d="M-38 -22l-3-15 13 8zM-19 -24l7-14 4 15z" fill="#8C2A22"/>
+    <path d="M-39 -8l-17 4 16 7z" fill="#C9584A"/>
+    <path d="M-52 -3l-6 1 6 3z" fill="#2C1810"/>
+    <path d="M-40 -2q7 8 14 4" stroke="#FFFBF3" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <circle cx="-30" cy="-14" r="2.8" fill="#2C1810"/>
+  </g>
+</svg>
+</template>
+
+<template data-art="red-riding-hood">
+<svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice" role="img" aria-label="A small figure in a red hooded cloak walking a forest path at dusk, watched by a wolf with golden eyes.">
+  <rect width="400" height="250" fill="#2E4139"/>
+  <circle cx="322" cy="52" r="26" fill="#F6EFDC"/>
+  <circle cx="312" cy="46" r="24" fill="#2E4139"/>
+  <g fill="#F6EFDC" opacity=".75"><circle cx="60" cy="34" r="2"/><circle cx="128" cy="20" r="1.6"/><circle cx="196" cy="42" r="1.8"/><circle cx="252" cy="24" r="1.4"/><circle cx="94" cy="62" r="1.4"/><circle cx="364" cy="94" r="1.6"/></g>
+  <!-- back trees -->
+  <g fill="#24332D">
+    <path d="M40 200V96l-26 40h16l-22 34h20l-18 30z"/><path d="M40 200V96l26 40H50l22 34H52l18 30z"/>
+    <path d="M118 210V118l-20 32h13l-18 28h16l-14 32z"/><path d="M118 210V118l20 32h-13l18 28h-16l14 32z"/>
+    <path d="M300 206V110l-22 34h14l-19 30h17l-15 32z"/><path d="M300 206V110l22 34h-14l19 30h-17l15 32z"/>
+    <path d="M370 214V132l-18 28h12l-16 26h14l-12 28z"/><path d="M370 214V132l18 28h-12l16 26h-14l12 28z"/>
+  </g>
+  <!-- ground and path -->
+  <path d="M0 194q100-22 200 0t200-8v64H0z" fill="#1D2A25"/>
+  <path d="M170 250q10-46 34-64t28-24" stroke="#4A5B4E" stroke-width="30" fill="none" stroke-linecap="round" opacity=".55"/>
+  <!-- wolf in the dark -->
+  <g transform="translate(316 196)">
+    <ellipse cx="0" cy="0" rx="40" ry="22" fill="#141C19"/>
+    <circle cx="-30" cy="-16" r="17" fill="#141C19"/>
+    <path d="M-42 -26l-3-16 13 9zM-20 -28l7-15 4 15z" fill="#141C19"/>
+    <path d="M-46 -12l-12 4 12 5z" fill="#141C19"/>
+    <path d="M34 -4c16-12 32-6 36 4-14 8-28 6-36 2z" fill="#141C19"/>
+    <circle cx="-36" cy="-16" r="3" fill="#D9A441"/><circle cx="-25" cy="-17" r="3" fill="#D9A441"/>
+  </g>
+  <!-- red riding hood -->
+  <g transform="translate(178 178)">
+    <path d="M0-52c-20 0-32 16-32 34l-6 40h76l-6-40C32-36 20-52 0-52z" fill="#B23A2E"/>
+    <path d="M0-54c-16 0-26 12-26 24 8-6 16-9 26-9s18 3 26 9c0-12-10-24-26-24z" fill="#8C2A22"/>
+    <circle cx="0" cy="-24" r="15" fill="#F0C9A6"/>
+    <g fill="#2C1810"><circle cx="-5" cy="-26" r="2"/><circle cx="5" cy="-26" r="2"/></g>
+    <path d="M-4-18q4 4 8 0" stroke="#8C2A22" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <rect x="-52" y="4" width="24" height="18" rx="4" fill="#C9A85E"/>
+    <path d="M-52 8h24" stroke="#8C6239" stroke-width="2"/>
+    <path d="M-44 4c0-6 8-6 8 0" stroke="#8C6239" stroke-width="2.5" fill="none"/>
+  </g>
+  <g fill="#D9A441" opacity=".55"><circle cx="88" cy="150" r="2.6"/><circle cx="140" cy="128" r="2"/><circle cx="248" cy="146" r="2.4"/><circle cx="72" cy="182" r="1.8"/></g>
+</svg>
+</template>
+
+<template data-art="billy-goats-gruff">
+<svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice" role="img" aria-label="A billy goat crossing a wooden bridge over a stream, with a troll hiding in the shadows underneath.">
+  <rect width="400" height="250" fill="#DCE9EC"/>
+  <ellipse cx="86" cy="40" rx="32" ry="13" fill="#FFFBF3"/><ellipse cx="118" cy="34" rx="22" ry="10" fill="#FFFBF3"/>
+  <circle cx="330" cy="46" r="24" fill="#EFD9A6"/>
+  <path d="M0 120q60-40 120-10t140-26 140 22v40H0z" fill="#9FBFA9"/>
+  <!-- banks -->
+  <path d="M0 148h120v102H0z" fill="#4C7F62"/>
+  <path d="M280 148h120v102H280z" fill="#4C7F62"/>
+  <path d="M0 148h120v14H0zM280 148h120v14h-120z" fill="#5E9573"/>
+  <!-- water -->
+  <path d="M120 190h160v60H120z" fill="#7FA9C0"/>
+  <path d="M120 190h160v14H120z" fill="#A9C7D8"/>
+  <g stroke="#DCE9EC" stroke-width="3" stroke-linecap="round" opacity=".8" fill="none">
+    <path d="M134 216q10-6 20 0t20 0"/><path d="M186 232q10-6 20 0t20 0"/><path d="M238 214q10-6 20 0t20 0"/>
+  </g>
+  <!-- bridge -->
+  <path d="M96 148h208v16H96z" fill="#A9743F"/>
+  <path d="M96 164h208v6H96z" fill="#8C6239"/>
+  <g stroke="#8C6239" stroke-width="2"><path d="M126 148v16M156 148v16M186 148v16M216 148v16M246 148v16M276 148v16"/></g>
+  <rect x="112" y="170" width="10" height="46" fill="#8C6239"/>
+  <rect x="278" y="170" width="10" height="46" fill="#8C6239"/>
+  <g stroke="#A9743F" stroke-width="7" stroke-linecap="round" fill="none">
+    <path d="M104 116v32M296 116v32M104 120h192"/>
+    <path d="M136 122v26M168 122v26M200 122v26M232 122v26M264 122v26"/>
+  </g>
+  <!-- troll under the bridge -->
+  <g opacity=".95">
+    <ellipse cx="200" cy="212" rx="46" ry="30" fill="#3B4A44"/>
+    <circle cx="200" cy="188" r="22" fill="#44554E"/>
+    <path d="M182 172l-6-14 16 8zM218 172l6-14-16 8z" fill="#44554E"/>
+    <circle cx="191" cy="186" r="4.6" fill="#D9A441"/><circle cx="209" cy="186" r="4.6" fill="#D9A441"/>
+    <path d="M190 198q10 7 20 0" stroke="#2C1810" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+    <path d="M193 199l2 5 3-5M205 199l2 5 3-5" fill="#FFFBF3"/>
+  </g>
+  <!-- goat -->
+  <g transform="translate(214 120)">
+    <ellipse cx="0" cy="0" rx="40" ry="24" fill="#FFFBF3"/>
+    <path d="M-16 20v14M-2 22v12M14 20v14M28 18v16" stroke="#EDE0CC" stroke-width="7" stroke-linecap="round"/>
+    <circle cx="38" cy="-14" r="16" fill="#FFFBF3"/>
+    <path d="M42 -30c8-12 18-12 18-2s-10 12-14 8z" fill="#EDE0CC"/>
+    <path d="M30 -28c-6-12-2-18 6-14" stroke="#C0A57A" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M46 -30c6-12 14-14 14-6" stroke="#C0A57A" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <circle cx="44" cy="-16" r="2.8" fill="#2C1810"/>
+    <path d="M40 -2q6 6 10 0" stroke="#C0A57A" stroke-width="2" fill="none"/>
+    <path d="M-38 -4c-12 0-14 10-6 12" stroke="#EDE0CC" stroke-width="6" fill="none" stroke-linecap="round"/>
+  </g>
+</svg>
+</template>
+
+<template data-art="chicken-little">
+<svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice" role="img" aria-label="A small chicken looking up in alarm as an acorn falls from an oak tree in a wide blue sky.">
+  <rect width="400" height="250" fill="#CFE3EC"/>
+  <rect y="0" width="400" height="120" fill="#BCD6E2"/>
+  <ellipse cx="70" cy="46" rx="36" ry="15" fill="#FFFBF3"/><ellipse cx="104" cy="38" rx="24" ry="12" fill="#FFFBF3"/>
+  <ellipse cx="300" cy="34" rx="30" ry="13" fill="#FFFBF3"/><ellipse cx="272" cy="28" rx="20" ry="10" fill="#FFFBF3"/>
+  <circle cx="196" cy="40" r="22" fill="#EFD9A6"/>
+  <path d="M0 174q100-28 200 0t200-10v86H0z" fill="#9FBFA9"/>
+  <path d="M0 206q120-18 200 6t200-12v50H0z" fill="#4C7F62"/>
+  <!-- oak branch -->
+  <path d="M400 74q-52 6-84 34" stroke="#8C6239" stroke-width="11" fill="none" stroke-linecap="round"/>
+  <path d="M352 84q-16 12-18 28" stroke="#8C6239" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <g fill="#4C7F62"><circle cx="382" cy="66" r="20"/><circle cx="348" cy="76" r="17"/><circle cx="324" cy="96" r="14"/><circle cx="366" cy="94" r="15"/></g>
+  <!-- falling acorn with motion lines -->
+  <g transform="translate(238 128) rotate(18)">
+    <ellipse cx="0" cy="6" rx="11" ry="14" fill="#C98B4B"/>
+    <path d="M-12-4h24a12 12 0 01-24 0z" fill="#8C6239"/>
+    <path d="M-12 -4h24" stroke="#6E4B2A" stroke-width="2"/>
+    <path d="M0-16v-8" stroke="#6E4B2A" stroke-width="3" stroke-linecap="round"/>
+  </g>
+  <g stroke="#8A7566" stroke-width="2.6" stroke-linecap="round" opacity=".5"><path d="M262 96l-8 14M276 104l-8 12M250 88l-6 12"/></g>
+  <!-- chicken little -->
+  <g transform="translate(140 190)">
+    <ellipse cx="0" cy="0" rx="40" ry="32" fill="#E9C97C"/>
+    <path d="M-34 -8c-14 4-20 16-16 24 10-2 18-10 20-18z" fill="#D9A441"/>
+    <circle cx="26" cy="-30" r="21" fill="#E9C97C"/>
+    <path d="M16 -50c2-10 10-9 10-2 5-7 12-2 8 5 7-3 10 5 3 8z" fill="#B23A2E"/>
+    <path d="M46 -32l16 7-16 7z" fill="#D9A441"/>
+    <path d="M28 -14c5 5 1 12-5 10" fill="#B23A2E"/>
+    <circle cx="34" cy="-36" r="4.4" fill="#2C1810"/><circle cx="35.4" cy="-37.4" r="1.5" fill="#FFFBF3"/>
+    <path d="M-14 30l-4 14M2 32l0 14M20 30l4 14" stroke="#D9A441" stroke-width="5" stroke-linecap="round"/>
+    <path d="M-24 46h14M-4 48h14M18 46h14" stroke="#D9A441" stroke-width="5" stroke-linecap="round"/>
+  </g>
+  <g stroke="#B23A2E" stroke-width="3" stroke-linecap="round" opacity=".8" fill="none">
+    <path d="M96 122l-8-12M112 112l-2-14M80 134l-13-7"/>
+  </g>
+</svg>
+</template>
+
+<template data-art="boy-who-cried-wolf">
+<svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice" role="img" aria-label="A shepherd boy with a crook standing among sheep on a hillside as a wolf watches from the ridge.">
+  <rect width="400" height="250" fill="#F4E6C8"/>
+  <circle cx="70" cy="48" r="30" fill="#EFD9A6"/><circle cx="70" cy="48" r="18" fill="#D9A441"/>
+  <ellipse cx="264" cy="38" rx="34" ry="14" fill="#FFFBF3"/><ellipse cx="296" cy="32" rx="22" ry="10" fill="#FFFBF3"/>
+  <path d="M0 150q80-46 168-14t232-18v132H0z" fill="#C9D9A8"/>
+  <path d="M0 186q110-34 210 2t190-16v78H0z" fill="#9FBFA9"/>
+  <path d="M0 222q120-18 208 6t192-12v34H0z" fill="#4C7F62"/>
+  <!-- wolf on the ridge -->
+  <g transform="translate(340 122)" opacity=".92">
+    <ellipse cx="0" cy="0" rx="30" ry="15" fill="#5C4433"/>
+    <circle cx="-22" cy="-12" r="12" fill="#5C4433"/>
+    <path d="M-31 -20l-3-12 11 7zM-14 -21l6-11 3 11z" fill="#5C4433"/>
+    <path d="M-33 -8l-10 3 10 4z" fill="#5C4433"/>
+    <path d="M26 -4c12-9 24-4 27 3-10 6-21 4-27 1z" fill="#5C4433"/>
+    <path d="M-16 14v10M-2 16v10M12 14v10" stroke="#5C4433" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="-26" cy="-13" r="2.4" fill="#D9A441"/><circle cx="-18" cy="-14" r="2.4" fill="#D9A441"/>
+  </g>
+  <!-- sheep -->
+  <g>
+    <ellipse cx="96" cy="204" rx="30" ry="22" fill="#FFFBF3"/>
+    <circle cx="76" cy="188" r="11" fill="#FFFBF3"/><circle cx="98" cy="182" r="12" fill="#FFFBF3"/><circle cx="118" cy="190" r="11" fill="#FFFBF3"/>
+    <circle cx="124" cy="200" r="11" fill="#5C4433"/>
+    <path d="M116 192l-5-8 8 3zM133 192l6-8-1 9z" fill="#5C4433"/>
+    <circle cx="128" cy="198" r="2.2" fill="#2C1810"/>
+    <path d="M84 224v10M100 226v10M112 224v10" stroke="#5C4433" stroke-width="5" stroke-linecap="round"/>
+  </g>
+  <g>
+    <ellipse cx="196" cy="222" rx="24" ry="17" fill="#FFFBF3"/>
+    <circle cx="180" cy="210" r="9" fill="#FFFBF3"/><circle cx="198" cy="206" r="10" fill="#FFFBF3"/><circle cx="214" cy="212" r="9" fill="#FFFBF3"/>
+    <circle cx="219" cy="220" r="9" fill="#5C4433"/>
+    <circle cx="222" cy="218" r="1.9" fill="#2C1810"/>
+    <path d="M186 238v8M200 240v8M210 238v8" stroke="#5C4433" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <!-- boy -->
+  <g transform="translate(268 168)">
+    <path d="M-6 44l-8-40h28l-8 40z" fill="#2F5D4E"/>
+    <path d="M-12 6h32l4 30h-40z" fill="#4C7F62"/>
+    <circle cx="4" cy="-14" r="15" fill="#F0C9A6"/>
+    <path d="M-11 -18c0-12 10-18 18-14s10 12 6 14c-4-6-16-8-24 0z" fill="#8C6239"/>
+    <g fill="#2C1810"><circle cx="-1" cy="-15" r="2"/><circle cx="9" cy="-15" r="2"/></g>
+    <path d="M0 -7q6 5 10-1" stroke="#8C2A22" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M-14 44v14M14 44v14" stroke="#5C4433" stroke-width="6" stroke-linecap="round"/>
+    <path d="M28 -22v78" stroke="#A9743F" stroke-width="5" stroke-linecap="round"/>
+    <path d="M28 -22c0-12-16-12-16-1" stroke="#A9743F" stroke-width="5" fill="none" stroke-linecap="round"/>
+  </g>
+</svg>
+</template>
+
+<template data-art="ugly-duckling">
+<svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice" role="img" aria-label="A young swan gliding on a quiet pond among reeds, its graceful reflection in the water below.">
+  <rect width="400" height="250" fill="#E6EDE4"/>
+  <circle cx="316" cy="46" r="26" fill="#EFD9A6"/>
+  <ellipse cx="90" cy="40" rx="34" ry="14" fill="#FFFBF3"/><ellipse cx="122" cy="34" rx="22" ry="11" fill="#FFFBF3"/>
+  <path d="M0 118q70-26 150-6t250-12v50H0z" fill="#9FBFA9"/>
+  <path d="M0 140h400v110H0z" fill="#A9C7D8"/>
+  <path d="M0 140h400v10H0z" fill="#C5DCE6"/>
+  <!-- reeds -->
+  <g stroke="#4C7F62" stroke-width="4" stroke-linecap="round" fill="none">
+    <path d="M34 152V96M52 156V108M20 158V116M366 154V100M382 158V112"/>
+  </g>
+  <g fill="#8C6239"><rect x="31" y="80" width="7" height="20" rx="3.5"/><rect x="363" y="84" width="7" height="20" rx="3.5"/></g>
+  <g fill="#7FA492"><path d="M52 108c-14-6-16-16-6-20 8-2 12 10 6 20z"/><path d="M366 100c14-6 16-16 6-20-8-2-12 10-6 20z"/></g>
+  <!-- swan -->
+  <g transform="translate(196 128)">
+    <ellipse cx="0" cy="6" rx="52" ry="24" fill="#FFFBF3"/>
+    <path d="M-46 -2c-16-6-30 4-30 12 14 6 28 0 34-6z" fill="#FFFBF3"/>
+    <path d="M20 4C14-22 22-46 44-50c18-3 26 10 20 18-6 7-14 2-14-6" fill="none" stroke="#FFFBF3" stroke-width="15" stroke-linecap="round"/>
+    <circle cx="54" cy="-46" r="10" fill="#FFFBF3"/>
+    <path d="M62 -44l14 4-13 6z" fill="#D9A441"/>
+    <circle cx="57" cy="-49" r="2.6" fill="#2C1810"/>
+    <path d="M-24 -8q22-14 44-2" stroke="#EDE0CC" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M-8 0q18-10 34-2" stroke="#EDE0CC" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  </g>
+  <!-- reflection -->
+  <g transform="translate(196 172) scale(1 -0.72)" opacity=".28">
+    <ellipse cx="0" cy="6" rx="52" ry="24" fill="#FFFBF3"/>
+    <path d="M20 4C14-22 22-46 44-50c18-3 26 10 20 18-6 7-14 2-14-6" fill="none" stroke="#FFFBF3" stroke-width="15" stroke-linecap="round"/>
+    <circle cx="54" cy="-46" r="10" fill="#FFFBF3"/>
+  </g>
+  <g stroke="#FFFBF3" stroke-width="3" stroke-linecap="round" opacity=".7" fill="none">
+    <path d="M84 186q16-8 32 0t32 0"/><path d="M232 200q16-8 32 0t32 0"/><path d="M120 220q16-8 32 0t32 0"/>
+  </g>
+</svg>
+</template>
+
+<script>
+/* ============================================================
+   THE LIBRARY
+   Ten public-domain tales, abridged for two-to-four-year-olds.
+   Each runs about two or three minutes read aloud.
+   ============================================================ */
+const STORIES = [
+  {
+    id: "three-little-pigs",
+    art: "three-little-pigs",
+    title: "The Three Little Pigs",
+    subtitle: "A tale of straw, sticks, and good strong bricks",
+    minutes: 3,
+    tint: "#F7E9CD",
+    excerpt: "Three brothers build three houses. Only one of them is built to last, and it is very glad of it when the wind starts blowing.",
+    moral: "Take your time and do it properly. Good work keeps you safe.",
+    pullAfter: 5,
+    pull: "Little pig, little pig, let me come in!",
+    body: [
+      "Once upon a time there were three little pigs. One morning they hugged their mother goodbye and set off to build houses of their very own.",
+      "The first little pig was in a hurry. He found a pile of golden straw and built his house in one afternoon. It was soft and it was quick. Then he sat down to play his flute.",
+      "The second little pig found a bundle of sticks. He built his house by teatime and went outside to play his fiddle.",
+      "The third little pig carried bricks. One brick, then another brick, then another. He worked all day and all week. His brothers laughed at him. The third little pig only smiled and kept building.",
+      "Along came a hungry wolf. He knocked at the house of straw and called out in his big rumbly voice.",
+      "The first little pig held the door tight. But the wolf huffed, and he puffed, and he blew the straw house away like dandelion fluff. Off ran the first little pig to his brother's house of sticks.",
+      "Knock, knock. The wolf huffed, and he puffed, and away went the sticks, clattering down the lane. Off ran both little pigs, as fast as their trotters would carry them, to the house of bricks.",
+      "The wolf came to the brick house last of all. He knocked. He huffed. He puffed. He huffed and puffed until his cheeks went pink and his eyes went round.",
+      "But the bricks did not budge. Not one single brick.",
+      "The wolf sat down in the garden, quite out of puff, and decided he would rather have soup at home. He went away down the road and never came back.",
+      "Inside, the three little pigs made cocoa and toasted bread by the fire. And that night, in the strong little house that had taken so long to build, all three of them slept safe and warm."
+    ]
+  },
+  {
+    id: "goldilocks",
+    art: "goldilocks",
+    title: "Goldilocks and the Three Bears",
+    subtitle: "Too hot, too cold, and just right",
+    minutes: 3,
+    tint: "#F2E3C9",
+    excerpt: "A curious girl wanders into a little house in the woods and tries everything in it. Then the family who lives there comes home.",
+    moral: "Ask before you borrow. Other people's things are theirs.",
+    pullAfter: 6,
+    pull: "Somebody has been sleeping in my bed &mdash; and she is still there!",
+    body: [
+      "Deep in the woods there was a little house, and in the little house lived three bears: a great big Papa Bear, a middle-sized Mama Bear, and a small wee Baby Bear.",
+      "One morning they made porridge for breakfast. It was far too hot to eat, so the three bears went for a walk in the woods while it cooled.",
+      "While they were out, a girl called Goldilocks came skipping along. She saw the little house. She peeped in the window. Then she opened the door and walked right in, which she should not have done at all.",
+      "On the table were three bowls of porridge. Goldilocks tasted the great big bowl. Too hot! She tasted the middle bowl. Too cold! She tasted the small wee bowl. Just right &mdash; and she ate up every spoonful.",
+      "Then she saw three chairs. The big chair was too hard. The middle chair was too soft. The small wee chair was just right, but when she wriggled and bounced, it broke into pieces underneath her.",
+      "Goldilocks went upstairs and found three beds. The big bed was too lumpy. The middle bed was too squashy. The small wee bed was just right, and she was so sleepy that she curled up and fell fast asleep.",
+      "Home came the three bears. Papa Bear looked at his bowl and rumbled, Somebody has been eating my porridge! Mama Bear said the same. And Baby Bear said, in a very small voice, Somebody has eaten mine all up.",
+      "They looked at the chairs. They climbed the stairs. And there in the small wee bed was a girl with tangled golden hair, snoring softly.",
+      "Goldilocks opened her eyes and saw three furry faces looking down at her. Oh my! She jumped out of bed, ran down the stairs, out of the door and all the way home through the trees.",
+      "The three bears mended the little chair with glue and made fresh porridge. And Goldilocks never went into anybody's house again without knocking first."
+    ]
+  },
+  {
+    id: "little-red-hen",
+    art: "little-red-hen",
+    title: "The Little Red Hen",
+    subtitle: "Who will help me bake the bread?",
+    minutes: 2,
+    tint: "#FBEFD5",
+    excerpt: "The little red hen finds a grain of wheat and asks her friends for help. They are all far too comfortable to move.",
+    moral: "Helping with the work means sharing in the treat.",
+    pullAfter: 5,
+    pull: "Not I, said the cat. Not I, said the dog. Not I, said the duck.",
+    body: [
+      "In a warm little farmyard lived a little red hen, a lazy cat, a sleepy dog, and a duck who liked to sit in the sun.",
+      "One day the little red hen was scratching in the dust when she found a grain of wheat. Who will help me plant this wheat? she asked.",
+      "Not I, said the cat. Not I, said the dog. Not I, said the duck. Then I shall plant it myself, said the little red hen. And she did.",
+      "The wheat grew tall and golden. Who will help me cut the wheat? asked the little red hen. Not I, not I, not I. So she cut it herself, snip snip snip.",
+      "Who will help me carry the wheat to the mill? Not I, not I, not I. So the little red hen carried it herself, all the way there and all the way back, with a sack of soft white flour.",
+      "Who will help me bake the bread? Not I, said the cat, stretching. Not I, said the dog, yawning. Not I, said the duck, who had one eye shut.",
+      "So the little red hen mixed the flour and kneaded the dough and lit the oven. Soon the whole farmyard smelled of warm fresh bread.",
+      "The cat sat up. The dog opened both eyes. The duck waddled over very quickly indeed.",
+      "Who will help me eat the bread? asked the little red hen.",
+      "I will! said the cat. I will! said the dog. I will! said the duck.",
+      "Oh no, said the little red hen. I planted it and cut it and carried it and baked it all by myself. And I shall eat it myself too.",
+      "And she did &mdash; every crumb. The next time there was work to do, the cat and the dog and the duck were the first ones there."
+    ]
+  },
+  {
+    id: "tortoise-and-hare",
+    art: "tortoise-and-hare",
+    title: "The Tortoise and the Hare",
+    subtitle: "A race that everybody was sure they knew the end of",
+    minutes: 2,
+    tint: "#EAF1E6",
+    excerpt: "The fastest animal in the wood laughs at the slowest one. So the slowest one challenges him to a race.",
+    moral: "Slow and steady wins the race.",
+    pullAfter: 4,
+    pull: "I shall just have a tiny nap, said the hare.",
+    body: [
+      "There was once a hare who could run faster than anyone. He never let anybody forget it.",
+      "Look how slow you are, he laughed at the tortoise one morning. You go plod, plod, plod. I could run around the whole wood before you reached that tree.",
+      "The tortoise thought about this for a little while. Then she said, Let us have a race.",
+      "All the animals came to watch. A crow said, Ready, steady, GO! and the hare shot away in a puff of dust. The tortoise started walking. Plod. Plod. Plod.",
+      "Very soon the hare was so far ahead that he could not see the tortoise at all. There was a shady tree by the path, and the grass underneath it was soft and cool.",
+      "There is no hurry, said the hare to himself. I shall just have a tiny nap. He lay down, wriggled his nose, and fell fast asleep.",
+      "The tortoise came around the corner. Plod. Plod. Plod. She saw the hare sleeping. She did not stop. She did not hurry either. She simply kept going, one foot after the other, all afternoon.",
+      "A breeze rustled the leaves and the hare woke up with a jump. The sun had moved! He raced down the path, faster than he had ever run in his life.",
+      "But there at the finishing line, with all the animals cheering around her, was the tortoise.",
+      "How? gasped the hare.",
+      "I never stopped, said the tortoise."
+    ]
+  },
+  {
+    id: "gingerbread-man",
+    art: "gingerbread-man",
+    title: "The Gingerbread Man",
+    subtitle: "Run, run, as fast as you can",
+    minutes: 2,
+    tint: "#FAEBD3",
+    excerpt: "A biscuit hops off the baking tray and out of the door, and half the countryside goes running after him.",
+    moral: "A little care is worth more than a lot of running.",
+    pullAfter: 3,
+    pull: "Run, run, as fast as you can! You cannot catch me, I am the Gingerbread Man!",
+    body: [
+      "One morning a little old woman rolled out gingerbread dough and cut it into the shape of a man. She gave him currant eyes, a cherry smile, and three white icing buttons down his front. Then she popped him in the oven.",
+      "When she opened the oven door, up jumped the Gingerbread Man and out he ran, straight across the kitchen floor.",
+      "Stop! called the little old woman. Stop! called the little old man. But the Gingerbread Man laughed over his shoulder as he ran.",
+      "He ran past a cow in the meadow. Stop, said the cow, you look delicious. The Gingerbread Man only ran faster, and the cow came running after.",
+      "He ran past a horse and a barnful of hens and a boy carrying a rake, and every single one of them came running after too. What a long line they made, huffing down the lane.",
+      "Then the Gingerbread Man came to a wide cold river, and he stopped, because gingerbread does not swim.",
+      "A fox was sitting on the bank. I can carry you across, said the fox kindly. Hop onto my tail.",
+      "So the Gingerbread Man hopped onto the fox's tail. The water grew deeper. Climb onto my back, said the fox. Then, Climb onto my nose, or you will get soggy.",
+      "The Gingerbread Man climbed onto the fox's nose. The fox reached the far bank, tipped back his head &mdash; and snap!",
+      "The clever fox had his supper, and the Gingerbread Man was never seen running again.",
+      "The little old woman went home and baked a whole tray of gingerbread people. And do you know, she let them cool right down before she opened the door."
+    ]
+  },
+  {
+    id: "red-riding-hood",
+    art: "red-riding-hood",
+    title: "Little Red Riding Hood",
+    subtitle: "Straight along the path, and no wandering",
+    minutes: 3,
+    tint: "#2E4139",
+    excerpt: "A girl in a red cloak carries a basket through the woods to her grandmother, and meets somebody with very big teeth.",
+    moral: "Stay on the path, and tell a grown-up when something feels wrong.",
+    pullAfter: 6,
+    pull: "Grandmother, what big teeth you have!",
+    body: [
+      "There was once a little girl who wore a red velvet cloak with a hood, so everybody called her Little Red Riding Hood.",
+      "One morning her mother packed a basket with bread and honey. Take this to Grandmother, she said. She is poorly. Go straight along the path and do not wander.",
+      "I will, said Little Red Riding Hood, and off she went into the green woods.",
+      "Halfway there she met a wolf, standing among the trees with his tail low. Good morning, said the wolf, ever so politely. Where are you off to?",
+      "To Grandmother's cottage, said Little Red Riding Hood, at the end of the path by the three oak trees.",
+      "What lovely flowers there are over there, said the wolf, pointing away from the path. Your grandmother would love a bunch. And while Little Red Riding Hood was picking them, the wolf ran ahead on his long grey legs.",
+      "When the girl arrived, Grandmother's door was open and Grandmother was in bed with the blanket pulled right up to her nose. But something was not right.",
+      "Grandmother, what big ears you have, said Little Red Riding Hood.",
+      "All the better to hear you with, said a growly voice.",
+      "Grandmother, what big eyes you have.",
+      "All the better to see you with.",
+      "Grandmother, what big teeth you have!",
+      "The wolf sprang up. But Little Red Riding Hood was quick, and she shouted as loudly as she could. A woodcutter working nearby heard her and came running with his axe over his shoulder, and the wolf took one look at him and bolted out of the window and away over the hills.",
+      "And there was Grandmother, safe in the wardrobe where the wolf had shut her, cross but quite unhurt.",
+      "They all sat down together and ate the bread and honey. And after that, Little Red Riding Hood stayed on the path every single time."
+    ]
+  },
+  {
+    id: "billy-goats-gruff",
+    art: "billy-goats-gruff",
+    title: "The Three Billy Goats Gruff",
+    subtitle: "Trip trap, trip trap, over the bridge",
+    minutes: 2,
+    tint: "#DCE9EC",
+    excerpt: "Three hungry goats want the sweet grass on the other side of the river. Underneath the bridge, something is listening.",
+    moral: "Even the smallest one can be clever, and the biggest one can be brave.",
+    pullAfter: 3,
+    pull: "Who is that trip trapping over my bridge?",
+    body: [
+      "Once there were three billy goats, and they were all called Gruff. There was a little Billy Goat Gruff, a middle Billy Goat Gruff, and a great big Billy Goat Gruff with horns like tree branches.",
+      "The grass on their side of the river was nibbled down to nothing. But on the other side, up the green hillside, the grass was long and sweet. To reach it they had to cross a little wooden bridge.",
+      "And under that bridge lived a troll, with eyes like saucers and a nose like a poker.",
+      "First went the little Billy Goat Gruff. Trip trap, trip trap. WHO is that trip trapping over my bridge? roared the troll.",
+      "It is only me, said the little goat in a tiny voice. Please do not eat me. My brother is coming, and he is much bigger.",
+      "The troll thought about that. Very well, be off with you.",
+      "Next came the middle Billy Goat Gruff. Trip TRAP, trip TRAP. WHO is that trip trapping over my bridge?",
+      "It is only me, said the middle goat. Do not eat me. My brother is coming, and he is bigger still.",
+      "Bigger still? said the troll, licking his lips. Then off you go.",
+      "Last of all came the great big Billy Goat Gruff. TRIP TRAP, TRIP TRAP, TRIP TRAP. The whole bridge shook.",
+      "WHO is that trip trapping over MY bridge? roared the troll, climbing up.",
+      "IT IS I, said the great big Billy Goat Gruff, and he lowered his enormous horns.",
+      "The troll took one look, squeaked, and jumped off the bridge into the water, and the river carried him far away downstream.",
+      "So the three Billy Goats Gruff crossed over to the sweet green hillside, where they ate and ate until they were so fat they could hardly walk home. Snip, snap, snout, this tale is told out."
+    ]
+  },
+  {
+    id: "chicken-little",
+    art: "chicken-little",
+    title: "Chicken Little",
+    subtitle: "The day the sky fell down (or did it?)",
+    minutes: 2,
+    tint: "#CFE3EC",
+    excerpt: "Something bonks Chicken Little on the head, and within five minutes the whole farmyard is running to tell the king.",
+    moral: "Look properly before you worry. And look up, too.",
+    pullAfter: 3,
+    pull: "The sky is falling! I must go and tell the king!",
+    body: [
+      "Chicken Little was scratching for seeds under the big oak tree when something fell out of the sky and bonked her right on the head.",
+      "Oh! said Chicken Little. Oh my goodness. The sky is falling! I must go and tell the king!",
+      "Off she ran down the lane. On the way she met Henny Penny. Where are you going in such a rush? asked Henny Penny.",
+      "The sky is falling, said Chicken Little. A piece of it fell on my head. I am going to tell the king.",
+      "Then I shall come too, said Henny Penny.",
+      "Next they met Ducky Lucky, and then Goosey Loosey, and then Turkey Lurkey, and every one of them said, Goodness me, the sky is falling! I shall come too. What a flapping, honking, gobbling crowd they made hurrying down the road.",
+      "Then they met Foxy Loxy, who smiled a very wide smile. The king? he said. Why, the king lives just through those trees. Follow me and I shall show you the shortcut.",
+      "But a wise old owl was sitting on the gate, and she had been watching the fox all morning. Wait, she said. Chicken Little, what exactly fell on your head?",
+      "Chicken Little thought. It was small, she said. And hard. And brown.",
+      "The owl looked up at the big oak tree, full of small hard brown acorns. And so did everybody else.",
+      "Oh, said Chicken Little, going quite pink under her feathers.",
+      "Foxy Loxy slipped away into the bushes with no supper at all. And the whole farmyard walked home together, laughing, under a sky that was exactly where it had always been."
+    ]
+  },
+  {
+    id: "boy-who-cried-wolf",
+    art: "boy-who-cried-wolf",
+    title: "The Boy Who Cried Wolf",
+    subtitle: "A joke that stopped being funny",
+    minutes: 2,
+    tint: "#F4E6C8",
+    excerpt: "A bored shepherd boy shouts wolf for fun, twice. On the third day, he is not joking.",
+    moral: "Nobody believes a person who tells tales, even when they tell the truth.",
+    pullAfter: 3,
+    pull: "Wolf! Wolf! Come quickly, there is a wolf!",
+    body: [
+      "High on a green hillside above the village, a boy sat all day watching the sheep. It was a very important job. It was also, he thought, a very boring one.",
+      "One morning he had an idea that made him giggle. He stood up, cupped his hands around his mouth, and shouted down the hill.",
+      "Wolf! Wolf! Come quickly, there is a wolf!",
+      "Up came the villagers, running and puffing, with sticks and buckets and one man still holding his breakfast. And there was no wolf at all. Only sheep, chewing grass, and a boy rolling about laughing.",
+      "That was not kind, said the villagers, and they walked back down the hill.",
+      "A few days later the boy was bored again. Wolf! he shouted. Wolf! Up came the villagers, running and puffing all over again. And again there was nothing but sheep and giggling.",
+      "Do not call us again unless it is true, they said, and this time they were not smiling.",
+      "Then one evening, when the sun was going down and the shadows grew long, something grey slipped out of the trees at the top of the hill. It had yellow eyes and it was watching the sheep.",
+      "The boy jumped up. Wolf! he shouted. WOLF! Please, please come, there really is a wolf!",
+      "Down in the village, the people heard him. They shook their heads and carried on with their supper. That boy, they said.",
+      "Nobody came.",
+      "The wolf chased the sheep all the way into the wood, and the boy sat down in the grass and cried real tears.",
+      "The next morning an old woman found him. Why did nobody come? he asked her.",
+      "Because, she said gently, nobody believes a person who tells tales &mdash; even when they are telling the truth.",
+      "And from that day on, the boy only ever said what was so."
+    ]
+  },
+  {
+    id: "ugly-duckling",
+    art: "ugly-duckling",
+    title: "The Ugly Duckling",
+    subtitle: "The little bird who was not a duck at all",
+    minutes: 3,
+    tint: "#E6EDE4",
+    excerpt: "A big grey duckling does not look like his brothers and sisters, and he cannot think why. One spring morning, he finds out.",
+    moral: "You may simply be growing into something you cannot see yet.",
+    pullAfter: 7,
+    pull: "He was not an ugly duckling at all. He never had been.",
+    body: [
+      "Down among the reeds at the edge of the pond, a mother duck sat on her nest, waiting.",
+      "Crack, crack, crack. Out came five yellow ducklings, small and fluffy and exactly the same. Then the last and biggest egg gave a wobble, and out tumbled a duckling who was grey, and lanky, and not the same at all.",
+      "The other ducks on the pond looked at him sideways. He is too big, they whispered. He is too grey. What an ugly duckling.",
+      "His brothers and sisters would not play with him. The hens pecked at him and the farm cat laughed at him, and one sad autumn morning the grey duckling walked away from the pond to find somewhere he might fit.",
+      "He walked a long way. He slept in the rushes. When winter came, the water froze at the edges and the wind was cold and he tucked his head under his wing and waited, because there was nothing else to do.",
+      "But winters end. The ice melted and the sun came back, and the grey bird stretched wings that had somehow grown enormous while he slept.",
+      "He flew. Right over the fields, all the way to a wide blue lake, where three beautiful white swans were gliding in the sunshine.",
+      "They will chase me away, he thought. But he was lonely, so he swam towards them anyway with his head bowed low &mdash; and he saw himself in the still water.",
+      "Looking back at him was a swan. A long white neck, soft white feathers, wide white wings. He was not an ugly duckling at all. He never had been. He had only been a swan who had not finished growing.",
+      "The three swans came and touched their beaks to his, gently, the way swans do, and told him he was the finest of them all.",
+      "And the big grey bird, who was not grey any more, tucked his head down and thought that he had never once dreamed of being this happy, back when he was the ugly duckling."
+    ]
+  }
+];
+
+/* ============================================================
+   INK WASH REVEAL
+   A canvas overlay blooms black ink across the plate, then
+   dissolves outward to uncover the illustration beneath.
+   Every reveal is seeded differently, so no two are alike.
+   ============================================================ */
+const InkWash = (function () {
+  const DURATION   = 1450;   // ms, whole cycle
+  const BLOOM_END  = 0.44;   // ink has covered the plate
+  const HOLD_END   = 0.46;   // wet pause before it lifts
+  const TAU        = Math.PI * 2;
+
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // does this browser support ctx.filter? (Safari < 16.4 does not)
+  const canFilter = (function () {
+    const c = document.createElement("canvas").getContext("2d");
+    if (!c) return false;
+    c.filter = "blur(2px)";
+    return c.filter === "blur(2px)";
+  })();
+
+  const ease   = function (p) { return 1 - Math.pow(1 - p, 3); };       // out-cubic
+  const easeIO = function (p) { return p < .5 ? 2*p*p : 1 - Math.pow(-2*p + 2, 2)/2; };
+  const clamp  = function (v) { return v < 0 ? 0 : v > 1 ? 1 : v; };
+
+  /* a fixed set of radius multipliers gives each blob a stable
+     wobbly outline that grows without wriggling about */
+  function makeShape(points) {
+    const s = [];
+    for (let i = 0; i < points; i++) s.push(0.68 + Math.random() * 0.5);
+    return s;
+  }
+
+  /* wobbly closed blob, drawn through the midpoints so it stays smooth */
+  function blob(ctx, x, y, r, shape, rot) {
+    const n = shape.length;
+    const px = [], py = [];
+    for (let i = 0; i < n; i++) {
+      const a = rot + (i / n) * TAU;
+      const rr = r * shape[i];
+      px.push(x + Math.cos(a) * rr);
+      py.push(y + Math.sin(a) * rr);
+    }
+    ctx.beginPath();
+    ctx.moveTo((px[n - 1] + px[0]) / 2, (py[n - 1] + py[0]) / 2);
+    for (let i = 0; i < n; i++) {
+      const j = (i + 1) % n;
+      ctx.quadraticCurveTo(px[i], py[i], (px[i] + px[j]) / 2, (py[i] + py[j]) / 2);
+    }
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  function seeds(cx, cy, R, count, opts) {
+    const out = [];
+    for (let i = 0; i < count; i++) {
+      const a = Math.random() * TAU;
+      const d = R * (opts.dist[0] + Math.random() * (opts.dist[1] - opts.dist[0]));
+      out.push({
+        x: cx + Math.cos(a) * d,
+        y: cy + Math.sin(a) * d,
+        r: R * (opts.size[0] + Math.random() * (opts.size[1] - opts.size[0])),
+        delay: opts.delay[0] + Math.random() * (opts.delay[1] - opts.delay[0]),
+        rot: Math.random() * TAU,
+        shape: makeShape(opts.points || 13)
+      });
+    }
+    return out;
+  }
+
+  function run(frame, art) {
+    if (frame.dataset.inked === "1") return;
+    frame.dataset.inked = "1";
+
+    const w = frame.clientWidth;
+    const h = frame.clientHeight;
+
+    // no geometry, or the reader prefers stillness: just show the picture
+    if (reduced || !w || !h) {
+      art.classList.add("ink-revealed");
+      return;
+    }
+
+    const dpr    = Math.min(window.devicePixelRatio || 1, 2);
+    const canvas = document.createElement("canvas");
+    canvas.className = "ink-canvas";
+    canvas.setAttribute("aria-hidden", "true");
+    canvas.width  = Math.round(w * dpr);
+    canvas.height = Math.round(h * dpr);
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) { art.classList.add("ink-revealed"); return; }
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    frame.appendChild(canvas);
+
+    const cx = w / 2;
+    const cy = h / 2;
+    const R  = Math.hypot(w, h) / 2;
+
+    // the flood: one big centre bloom plus lobes that reach the corners
+    const core = [{ x: cx, y: cy, r: R * 0.66, delay: 0, rot: Math.random() * TAU, shape: makeShape(16) }]
+      .concat(seeds(cx, cy, R, 12, { dist: [0.18, 0.62], size: [0.30, 0.52], delay: [0.00, 0.42], points: 13 }));
+
+    // tendrils: little satellites that creep out past the wet edge
+    const tendrils = seeds(cx, cy, R, 20, { dist: [0.55, 1.02], size: [0.06, 0.17], delay: [0.18, 0.80], points: 9 });
+
+    // the lift: erosion blobs that eat the ink away from the middle out
+    const lift = [{ x: cx, y: cy, r: R * 0.52, delay: 0, rot: Math.random() * TAU, shape: makeShape(17) }]
+      .concat(seeds(cx, cy, R, 18, { dist: [0.16, 0.86], size: [0.20, 0.42], delay: [0.02, 0.62], points: 12 }));
+
+    const fringe = seeds(cx, cy, R, 18, { dist: [0.60, 1.05], size: [0.09, 0.22], delay: [0.34, 0.88], points: 8 });
+
+    const blurCore = canFilter ? Math.max(2, R * 0.022) : 0;
+    const blurEdge = canFilter ? Math.max(5, R * 0.075) : 0;
+
+    let revealed = false;
+    const start = performance.now();
+
+    function grow(list, progress) {
+      const drawn = [];
+      for (let i = 0; i < list.length; i++) {
+        const s = list[i];
+        if (progress <= s.delay) continue;
+        const p = ease(clamp((progress - s.delay) / (1 - s.delay)));
+        drawn.push({ s: s, r: s.r * p, p: p });
+      }
+      return drawn;
+    }
+
+    function frameStep(now) {
+      const t = clamp((now - start) / DURATION);
+
+      ctx.clearRect(0, 0, w, h);
+      ctx.globalCompositeOperation = "source-over";
+
+      const bloomT = clamp(t / BLOOM_END);
+      const wetCore = grow(core, bloomT);
+      const wetTend = grow(tendrils, bloomT);
+
+      // soft bleed halo first, so edges look like paper drinking ink
+      if (canFilter) ctx.filter = "blur(" + blurEdge + "px)";
+      ctx.fillStyle = "rgba(38, 24, 16, 0.34)";
+      for (let i = 0; i < wetCore.length; i++) {
+        blob(ctx, wetCore[i].s.x, wetCore[i].s.y, wetCore[i].r * 1.24, wetCore[i].s.shape, wetCore[i].s.rot);
+      }
+      for (let i = 0; i < wetTend.length; i++) {
+        blob(ctx, wetTend[i].s.x, wetTend[i].s.y, wetTend[i].r * 1.5, wetTend[i].s.shape, wetTend[i].s.rot);
+      }
+
+      // then the dense body of the ink
+      if (canFilter) ctx.filter = "blur(" + blurCore + "px)";
+      ctx.fillStyle = "rgba(26, 16, 11, 0.96)";
+      for (let i = 0; i < wetCore.length; i++) {
+        blob(ctx, wetCore[i].s.x, wetCore[i].s.y, wetCore[i].r, wetCore[i].s.shape, wetCore[i].s.rot);
+      }
+      ctx.fillStyle = "rgba(26, 16, 11, 0.78)";
+      for (let i = 0; i < wetTend.length; i++) {
+        blob(ctx, wetTend[i].s.x, wetTend[i].s.y, wetTend[i].r, wetTend[i].s.shape, wetTend[i].s.rot);
+      }
+
+      // the lift: dissolve outwards, uncovering the picture underneath
+      if (t > HOLD_END) {
+        if (!revealed) {
+          revealed = true;
+          art.classList.add("ink-revealed");
+        }
+        const liftT = easeIO(clamp((t - HOLD_END) / (1 - HOLD_END)));
+        ctx.globalCompositeOperation = "destination-out";
+
+        if (canFilter) ctx.filter = "blur(" + blurEdge + "px)";
+        ctx.fillStyle = "rgba(0,0,0,1)";
+        const dry = grow(lift, liftT);
+        for (let i = 0; i < dry.length; i++) {
+          blob(ctx, dry[i].s.x, dry[i].s.y, dry[i].r * 1.12, dry[i].s.shape, dry[i].s.rot);
+        }
+        const dryFringe = grow(fringe, liftT);
+        for (let i = 0; i < dryFringe.length; i++) {
+          blob(ctx, dryFringe[i].s.x, dryFringe[i].s.y, dryFringe[i].r * 1.35, dryFringe[i].s.shape, dryFringe[i].s.rot);
+        }
+        // a broad wipe, saved for the last moments, so that nothing is
+        // left stranded in the corners when the canvas lifts away
+        const late = clamp((liftT - 0.42) / 0.58);
+        if (late > 0) {
+          if (canFilter) ctx.filter = "none";
+          const wipe = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(1, R * 1.5 * late));
+          wipe.addColorStop(0,    "rgba(0,0,0," + late.toFixed(3) + ")");
+          wipe.addColorStop(0.68, "rgba(0,0,0," + (late * 0.8).toFixed(3) + ")");
+          wipe.addColorStop(1,    "rgba(0,0,0,0)");
+          ctx.fillStyle = wipe;
+          ctx.fillRect(0, 0, w, h);
+        }
+      }
+
+      if (canFilter) ctx.filter = "none";
+
+      if (t < 1) {
+        requestAnimationFrame(frameStep);
+      } else {
+        art.classList.add("ink-revealed");
+        canvas.classList.add("is-fading");
+        setTimeout(function () { canvas.remove(); }, 520);
+      }
+    }
+
+    requestAnimationFrame(frameStep);
+  }
+
+  /* ---- watch for plates entering the viewport ---- */
+  let observer = null;
+  if ("IntersectionObserver" in window) {
+    observer = new IntersectionObserver(function (entries) {
+      let queued = 0;
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        const frame = entry.target;
+        observer.unobserve(frame);
+        const art = frame.querySelector(".illus-art");
+        if (!art) return;
+        const wait = queued * 110;
+        queued++;
+        setTimeout(function () { run(frame, art); }, wait);
+      });
+    }, { threshold: 0.22, rootMargin: "0px 0px -6% 0px" });
+  }
+
+  return {
+    watch: function (root) {
+      const frames = (root || document).querySelectorAll(".ink-frame");
+      frames.forEach(function (frame) {
+        if (frame.dataset.watched === "1") return;
+        frame.dataset.watched = "1";
+        if (observer) {
+          observer.observe(frame);
+        } else {
+          const art = frame.querySelector(".illus-art");
+          if (art) run(frame, art);
+        }
+      });
+    }
+  };
+})();
+
+/* ============================================================
+   THE BOOK ITSELF
+   Rendering, routing between the shelf and the reading page.
+   ============================================================ */
+(function () {
+  const ROMAN = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
+
+  const grid        = document.getElementById("storyGrid");
+  const tocList     = document.getElementById("tocList");
+  const libraryView = document.getElementById("view-library");
+  const readerView  = document.getElementById("view-reader");
+  const masthead    = document.getElementById("masthead");
+  const toTop       = document.getElementById("toTop");
+
+  const byId = {};
+  STORIES.forEach(function (s, i) { byId[s.id] = { story: s, index: i }; });
+
+  let libraryScroll = 0;
+  let firstRoute = true;
+
+  /* polite announcements for screen readers */
+  const live = document.createElement("p");
+  live.className = "visually-hidden";
+  live.setAttribute("role", "status");
+  live.setAttribute("aria-live", "polite");
+  document.body.appendChild(live);
+
+  const ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+
+  const FLOURISH =
+    '<svg viewBox="0 0 600 80" preserveAspectRatio="xMidYMid meet" role="presentation" aria-hidden="true">' +
+    '<path d="M60 40h190M350 40h190" stroke="#D9A441" stroke-width="1.6" fill="none"/>' +
+    '<path d="M250 40c14-16 30-16 40 0-10 16-26 16-40 0z" fill="#7FA492"/>' +
+    '<path d="M350 40c-14-16-30-16-40 0 10 16 26 16 40 0z" fill="#7FA492"/>' +
+    '<path d="M300 12l6 15 16 1-12 11 4 16-14-9-14 9 4-16-12-11 16-1z" fill="#D9A441"/>' +
+    '<circle cx="300" cy="62" r="4" fill="#B23A2E"/>' +
+    '<circle cx="60" cy="40" r="4" fill="#D9A441"/><circle cx="540" cy="40" r="4" fill="#D9A441"/>' +
+    '<path d="M120 40c0-10 10-14 16-8s-2 16-16 8zM480 40c0-10-10-14-16-8s2 16 16 8z" fill="#C9A85E"/>' +
+    '</svg>';
+
+  /* ---------- plates ---------- */
+  function makePlate(story, tag, className) {
+    const frame = document.createElement(tag);
+    frame.className = className + " ink-frame";
+    frame.style.setProperty("--tint", story.tint);
+
+    const art = document.createElement("div");
+    art.className = "illus-art ink-processed";
+
+    const tpl = document.querySelector('template[data-art="' + story.art + '"]');
+    if (tpl) art.appendChild(tpl.content.cloneNode(true));
+
+    frame.appendChild(art);
+    return frame;
+  }
+
+  function makeFlourish() {
+    const frame = document.createElement("div");
+    frame.className = "aside-plate ink-frame";
+    const art = document.createElement("div");
+    art.className = "illus-art ink-processed";
+    art.innerHTML = FLOURISH;
+    frame.appendChild(art);
+    return frame;
+  }
+
+  /* ---------- the shelf ---------- */
+  function renderLibrary() {
+    const cards = document.createDocumentFragment();
+    const items = document.createDocumentFragment();
+
+    STORIES.forEach(function (story, i) {
+      const card = document.createElement("article");
+      card.className = "card";
+      card.appendChild(makePlate(story, "figure", "card__figure"));
+
+      const body = document.createElement("div");
+      body.className = "card__body";
+      body.innerHTML =
+        '<p class="card__kicker"><b>No. ' + ROMAN[i + 1] + '</b><span>' + story.minutes + ' min read-aloud</span></p>' +
+        '<h3 class="card__title"><a class="card__link" href="#story/' + story.id + '">' + story.title + '</a></h3>' +
+        '<p class="card__excerpt">' + story.excerpt + '</p>' +
+        '<span class="card__cta" aria-hidden="true">Read story ' + ARROW + '</span>';
+      card.appendChild(body);
+      cards.appendChild(card);
+
+      const li = document.createElement("li");
+      li.className = "toc__item";
+      li.innerHTML =
+        '<a class="toc__link" href="#story/' + story.id + '">' +
+          '<span class="toc__num" aria-hidden="true">' + ROMAN[i + 1] + '</span>' +
+          '<span class="toc__name">' + story.title + '</span>' +
+          '<span class="toc__leader" aria-hidden="true"></span>' +
+          '<span class="toc__time">' + story.minutes + ' min</span>' +
+        '</a>';
+      items.appendChild(li);
+    });
+
+    grid.appendChild(cards);
+    tocList.appendChild(items);
+  }
+
+  /* ---------- the reading page ---------- */
+  function buildReader(story, index) {
+    readerView.innerHTML = "";
+
+    const shell = document.createElement("div");
+    shell.className = "shell";
+
+    const bar = document.createElement("div");
+    bar.className = "reader__bar";
+    bar.innerHTML =
+      '<a class="btn btn--ghost" href="#contents">' +
+        '<svg class="btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>' +
+        'All the stories' +
+      '</a>';
+    shell.appendChild(bar);
+
+    const hero = document.createElement("header");
+    hero.className = "reader__hero";
+    hero.innerHTML =
+      '<p class="reader__kicker"><b>Story ' + ROMAN[index + 1] + '</b><span>' + story.minutes + ' minutes to read aloud</span></p>' +
+      '<h1 class="reader__title" id="readerTitle">' + story.title + '</h1>' +
+      '<p class="reader__sub">' + story.subtitle + '</p>';
+    shell.appendChild(hero);
+
+    shell.appendChild(makePlate(story, "figure", "reader__plate"));
+
+    const bodyEl = document.createElement("div");
+    bodyEl.className = "reader__body";
+    story.body.forEach(function (para, i) {
+      const p = document.createElement("p");
+      p.innerHTML = para;
+      bodyEl.appendChild(p);
+
+      if (i === story.pullAfter) {
+        const pull = document.createElement("blockquote");
+        pull.className = "pull";
+        pull.innerHTML = story.pull;
+        bodyEl.appendChild(pull);
+        bodyEl.appendChild(makeFlourish());
+      }
+    });
+    shell.appendChild(bodyEl);
+
+    const prev = STORIES[(index - 1 + STORIES.length) % STORIES.length];
+    const next = STORIES[(index + 1) % STORIES.length];
+
+    const end = document.createElement("div");
+    end.className = "reader__end";
+    end.innerHTML =
+      '<p class="reader__end-mark">&mdash; The End &mdash;</p>' +
+      '<p class="reader__moral"><b>Something to talk about</b>' + story.moral + '</p>' +
+      '<nav class="reader__nav" aria-label="More stories">' +
+        '<a class="navcard" href="#story/' + prev.id + '">' +
+          '<span class="navcard__label">Story before</span>' +
+          '<span class="navcard__title">' + prev.title + '</span>' +
+        '</a>' +
+        '<a class="navcard navcard--next" href="#story/' + next.id + '">' +
+          '<span class="navcard__label">Story after</span>' +
+          '<span class="navcard__title">' + next.title + '</span>' +
+        '</a>' +
+      '</nav>' +
+      '<p style="margin-top:2rem"><button class="btn btn--primary" type="button" data-action="random">' +
+        '<svg class="btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 4.6 5 .4-3.8 3.3 1.2 4.9L12 13.6 7.7 16.2l1.2-4.9L5.1 8l5-.4z"/></svg>' +
+        'Another one, please' +
+      '</button></p>';
+    shell.appendChild(end);
+
+    readerView.appendChild(shell);
+    readerView.setAttribute("aria-label", story.title);
+  }
+
+  /* ---------- views ---------- */
+  function showLibrary(restore) {
+    readerView.classList.remove("is-active");
+    libraryView.classList.add("is-active");
+    document.title = "The Little Lamplight Book · Bedtime Stories for Small People";
+    if (restore !== false && !firstRoute) {
+      window.scrollTo({ top: libraryScroll, behavior: "auto" });
+    }
+    InkWash.watch(libraryView);
+  }
+
+  function openStory(id) {
+    const entry = byId[id];
+    if (!entry) { showLibrary(); return; }
+
+    if (libraryView.classList.contains("is-active")) {
+      libraryScroll = window.scrollY;
+    }
+
+    buildReader(entry.story, entry.index);
+    libraryView.classList.remove("is-active");
+    readerView.classList.add("is-active");
+
+    window.scrollTo({ top: 0, behavior: "auto" });
+    readerView.focus({ preventScroll: true });
+
+    document.title = entry.story.title + " · The Little Lamplight Book";
+    live.textContent = "Now reading: " + entry.story.title;
+
+    InkWash.watch(readerView);
+  }
+
+  /* ---------- routing ---------- */
+  function route() {
+    const hash = window.location.hash;
+    const first = firstRoute;
+    firstRoute = false;
+    if (hash.indexOf("#story/") === 0) {
+      const id = decodeURIComponent(hash.slice(7));
+      if (byId[id]) { openStory(id); return; }
+    }
+    const wasReading = readerView.classList.contains("is-active");
+    showLibrary(hash === "#contents" ? false : true);
+    if (hash === "#contents") {
+      const target = document.getElementById("contents");
+      if (target) {
+        target.scrollIntoView({ behavior: (wasReading || first) ? "auto" : "smooth", block: "start" });
+      }
+    }
+  }
+
+  function go(hash) {
+    if (window.location.hash === hash) { route(); }
+    else { window.location.hash = hash; }
+  }
+
+  function randomStory() {
+    const current = window.location.hash.indexOf("#story/") === 0
+      ? window.location.hash.slice(7) : null;
+    let pick = STORIES[Math.floor(Math.random() * STORIES.length)];
+    let guard = 0;
+    while (STORIES.length > 1 && pick.id === current && guard++ < 20) {
+      pick = STORIES[Math.floor(Math.random() * STORIES.length)];
+    }
+    go("#story/" + pick.id);
+  }
+
+  /* ---------- wiring ---------- */
+  document.addEventListener("click", function (e) {
+    const trigger = e.target.closest && e.target.closest("[data-action]");
+    if (!trigger) return;
+    const action = trigger.dataset.action;
+
+    if (action === "random") { e.preventDefault(); randomStory(); }
+    if (action === "contents") { e.preventDefault(); go("#contents"); }
+    if (action === "home") {
+      e.preventDefault();
+      if (window.location.hash) { window.location.hash = ""; }
+      else { showLibrary(); window.scrollTo({ top: 0, behavior: "smooth" }); }
+    }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (!readerView.classList.contains("is-active")) return;
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    const tag = (e.target.tagName || "").toLowerCase();
+    if (tag === "input" || tag === "textarea") return;
+
+    const hash = window.location.hash;
+    if (hash.indexOf("#story/") !== 0) return;
+    const entry = byId[hash.slice(7)];
+    if (!entry) return;
+
+    if (e.key === "ArrowRight") {
+      go("#story/" + STORIES[(entry.index + 1) % STORIES.length].id);
+    } else if (e.key === "ArrowLeft") {
+      go("#story/" + STORIES[(entry.index - 1 + STORIES.length) % STORIES.length].id);
+    } else if (e.key === "Escape") {
+      go("#contents");
+    }
+  });
+
+  toTop.addEventListener("click", function () {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  let ticking = false;
+  window.addEventListener("scroll", function () {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function () {
+      const y = window.scrollY;
+      masthead.classList.toggle("is-stuck", y > 12);
+      toTop.classList.toggle("is-visible", y > 640);
+      ticking = false;
+    });
+  }, { passive: true });
+
+  window.addEventListener("hashchange", route);
+
+  /* ---------- go ---------- */
+  renderLibrary();
+  InkWash.watch(document);
+  route();
+})();
+</script>
+</body>
+</html>
