@@ -949,7 +949,7 @@ body.entered .fade-item, body.entered .card-enter {
         <p class="eyebrow ornament">The stories</p>
         <h2 class="section-head__title">Ten small tales, ready to read</h2>
         <p class="section-head__note">
-          Every picture washes itself in with a bloom of golden ink
+          Every picture washes itself in with a sweep of golden ink
           as you scroll.
         </p>
       </div>
@@ -1645,15 +1645,16 @@ const IMAGE_ALTS = {
 };
 
 /* ============================================================
-   GOLDEN INK WASH REVEAL
-   A canvas overlay blooms golden ink across the plate, then
-   dissolves outward to uncover the illustration beneath.
+   GOLDEN INK CURTAIN REVEAL
+   A canvas overlay sweeps golden ink across the plate from left
+   to right — the curtain drawing shut — then draws the curtain
+   open the same way, uncovering the illustration left-to-right.
    Every reveal is seeded differently, so no two are alike.
    ============================================================ */
 const InkWash = (function () {
-  const DURATION   = 1450;   // ms, whole cycle
-  const BLOOM_END  = 0.44;   // ink has covered the plate
-  const HOLD_END   = 0.46;   // wet pause before it lifts
+  const DURATION   = 1500;   // ms, whole cycle
+  const SWEEP_END  = 0.42;   // ink has swept across the full plate
+  const HOLD_END   = 0.46;   // wet pause before the curtain lifts
   const TAU        = Math.PI * 2;
 
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -1666,9 +1667,10 @@ const InkWash = (function () {
     return c.filter === "blur(2px)";
   })();
 
-  const ease   = function (p) { return 1 - Math.pow(1 - p, 3); };       // out-cubic
-  const easeIO = function (p) { return p < .5 ? 2*p*p : 1 - Math.pow(-2*p + 2, 2)/2; };
-  const clamp  = function (v) { return v < 0 ? 0 : v > 1 ? 1 : v; };
+  const ease    = function (p) { return 1 - Math.pow(1 - p, 3); };       // out-cubic
+  const easeIO  = function (p) { return p < .5 ? 2*p*p : 1 - Math.pow(-2*p + 2, 2)/2; };
+  const clamp   = function (v) { return v < 0 ? 0 : v > 1 ? 1 : v; };
+  const invEase = function (p) { return 1 - Math.pow(1 - p, 1 / 3); };   // inverse of ease
 
   /* a fixed set of radius multipliers gives each blob a stable
      wobbly outline that grows without wriggling about */
@@ -1698,16 +1700,45 @@ const InkWash = (function () {
     ctx.fill();
   }
 
-  function seeds(cx, cy, R, count, opts) {
+  /* the wobbly vertical lip of the curtain at height y. Slow waves
+     stack with faster ripples so the edge breathes as it rolls. */
+  function lip(y, seed, x, w) {
+    const a = w * 0.028;
+    return Math.sin(y * 0.011 + seed) * a * 0.62
+         + Math.sin(y * 0.0043 + seed * 1.9) * a
+         + Math.sin(y * 0.008 + x * 0.05 + seed * 2.7) * a * 0.45;
+  }
+
+  /* fill everything to the left of frontX with ink — the curtain */
+  function curtain(ctx, frontX, w, h, seed) {
+    const seg = 14;
+    ctx.beginPath();
+    ctx.moveTo(-20, -20);
+    ctx.lineTo(frontX, -20);
+    for (let i = 0; i <= seg; i++) {
+      const y = -20 + (h + 40) * (i / seg);
+      ctx.lineTo(frontX + lip(y, seed, frontX, w), y);
+    }
+    ctx.lineTo(-20, h + 20);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  /* scattered blobs, each woken just as the sweeping front reaches
+     it, so the whole flock tracks the curtain edge. */
+  function seeds(w, h, count, opts) {
     const out = [];
     for (let i = 0; i < count; i++) {
-      const a = Math.random() * TAU;
-      const d = R * (opts.dist[0] + Math.random() * (opts.dist[1] - opts.dist[0]));
+      const x = w * (opts.x[0] + Math.random() * (opts.x[1] - opts.x[0]));
+      const y = h * (opts.y[0] + Math.random() * (opts.y[1] - opts.y[0]));
+      const when = (opts.base || 0)
+                 + invEase(clamp(x / w)) * opts.phase
+                 + (opts.lead || 0)
+                 + opts.jitter * Math.random();
       out.push({
-        x: cx + Math.cos(a) * d,
-        y: cy + Math.sin(a) * d,
-        r: R * (opts.size[0] + Math.random() * (opts.size[1] - opts.size[0])),
-        delay: opts.delay[0] + Math.random() * (opts.delay[1] - opts.delay[0]),
+        x: x, y: y,
+        r: Math.max(w, h) * (opts.size[0] + Math.random() * (opts.size[1] - opts.size[0])),
+        when: when,
         rot: Math.random() * TAU,
         shape: makeShape(opts.points || 13)
       });
@@ -1740,38 +1771,35 @@ const InkWash = (function () {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     frame.appendChild(canvas);
 
-    const cx = w / 2;
-    const cy = h / 2;
-    const R  = Math.hypot(w, h) / 2;
+    const seed = Math.random() * TAU;
 
-    // the flood: one big centre bloom plus lobes that reach the corners
-    const core = [{ x: cx, y: cy, r: R * 0.66, delay: 0, rot: Math.random() * TAU, shape: makeShape(16) }]
-      .concat(seeds(cx, cy, R, 12, { dist: [0.18, 0.62], size: [0.30, 0.52], delay: [0.00, 0.42], points: 13 }));
+    // trailing blobs: wet patches left in the wake of the leading edge
+    const drift = seeds(w, h, 14, { x: [0.05, 0.72], y: [0.08, 0.92], size: [0.05, 0.14], phase: SWEEP_END, jitter: 0.04, points: 11 });
 
-    // tendrils: little satellites that creep out past the wet edge
-    const tendrils = seeds(cx, cy, R, 20, { dist: [0.55, 1.02], size: [0.06, 0.17], delay: [0.18, 0.80], points: 9 });
+    // tendrils: little satellites that creep out just ahead of the wet edge
+    const tendrils = seeds(w, h, 16, { x: [0.05, 0.95], y: [0.06, 0.94], size: [0.04, 0.11], phase: SWEEP_END, lead: -0.04, jitter: 0.05, points: 9 });
 
-    // golden dust: bright flecks riding the wet edge of the ink
-    const dust = seeds(cx, cy, R, 26, { dist: [0.50, 1.04], size: [0.018, 0.05], delay: [0.12, 0.92], points: 6 });
+    // golden dust: bright flecks sparkling along the wet edge
+    const dust = seeds(w, h, 26, { x: [0.02, 0.98], y: [0.05, 0.95], size: [0.015, 0.045], phase: SWEEP_END, lead: -0.05, jitter: 0.05, points: 6 });
 
-    // the lift: erosion blobs that eat the ink away from the middle out
-    const lift = [{ x: cx, y: cy, r: R * 0.52, delay: 0, rot: Math.random() * TAU, shape: makeShape(17) }]
-      .concat(seeds(cx, cy, R, 18, { dist: [0.16, 0.86], size: [0.20, 0.42], delay: [0.02, 0.62], points: 12 }));
+    // the lift: erosion blobs that eat the ink away from the left
+    const lift = seeds(w, h, 20, { x: [0.02, 0.92], y: [0.06, 0.94], size: [0.13, 0.30], base: HOLD_END, phase: 1 - HOLD_END, jitter: 0.05, points: 12 });
 
-    const fringe = seeds(cx, cy, R, 18, { dist: [0.60, 1.05], size: [0.09, 0.22], delay: [0.34, 0.88], points: 8 });
+    // fringe blobs pushed just past the lift edge to finish the right side
+    const fringe = seeds(w, h, 16, { x: [0.03, 0.96], y: [0.06, 0.94], size: [0.06, 0.15], base: HOLD_END, phase: 1 - HOLD_END, lead: 0.04, jitter: 0.07, points: 8 });
 
-    const blurCore = canFilter ? Math.max(2, R * 0.022) : 0;
-    const blurEdge = canFilter ? Math.max(5, R * 0.075) : 0;
+    const blurCore = canFilter ? Math.max(2, w * 0.02) : 0;
+    const blurEdge = canFilter ? Math.max(5, w * 0.06) : 0;
 
     let revealed = false;
     const start = performance.now();
 
-    function grow(list, progress) {
+    function grow(list, t) {
       const drawn = [];
       for (let i = 0; i < list.length; i++) {
         const s = list[i];
-        if (progress <= s.delay) continue;
-        const p = ease(clamp((progress - s.delay) / (1 - s.delay)));
+        if (t <= s.when) continue;
+        const p = ease(clamp((t - s.when) / (1 - s.when)));
         drawn.push({ s: s, r: s.r * p, p: p });
       }
       return drawn;
@@ -1783,16 +1811,15 @@ const InkWash = (function () {
       ctx.clearRect(0, 0, w, h);
       ctx.globalCompositeOperation = "source-over";
 
-      const bloomT = clamp(t / BLOOM_END);
-      const wetCore = grow(core, bloomT);
-      const wetTend = grow(tendrils, bloomT);
+      /* ---- flood: the curtain draws across, left -> right ---- */
+      // overshoots the right edge so the lip can wobble past it
+      const frontX = w * (0.02 + 1.08 * ease(clamp(t / SWEEP_END)));
 
       // soft bleed halo first, so edges look like paper drinking golden ink
       if (canFilter) ctx.filter = "blur(" + blurEdge + "px)";
       ctx.fillStyle = "rgba(217, 164, 65, 0.34)";
-      for (let i = 0; i < wetCore.length; i++) {
-        blob(ctx, wetCore[i].s.x, wetCore[i].s.y, wetCore[i].r * 1.24, wetCore[i].s.shape, wetCore[i].s.rot);
-      }
+      curtain(ctx, frontX, w, h, seed);
+      const wetTend = grow(tendrils, t);
       for (let i = 0; i < wetTend.length; i++) {
         blob(ctx, wetTend[i].s.x, wetTend[i].s.y, wetTend[i].r * 1.5, wetTend[i].s.shape, wetTend[i].s.rot);
       }
@@ -1800,52 +1827,46 @@ const InkWash = (function () {
       // then the dense golden body of the ink
       if (canFilter) ctx.filter = "blur(" + blurCore + "px)";
       ctx.fillStyle = "rgba(217, 164, 65, 0.97)";
-      for (let i = 0; i < wetCore.length; i++) {
-        blob(ctx, wetCore[i].s.x, wetCore[i].s.y, wetCore[i].r, wetCore[i].s.shape, wetCore[i].s.rot);
-      }
+      curtain(ctx, frontX, w, h, seed);
       ctx.fillStyle = "rgba(197, 140, 40, 0.82)";
+      const wetDrift = grow(drift, t);
+      for (let i = 0; i < wetDrift.length; i++) {
+        blob(ctx, wetDrift[i].s.x, wetDrift[i].s.y, wetDrift[i].r, wetDrift[i].s.shape, wetDrift[i].s.rot);
+      }
       for (let i = 0; i < wetTend.length; i++) {
         blob(ctx, wetTend[i].s.x, wetTend[i].s.y, wetTend[i].r, wetTend[i].s.shape, wetTend[i].s.rot);
       }
 
-      // golden dust flecks sparkling along the ink edge
+      // golden dust flecks sparkling along the wet edge
       if (canFilter) ctx.filter = "none";
       ctx.fillStyle = "rgba(255, 224, 130, 0.9)";
-      const sparkle = grow(dust, bloomT);
+      const sparkle = grow(dust, t);
       for (let i = 0; i < sparkle.length; i++) {
         blob(ctx, sparkle[i].s.x, sparkle[i].s.y, sparkle[i].r, sparkle[i].s.shape, sparkle[i].s.rot);
       }
 
-      // the lift: dissolve outwards, uncovering the picture underneath
+      /* ---- the lift: the curtain draws open, left -> right ---- */
       if (t > HOLD_END) {
         if (!revealed) {
           revealed = true;
           art.classList.add("ink-revealed");
         }
         const liftT = easeIO(clamp((t - HOLD_END) / (1 - HOLD_END)));
+        // a fresh wavefront, overshooting the right edge so no ink is stranded
+        const dryX = w * (0.02 + 1.08 * ease(liftT));
         ctx.globalCompositeOperation = "destination-out";
 
         if (canFilter) ctx.filter = "blur(" + blurEdge + "px)";
         ctx.fillStyle = "rgba(0,0,0,1)";
-        const dry = grow(lift, liftT);
+        curtain(ctx, dryX, w, h, seed + 3.1);
+
+        const dry = grow(lift, t);
         for (let i = 0; i < dry.length; i++) {
           blob(ctx, dry[i].s.x, dry[i].s.y, dry[i].r * 1.12, dry[i].s.shape, dry[i].s.rot);
         }
-        const dryFringe = grow(fringe, liftT);
+        const dryFringe = grow(fringe, t);
         for (let i = 0; i < dryFringe.length; i++) {
           blob(ctx, dryFringe[i].s.x, dryFringe[i].s.y, dryFringe[i].r * 1.35, dryFringe[i].s.shape, dryFringe[i].s.rot);
-        }
-        // a broad wipe, saved for the last moments, so that nothing is
-        // left stranded in the corners when the canvas lifts away
-        const late = clamp((liftT - 0.42) / 0.58);
-        if (late > 0) {
-          if (canFilter) ctx.filter = "none";
-          const wipe = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(1, R * 1.5 * late));
-          wipe.addColorStop(0,    "rgba(0,0,0," + late.toFixed(3) + ")");
-          wipe.addColorStop(0.68, "rgba(0,0,0," + (late * 0.8).toFixed(3) + ")");
-          wipe.addColorStop(1,    "rgba(0,0,0,0)");
-          ctx.fillStyle = wipe;
-          ctx.fillRect(0, 0, w, h);
         }
       }
 
