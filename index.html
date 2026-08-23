@@ -635,6 +635,10 @@ body.entered .fade-item, body.entered .card-enter {
 .ink-frame.is-developing::before {
   transform: translateX(101%);
 }
+/* reveal the photograph as the curtain slides right —
+   the image sits below the ::before (z-index 2 vs 5) so it
+   becomes visible on the left as the paper-coloured sheet clears */
+.ink-frame.is-developing .story-image { opacity: 1 !important; }
 
 /* --- inline illustrations in story reader --- */
 .inline-illustration {
