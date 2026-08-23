@@ -580,10 +580,10 @@ body.entered .fade-item, body.entered .card-enter {
 .card__cta svg { width: 1em; height: 1em; }
 
 /* ============================================================
-   10. ILLUSTRATION FRAME + INK CANVAS
+   10. ILLUSTRATION FRAME + DEVELOPING-PRINT REVEAL
    ============================================================ */
 .ink-frame { position: relative; overflow: hidden; }
-.ink-frame::after {          /* paper stands in while the ink is wet */
+.ink-frame::after {          /* paper stands in while the print develops */
   content: "";
   position: absolute; inset: 0; z-index: 0;
   background:
@@ -598,7 +598,7 @@ body.entered .fade-item, body.entered .card-enter {
 .illus-art svg { width: 100%; height: 100%; }
 
 /* the photographic illustration, sitting over the SVG fallback.
-   The ink canvas washes in on top of whichever is showing. */
+   The developing curtain covers it until the print is ready. */
 .story-image {
   position: absolute; inset: 0; z-index: 2;
   width: 100%; height: 100%;
@@ -609,22 +609,32 @@ body.entered .fade-item, body.entered .card-enter {
 .ink-frame.has-photo .story-image { opacity: 1; }
 .ink-frame.has-photo .illus-art svg { visibility: hidden; }
 
-/* --- the contract with the ink --- */
+/* --- the developing-print curtain --- */
 .ink-processed { opacity: 0 !important; }
 .ink-processed.ink-revealed { opacity: 1 !important; }
 
-/* a plate that is waiting for its ink shows nothing but paper —
-   the photograph is held back so the bloom has something to print */
+/* a plate waiting for its print shows nothing but paper —
+   the photograph is held back until the developer reaches it */
 .ink-frame.is-wet .story-image { opacity: 0 !important; }
 
-.ink-canvas {
-  position: absolute; inset: 0; z-index: 3;
-  width: 100%; height: 100%;
+/* the curtain: a paper-coloured sheet that slides right, revealing
+   the image underneath — like a darkroom print developing left to right.
+   The ::before sits above the image (z-index 5) and translates off
+   to the right when .is-developing is added by the observer. */
+.ink-frame::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: 5;
+  background: var(--paper-warm);
+  transform: translateX(0%);
+  transition: transform 1.6s cubic-bezier(.22,.61,.36,1);
+  will-change: transform;
   pointer-events: none;
-  transition: opacity .5s var(--ease-soft);
 }
-.ink-canvas.is-fading { opacity: 0; }
-.ink-canvas { transition: opacity .4s var(--ease-soft); }
+.ink-frame.is-developing::before {
+  transform: translateX(101%);
+}
 
 /* --- inline illustrations in story reader --- */
 .inline-illustration {
@@ -850,6 +860,7 @@ body.entered .fade-item, body.entered .card-enter {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .ink-frame.is-wet .story-image { opacity: 1 !important; }
+  .ink-frame::before { transition: none !important; transform: translateX(101%) !important; }
   *, *::before, *::after {
     animation-duration: .01ms !important;
     animation-iteration-count: 1 !important;
@@ -866,7 +877,7 @@ body.entered .fade-item, body.entered .card-enter {
   .masthead, .to-top, .reader__nav, .hero__actions, .footer, .veil { display: none !important; }
   body::before, body::after { display: none; }
   .ink-processed { opacity: 1 !important; }
-  .ink-canvas { display: none; }
+  .ink-frame::before { display: none !important; }
   .story-image, .ink-frame.is-wet .story-image { opacity: 1 !important; }
 }
 
@@ -1000,8 +1011,8 @@ body.entered .fade-item, body.entered .card-enter {
         <p class="eyebrow ornament">The stories</p>
         <h2 class="section-head__title">Ten small tales, ready to read</h2>
         <p class="section-head__note">
-          Every picture drinks up its ink as you scroll &mdash; dark India ink
-          blooming out from the middle of the plate.
+          Every picture develops like an old photograph &mdash; the paper
+          peels away left to right as you scroll, revealing the plate beneath.
         </p>
       </div>
 
@@ -1722,138 +1733,23 @@ const MULTI_IMAGES = {
 };
 
 /* ============================================================
-   INDIA INK BLOOM
+   DARKROOM PRINT REVEAL
    ------------------------------------------------------------
    Every plate starts as a blank sheet of warm paper. When it
-   scrolls into view a drop of dark India ink lands in the middle
-   and spreads outward — a dense wet blot that puts out capillary
-   fingers as it goes — and behind its travelling edge it leaves
-   the picture, as though the ink itself had printed it.
+   scrolls into view, a paper-coloured curtain slides left to
+   right, revealing the photograph underneath — like a darkroom
+   print developing in the tray.
 
-   Each frame of the canvas is built up in four passes:
-     1. an opaque sheet of paper over the whole plate
-     2. a soft ink halo creeping a little ahead of the wet front
-     3. the dense body of the ink, a disc out to the front
-     4. a hole punched back out of all of it, a band's width
-        inside the front — which is where the picture appears
-
-   So the paper is drunk away from the middle out, the ink rides
-   the rim of the hole, and the two of them walk off the plate
-   together. One bloom, centre out, about a second and a half.
+   Implementation: a ::before pseudo-element on .ink-frame sits
+   above the image at z-index 5, coloured var(--paper-warm).
+   When .is-developing is added, it translates off to the right
+   over 1.6s with an ease-out curve. No canvas, no JS animation
+   loop — pure CSS transition triggered by IntersectionObserver.
    ============================================================ */
 const InkWash = (function () {
-  const DURATION = 1700;                        // ms, drop to dry
-  const TAU      = Math.PI * 2;
-  const PAPER    = "#F5E9D3";                   // --paper-warm: the plate reads as blank stock
-  const INK_CORE = "rgba(38, 24, 16, 0.95)";    // dense India ink
-  const INK_EDGE = "rgba(26, 16, 11, 0.30)";    // what the fibres wick ahead of it
+  const DURATION = 1600; // ms, curtain travel time (matches CSS)
 
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  /* Safari before 16.4 has no ctx.filter; without it the ink still
-     blooms, it just has a crisper edge than a real wash would. */
-  const canFilter = (function () {
-    const probe = document.createElement("canvas").getContext("2d");
-    if (!probe) return false;
-    probe.filter = "blur(2px)";
-    return probe.filter === "blur(2px)";
-  })();
-
-  const clamp = function (v) { return v < 0 ? 0 : v > 1 ? 1 : v; };
-
-  /* Ink into paper opens quickly and then keeps creeping, so the
-     blot has a splat at the start and a long slow settle. Gentle
-     enough that the wet edge stays readable most of the way. */
-  const spread = function (p) { return 1 - Math.pow(1 - p, 1.9); };
-
-  /* ---- the outline of a blot -------------------------------
-     A handful of sine harmonics around the circle. Summed, they
-     give an edge that is lumpy in a believable way and, because
-     the harmonics never change, stays the SAME lump as the blot
-     grows instead of wriggling about.                          */
-  function makeEdge() {
-    const harmonics = [];
-    for (let i = 0; i < 4; i++) {
-      harmonics.push({
-        k: 2 + i * 2 + Math.floor(Math.random() * 3),
-        a: (0.085 / (i * 0.75 + 1)) * (0.6 + Math.random() * 0.8),
-        p: Math.random() * TAU
-      });
-    }
-    return harmonics;
-  }
-  function edgeAt(harmonics, angle) {
-    let r = 1;
-    for (let i = 0; i < harmonics.length; i++) {
-      r += harmonics[i].a * Math.sin(harmonics[i].k * angle + harmonics[i].p);
-    }
-    return r;
-  }
-
-  /* ---- capillary fingers -----------------------------------
-     Threads of ink that run ahead of the front along the grain
-     of the paper. Each one wakes at its own moment and reaches
-     out over a narrow wedge of angles.                         */
-  function makeFingers(count) {
-    const fingers = [];
-    for (let i = 0; i < count; i++) {
-      fingers.push({
-        angle: Math.random() * TAU,
-        width: 0.10 + Math.random() * 0.22,
-        reach: 0.10 + Math.random() * 0.20,
-        wakes: 0.08 + Math.random() * 0.55
-      });
-    }
-    return fingers;
-  }
-  function reachAt(fingers, angle, t) {
-    let bump = 0;
-    for (let i = 0; i < fingers.length; i++) {
-      const f = fingers[i];
-      let d = Math.abs(angle - f.angle);
-      if (d > Math.PI) d = TAU - d;
-      if (d >= f.width || t <= f.wakes) continue;
-      const across = 0.5 + 0.5 * Math.cos(Math.PI * d / f.width);
-      const grown  = spread(Math.min(1, (t - f.wakes) / 0.45));
-      bump += f.reach * across * across * grown;
-    }
-    return bump;
-  }
-
-  /* The wet front at time t, inset by a band of dry pixels.
-     The plates are wide, and a perfectly round front would reach
-     the top and bottom edges long before the two ends, leaving
-     most of the bloom happening off in the corners. o.sx / o.sy
-     lean the front towards the shape of the plate — only part of
-     the way, so it still reads as a blot and not an ellipse. */
-  function frontPath(ctx, o, base, t, inset) {
-    const steps = 176;
-    ctx.beginPath();
-    for (let i = 0; i <= steps; i++) {
-      const a = (i / steps) * TAU;
-      const r = Math.max(0, base * (edgeAt(o.edge, a) + reachAt(o.fingers, a, t)) - inset);
-      const x = o.cx + Math.cos(a) * r * o.sx;
-      const y = o.cy + Math.sin(a) * r * o.sy;
-      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-    }
-    ctx.closePath();
-  }
-
-  /* ---- spatter ---------------------------------------------
-     Specks thrown clear of the drop. They sit on dry paper until
-     the front catches up and swallows them.                    */
-  function makeSpatter(count, maxR) {
-    const specks = [];
-    for (let i = 0; i < count; i++) {
-      specks.push({
-        angle: Math.random() * TAU,
-        dist: maxR * (0.22 + Math.random() * 0.95),
-        size: maxR * (0.012 + Math.random() * 0.035),
-        edge: makeEdge()
-      });
-    }
-    return specks;
-  }
 
   function run(frame, art) {
     if (frame.dataset.inked === "1") return;
@@ -1864,119 +1760,14 @@ const InkWash = (function () {
       frame.classList.remove("is-wet");
     };
 
-    const w = frame.clientWidth;
-    const h = frame.clientHeight;
+    // nothing to animate, or the reader asked for stillness
+    if (reduced) { reveal(); return; }
 
-    // nothing to draw on, or the reader asked for stillness
-    if (reduced || !w || !h) { reveal(); return; }
+    // add the developing class — CSS handles the curtain slide
+    frame.classList.add("is-developing");
 
-    const dpr    = Math.min(window.devicePixelRatio || 1, 2);
-    const canvas = document.createElement("canvas");
-    canvas.className = "ink-canvas";
-    canvas.setAttribute("aria-hidden", "true");
-    canvas.width  = Math.round(w * dpr);
-    canvas.height = Math.round(h * dpr);
-
-    const ctx = canvas.getContext("2d");
-    if (!ctx) { reveal(); return; }
-
-    // where the drop lands — near the middle, never exactly on it
-    const cx = w * (0.42 + Math.random() * 0.16);
-    const cy = h * (0.42 + Math.random() * 0.16);
-
-    // lean the front towards the plate's own proportions — half
-    // way there, which keeps the area of the blot the same
-    const sx = Math.pow(w / h, 0.45);
-    const sy = 1 / sx;
-
-    // the furthest corner from the drop, measured on those axes:
-    // how far the ink has to travel
-    const reachTo = function (x, y) { return Math.hypot((x - cx) / sx, (y - cy) / sy); };
-    const maxR = Math.max(reachTo(0, 0), reachTo(w, 0), reachTo(0, h), reachTo(w, h));
-
-    const o = { cx: cx, cy: cy, sx: sx, sy: sy, edge: makeEdge(), fingers: makeFingers(7) };
-    const spatter  = makeSpatter(9, maxR);
-    const minSide  = Math.min(w, h);
-    const bandPx   = Math.max(20, minSide * 0.14);   // width of the wet rim
-    const softBlur = canFilter ? Math.max(3, minSide * 0.030) : 0;
-    const haloBlur = canFilter ? Math.max(8, minSide * 0.085) : 0;
-    const haloPx   = minSide * 0.06;
-
-    // 1.30 puts the lumpiest part of the front clear of the far
-    // corner, so the plate really does finish bare
-    const travel = maxR * 1.30;
-
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-    function paint(t) {
-      const base = travel * spread(t);
-      const band = bandPx * (0.35 + 0.65 * Math.min(1, spread(t) * 2.2));
-
-      ctx.globalCompositeOperation = "source-over";
-      ctx.filter = "none";
-      ctx.clearRect(0, 0, w, h);
-
-      /* 1 — blank paper */
-      ctx.fillStyle = PAPER;
-      ctx.fillRect(0, 0, w, h);
-
-      /* 2 — the halo wicking ahead of the front */
-      if (canFilter) ctx.filter = "blur(" + haloBlur + "px)";
-      ctx.fillStyle = INK_EDGE;
-      frontPath(ctx, o, base, t, -haloPx);
-      ctx.fill();
-
-      /* 3 — the body of the ink, plus the specks still on dry paper */
-      if (canFilter) ctx.filter = "blur(" + softBlur + "px)";
-      ctx.fillStyle = INK_CORE;
-      frontPath(ctx, o, base, t, 0);
-      ctx.fill();
-
-      for (let i = 0; i < spatter.length; i++) {
-        const s = spatter[i];
-        if (s.dist > base * 1.55) continue;          // the drop has not thrown this far yet
-        const sx = cx + Math.cos(s.angle) * s.dist * o.sx;
-        const sy = cy + Math.sin(s.angle) * s.dist * o.sy;
-        ctx.beginPath();
-        for (let j = 0; j <= 24; j++) {
-          const a = (j / 24) * TAU;
-          const r = s.size * edgeAt(s.edge, a * 3);
-          const px = sx + Math.cos(a) * r, py = sy + Math.sin(a) * r;
-          if (j === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
-        }
-        ctx.closePath();
-        ctx.fill();
-      }
-
-      /* 4 — punch the picture back out, a band inside the front */
-      ctx.globalCompositeOperation = "destination-out";
-      if (canFilter) ctx.filter = "blur(" + softBlur + "px)";
-      ctx.fillStyle = "#000";
-      frontPath(ctx, o, base, t, band);
-      ctx.fill();
-
-      ctx.filter = "none";
-      ctx.globalCompositeOperation = "source-over";
-    }
-
-    // paint the blank sheet before the canvas is ever composited,
-    // so the picture underneath is covered without a flicker
-    paint(0);
-    frame.appendChild(canvas);
-    reveal();
-
-    const start = performance.now();
-    function step(now) {
-      const t = clamp((now - start) / DURATION);
-      paint(t);
-      if (t < 1) {
-        requestAnimationFrame(step);
-      } else {
-        canvas.classList.add("is-fading");
-        setTimeout(function () { canvas.remove(); }, 420);
-      }
-    }
-    requestAnimationFrame(step);
+    // after the curtain has cleared, mark the art as revealed
+    setTimeout(reveal, DURATION + 100);
   }
 
   /* ---- watch for plates coming into view ---- */
@@ -1990,7 +1781,7 @@ const InkWash = (function () {
         observer.unobserve(frame);
         const art = frame.querySelector(".illus-art");
         if (!art) return;
-        // a plate at a time, so a whole row does not bloom in unison
+        // a plate at a time, so a whole row does not develop in unison
         const wait = queued * 130;
         queued++;
         setTimeout(function () { run(frame, art); }, wait);
@@ -2009,7 +1800,7 @@ const InkWash = (function () {
           if (art) run(frame, art);
           return;
         }
-        // hold the plate blank until its ink arrives
+        // hold the plate blank until its curtain arrives
         frame.classList.add("is-wet");
         observer.observe(frame);
         // and never leave it blank if the observer somehow never fires
