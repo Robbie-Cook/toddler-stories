@@ -3,9 +3,88 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Little Lamplight Book &middot; Bedtime Stories for Small People</title>
-<meta name="description" content="A hand-bound collection of ten classic public-domain fairy tales and fables, gently abridged for reading aloud to toddlers aged two to four.">
+<title>The Little Lamplight Book &middot; Ten Classic Fairy Tales to Read Aloud</title>
+
+<!-- =========================================================
+     DISCOVERY  —  icons, description, sharing cards
+     ---------------------------------------------------------
+     Why these tags, and why these values:
+
+     apple-touch-icon
+       iOS ignores <link rel="icon"> when a page is saved to the
+       home screen. Without an apple-touch-icon it screenshots
+       the page instead, which at 60px is an unreadable smear of
+       cream. 180x180 is the largest size any current iPhone asks
+       for (@3x of 60pt); iOS downsamples that cleanly for every
+       smaller slot, so one file covers the whole range and there
+       is no reason to ship the old size ladder. The artwork is a
+       book and a star in the site's own palette — a mark that
+       still reads at 60px, unlike the page itself. It is a PNG
+       because iOS will not take SVG here, and it is drawn to the
+       full square with no rounded corners of its own, because
+       iOS applies its own mask and would clip ours twice.
+
+     description
+       Written for the search result, not for a keyword crawler:
+       what the thing is (ten classic fairy tales), whose words
+       (Grimm, Jacobs, Aesop, Andersen), what state they are in
+       (complete, with the original endings), and what you would
+       do with it (read aloud). The old copy promised stories
+       "gently abridged" and "softened", which is no longer true
+       of the texts and would have been a bait-and-switch for
+       anyone arriving from a search.
+
+     Open Graph + Twitter
+       Messaging apps are how a page like this actually travels —
+       one parent sends it to another. Bare links unfurl as a
+       grey box; with these they unfurl as a picture and a line
+       of copy. og:image points at the story-1 plate as briefed,
+       and a PNG twin is listed second because Facebook's
+       scraper still will not render WebP — crawlers take the
+       first candidate they can decode, so ordering costs
+       nothing and buys coverage. Explicit width/height let the
+       card reserve its space before the image downloads.
+       twitter:card is summary_large_image so the illustration
+       gets the full width rather than a thumbnail; X falls back
+       to the og:* tags for the rest, so those are not repeated.
+
+     canonical
+       The site answers on more than one URL shape (with and
+       without the trailing slash, and with #story/... hashes
+       that are the same document). Canonical points every one
+       of them at the root so ten story routes do not compete
+       with each other for the same ranking.
+     ========================================================= -->
+<meta name="description" content="Ten classic fairy tales and fables — Grimm, Joseph Jacobs, Aesop and Andersen — set in big, warm type for reading aloud at bedtime. The Three Little Pigs, Little Red Riding Hood, Goldilocks, the Billy Goats Gruff and six more, told whole, with their original endings.">
 <meta name="color-scheme" content="light">
+<link rel="canonical" href="https://toddler-stories.robbie.digital/">
+
+<link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="Lamplight">
+<meta name="theme-color" content="#FBF4E6">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="The Little Lamplight Book">
+<meta property="og:url" content="https://toddler-stories.robbie.digital/">
+<meta property="og:title" content="The Little Lamplight Book &middot; Ten Classic Fairy Tales to Read Aloud">
+<meta property="og:description" content="Ten old tales — Grimm, Jacobs, Aesop and Andersen — illustrated and set in big warm type for reading aloud at bedtime. Told whole, with their original endings.">
+<meta property="og:image" content="https://toddler-stories.robbie.digital/img/story-1.webp">
+<meta property="og:image:type" content="image/webp">
+<meta property="og:image:width" content="1024">
+<meta property="og:image:height" content="572">
+<meta property="og:image:alt" content="Three little houses of straw, sticks and brick on green hills beneath a golden sun.">
+<meta property="og:image" content="https://toddler-stories.robbie.digital/img/story-1.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1024">
+<meta property="og:image:height" content="572">
+<meta property="og:image:alt" content="Three little houses of straw, sticks and brick on green hills beneath a golden sun.">
+<meta property="og:locale" content="en_GB">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Little Lamplight Book &middot; Ten Classic Fairy Tales to Read Aloud">
+<meta name="twitter:description" content="Ten old tales — Grimm, Jacobs, Aesop and Andersen — illustrated and set in big warm type for reading aloud at bedtime. Told whole, with their original endings.">
+<meta name="twitter:image" content="https://toddler-stories.robbie.digital/img/story-1.png">
+<meta name="twitter:image:alt" content="Three little houses of straw, sticks and brick on green hills beneath a golden sun.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
@@ -398,74 +477,11 @@ body.entered .fade-item, body.entered .card-enter {
 @media (max-width: 780px) { .hero__scenery { opacity: .4; } }
 
 /* ============================================================
-   8. TABLE OF CONTENTS
-   ============================================================ */
-.toc {
-  position: relative;
-  margin-block: clamp(2rem, 5vw, 3.5rem);
-  padding: clamp(1.6rem, 4vw, 2.8rem) clamp(1.3rem, 4vw, 3.2rem);
-  background: var(--paper-card);
-  border: 1px solid var(--rule);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  animation-delay: .22s;
-}
-.toc::before {
-  content: ""; position: absolute; inset: 9px;
-  border: 1px solid var(--rule);
-  border-radius: calc(var(--radius-lg) - 8px);
-  pointer-events: none;
-}
-.toc__head { text-align: center; margin-bottom: 1.8rem; }
-.toc__title {
-  font-family: var(--font-display);
-  font-size: clamp(1.5rem, 3.4vw, 2rem);
-  font-weight: 700; margin: .5rem 0 0;
-}
-.toc__list {
-  list-style: none; margin: 0; padding: 0;
-  columns: 2; column-gap: clamp(1.5rem, 5vw, 4rem);
-}
-@media (max-width: 700px) { .toc__list { columns: 1; } }
-.toc__item { break-inside: avoid; }
-.toc__link {
-  display: flex; align-items: baseline; gap: .6rem;
-  width: 100%; padding: .62rem .5rem;
-  background: none; border: 0; border-radius: 8px;
-  cursor: pointer; text-align: left;
-  transition: background-color .2s var(--ease), color .2s var(--ease);
-}
-.toc__link:hover { background: var(--paper-warm); }
-.toc__link:hover .toc__name { color: var(--red); }
-.toc__num {
-  flex: none;
-  font-family: var(--font-display);
-  font-size: .95rem; font-style: italic;
-  color: var(--gold-ink); width: 1.9rem;
-}
-.toc__name {
-  font-family: var(--font-display);
-  font-size: 1.08rem; font-weight: 500;
-  transition: color .2s var(--ease);
-}
-.toc__leader {
-  flex: 1;
-  border-bottom: 1.5px dotted var(--rule-strong);
-  transform: translateY(-.28em);
-  min-width: 1.5rem;
-}
-.toc__time {
-  flex: none;
-  font-size: .78rem; font-weight: 700;
-  color: var(--ink-faint);
-  letter-spacing: .04em;
-}
-
-/* ============================================================
-   9. SECTION HEADINGS
+   8. SECTION HEADINGS
    ============================================================ */
 .section-head {
   text-align: center;
+  scroll-margin-top: 5.5rem;
   max-width: 44rem;
   margin: clamp(3rem, 8vw, 5rem) auto clamp(1.8rem, 4vw, 2.8rem);
   animation-delay: .32s;
@@ -485,7 +501,7 @@ body.entered .fade-item, body.entered .card-enter {
 }
 
 /* ============================================================
-   10. STORY GRID + CARDS
+   9. STORY GRID + CARDS
    ============================================================ */
 .grid {
   display: grid;
@@ -564,7 +580,7 @@ body.entered .fade-item, body.entered .card-enter {
 .card__cta svg { width: 1em; height: 1em; }
 
 /* ============================================================
-   11. ILLUSTRATION FRAME + INK CANVAS
+   10. ILLUSTRATION FRAME + INK CANVAS
    ============================================================ */
 .ink-frame { position: relative; overflow: hidden; }
 .ink-frame::after {          /* paper stands in while the ink is wet */
@@ -593,9 +609,13 @@ body.entered .fade-item, body.entered .card-enter {
 .ink-frame.has-photo .story-image { opacity: 1; }
 .ink-frame.has-photo .illus-art svg { visibility: hidden; }
 
-/* --- the contract from the blog --- */
+/* --- the contract with the ink --- */
 .ink-processed { opacity: 0 !important; }
 .ink-processed.ink-revealed { opacity: 1 !important; }
+
+/* a plate that is waiting for its ink shows nothing but paper —
+   the photograph is held back so the bloom has something to print */
+.ink-frame.is-wet .story-image { opacity: 0 !important; }
 
 .ink-canvas {
   position: absolute; inset: 0; z-index: 3;
@@ -604,6 +624,7 @@ body.entered .fade-item, body.entered .card-enter {
   transition: opacity .5s var(--ease-soft);
 }
 .ink-canvas.is-fading { opacity: 0; }
+.ink-canvas { transition: opacity .4s var(--ease-soft); }
 
 /* --- inline illustrations in story reader --- */
 .inline-illustration {
@@ -625,7 +646,7 @@ body.entered .fade-item, body.entered .card-enter {
 }
 
 /* ============================================================
-   12. READING VIEW
+   11. READING VIEW
    ============================================================ */
 .reader { padding-bottom: clamp(3rem, 9vw, 6rem); }
 .reader__bar {
@@ -778,7 +799,7 @@ body.entered .fade-item, body.entered .card-enter {
 }
 
 /* ============================================================
-   13. FOOTER
+   12. FOOTER
    ============================================================ */
 .footer {
   position: relative; z-index: 2;
@@ -802,7 +823,7 @@ body.entered .fade-item, body.entered .card-enter {
 }
 
 /* ============================================================
-   14. BACK TO TOP
+   13. BACK TO TOP
    ============================================================ */
 .to-top {
   position: fixed; right: clamp(1rem, 3vw, 2rem); bottom: clamp(1rem, 3vw, 2rem);
@@ -824,10 +845,11 @@ body.entered .fade-item, body.entered .card-enter {
 .to-top svg { width: 20px; height: 20px; }
 
 /* ============================================================
-   15. REDUCED MOTION
+   14. REDUCED MOTION
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  .ink-frame.is-wet .story-image { opacity: 1 !important; }
   *, *::before, *::after {
     animation-duration: .01ms !important;
     animation-iteration-count: 1 !important;
@@ -838,18 +860,18 @@ body.entered .fade-item, body.entered .card-enter {
 }
 
 /* ============================================================
-   16. PRINT
+   15. PRINT
    ============================================================ */
 @media print {
   .masthead, .to-top, .reader__nav, .hero__actions, .footer, .veil { display: none !important; }
   body::before, body::after { display: none; }
   .ink-processed { opacity: 1 !important; }
   .ink-canvas { display: none; }
-  .story-image { opacity: 1; }
+  .story-image, .ink-frame.is-wet .story-image { opacity: 1 !important; }
 }
 
 /* ============================================================
-   17. LINKS THAT LOOK LIKE CARDS
+   16. LINKS THAT LOOK LIKE CARDS
    ============================================================ */
 .card__link { color: inherit; text-decoration: none; }
 .card__link::after {            /* stretch the hit area over the whole card */
@@ -861,10 +883,10 @@ body.entered .fade-item, body.entered .card-enter {
   outline: 3px solid var(--gold);
   outline-offset: -5px;
 }
-.toc__link, .navcard, .reader__bar a { text-decoration: none; color: inherit; }
+.navcard, .reader__bar a { text-decoration: none; color: inherit; }
 
 /* ============================================================
-   18. MID-STORY FLOURISH
+   17. MID-STORY FLOURISH
    ============================================================ */
 .aside-plate {
   position: relative;
@@ -940,15 +962,15 @@ body.entered .fade-item, body.entered .card-enter {
       </div>
 
       <div class="shell hero__inner">
-        <p class="eyebrow hero__eyebrow fade-item">Ten old tales &middot; gently retold</p>
+        <p class="eyebrow hero__eyebrow fade-item">Ten old tales &middot; told whole</p>
         <h1 class="hero__title fade-item">
           Once Upon<br>a Bedtime
           <em>a little book of read-aloud stories</em>
         </h1>
         <p class="hero__lede fade-item">
-          Classic fairy tales and fables, trimmed to toddler size &mdash; two or three
-          warm minutes each. Big type for tired eyes, short lines for little ears,
-          and a happy ending waiting at the bottom of every page.
+          Classic fairy tales and fables, told the way the old storytellers set them
+          down &mdash; two or three warm minutes each. Big type for tired eyes, short
+          lines for little ears, and the endings left where they found them.
         </p>
         <div class="hero__actions fade-item">
           <button class="btn btn--primary" type="button" data-action="contents">
@@ -974,20 +996,12 @@ body.entered .fade-item, body.entered .card-enter {
     </div>
 
     <div class="shell">
-      <nav class="toc fade-item" id="contents" aria-labelledby="tocTitle">
-        <div class="toc__head">
-          <p class="eyebrow ornament">Contents</p>
-          <h2 class="toc__title" id="tocTitle">What shall we read tonight?</h2>
-        </div>
-        <ol class="toc__list" id="tocList"></ol>
-      </nav>
-
-      <div class="section-head fade-item">
+      <div class="section-head fade-item" id="contents">
         <p class="eyebrow ornament">The stories</p>
         <h2 class="section-head__title">Ten small tales, ready to read</h2>
         <p class="section-head__note">
-          Every picture washes itself in with a sweep of golden ink
-          as you scroll.
+          Every picture drinks up its ink as you scroll &mdash; dark India ink
+          blooming out from the middle of the plate.
         </p>
       </div>
 
@@ -1008,8 +1022,9 @@ body.entered .fade-item, body.entered .card-enter {
     <h2 class="footer__title">Sleep well, little one</h2>
     <p class="footer__note">
       Every story here is in the public domain &mdash; folk tales that have been
-      told at bedsides for hundreds of years. These retellings are shortened and
-      softened for the very youngest listeners.
+      told at bedsides for hundreds of years. These are the whole tales, with the
+      endings their tellers gave them &mdash; the wolf is not always sent packing,
+      and not everybody gets home. Read one through before you read it aloud.
     </p>
     <p class="footer__fine">Hand-set in Fraunces &amp; EB Garamond. One page, no plugins, no tracking.</p>
   </div>
@@ -1475,7 +1490,7 @@ body.entered .fade-item, body.entered .card-enter {
 <script>
 /* ============================================================
    THE LIBRARY
-   Ten public-domain tales, abridged for two-to-four-year-olds.
+   Ten public-domain tales, kept whole &mdash; the old endings and all.
    Each runs about two or three minutes read aloud.
    ============================================================ */
 const STORIES = [
@@ -1486,16 +1501,16 @@ const STORIES = [
     subtitle: "Straw, sticks, and a house of good strong bricks",
     minutes: 5,
     tint: "#F7E9CD",
-    excerpt: "Three little pigs go out to seek their fortune. A hungry wolf comes huffing and puffing, and only the strongest house of bricks can keep them safe.",
+    excerpt: "Three little pigs go out to seek their fortune. A hungry wolf comes huffing and puffing, and two houses built in a hurry are no houses at all.",
     moral: "Slow and careful work often saves you in the end.",
     pullAfter: 3,
     pull: "Little pig, little pig, let me come in!",
     body: [
       "Once upon a time there was an old sow with three little pigs, and as she had not enough to keep them she sent them out into the world to seek their fortune. The first little pig met a man carrying a bundle of straw, and said to him: &ldquo;Please, man, give me that straw, and I will build myself a house.&rdquo; The man gave him the straw, and the little pig built a house with it.",
-      "Presently along came a wolf, who knocked at the door and said: &ldquo;Little pig, little pig, let me come in.&rdquo; To which the pig answered: &ldquo;No, no, not by the hair on my chiny-chin-chin.&rdquo; &ldquo;Then I will huff, and I will puff, and I will blow your house in!&rdquo; So the wolf huffed, and he puffed, and he blew the house in, and the first little pig ran squealing off to his brother&rsquo;s house as fast as his little legs could carry him.",
-      "The second little pig met a man with a bundle of sticks, and begged them of him to build a house; and when the wolf knocked at his door he answered just as his brother had done. &ldquo;Then I will huff, and I will puff, and I will blow your house in!&rdquo; And he huffed and puffed, and blew the house in, and both little pigs ran squealing off to their brother&rsquo;s brick house together.",
+      "Presently along came a wolf, who knocked at the door and said: &ldquo;Little pig, little pig, let me come in.&rdquo; To which the pig answered: &ldquo;No, no, not by the hair on my chiny-chin-chin.&rdquo; &ldquo;Then I will huff, and I will puff, and I will blow your house in!&rdquo; So the wolf huffed, and he puffed, and he blew the house in, and the straw went flying every which way &mdash; and he ate up the first little pig.",
+      "The second little pig met a man with a bundle of sticks, and begged them of him to build a house; and when the wolf knocked at his door he answered just as his brother had done. &ldquo;Then I will huff, and I will puff, and I will blow your house in!&rdquo; And he huffed, and he puffed, and he puffed, and he huffed, and at last he blew the house in &mdash; and he ate up the second little pig too.",
       "But the third little pig met a man with a load of bricks, and said: &ldquo;Please, man, give me those bricks, and I will build myself a house with them.&rdquo; And when the wolf came to the door of the brick house, the little pig answered: &ldquo;No, no, not by the hair on my chiny-chin-chin.&rdquo; &ldquo;Then I will huff, and I will puff, and I will blow your house in!&rdquo; Well, he huffed and he puffed, and he puffed and he huffed, but with all his huffing and puffing he could not blow that house of bricks down.",
-      "Then the wolf tried to trick the little pig out of doors with talk of a field of turnips, an apple orchard, and a fair in the town; but every time the clever pig was too quick for him. At last, in a great rage, the wolf climbed onto the roof and came down the chimney &mdash; but the little pig heard him coming and set a great pot of water bubbling on the fire. The wolf tumbled straight in with a tremendous splash! He scrambled out, dripping and grumbling, and ran out of the door and away into the wood, and he never came back. And the three little pigs, safe together in their strong brick house, lived happily ever after."
+      "Then the wolf tried to trick the little pig out of doors with talk of a field of turnips, an apple orchard, and a fair in the town; but every time the clever pig was too quick for him. At last, in a great rage, the wolf climbed onto the roof and came down the chimney &mdash; but the little pig heard him scrabbling above and hung a great pot of water over the fire to boil. Down came the wolf, and in he fell with a tremendous splash, and the little pig clapped on the lid. And that was the end of the wolf. So the third little pig, who had built his house of good strong bricks, lived safe and snug in it for the rest of his days &mdash; and he never forgot his two brothers, who had built theirs in a hurry."
     ]
   },
   {
@@ -1577,16 +1592,17 @@ const STORIES = [
     subtitle: "Straight along the path, and no wandering",
     minutes: 5,
     tint: "#2E4139",
-    excerpt: "A girl in a red hood carries cake and wine through the wood to her grandmother, and meets a wolf who is not quite what he seems.",
+    excerpt: "A girl in a red hood carries cake and wine through the wood to her grandmother, and meets a wolf who gets to the cottage first.",
     moral: "Listen to your mother, and keep to the path.",
     pullAfter: 3,
-    pull: "The better to hug you with, my child!",
+    pull: "The better to eat you with!",
     body: [
       "There was once a dear little girl who was loved by everyone who looked at her, and best of all by her grandmother, who made her a little red riding-hood. From that day she wore it always, so everybody called her Little Red Riding Hood. One day her mother said: &ldquo;Come, take this cake and a bottle of wine to grandmother; she is weak and ill, and this will do her good. Go nicely, keep to the path, and do not run off into the wood.&rdquo;",
-      "Little Red Riding Hood set off, and in the wood she met a wolf, who greeted her politely and asked where she was going. &ldquo;To my grandmother's cottage, at the other end of the wood,&rdquo; she said. &ldquo;And see,&rdquo; said the wolf, pointing, &ldquo;what beautiful flowers grow over there. Your grandmother would be so pleased with a bunch.&rdquo; And while the little girl stopped to gather them, the wolf ran on to the cottage as fast as he could, knocked at the door, and when the grandmother opened it he pushed past her, put on her nightcap, drew the curtains, and hid under her bed.",
-      "When Little Red Riding Hood arrived she found the door open, and went in. &ldquo;Grandmother, what big ears you have!&rdquo; she said. &ldquo;The better to hear you with, my child.&rdquo; &ldquo;Grandmother, what big eyes you have!&rdquo; &ldquo;The better to see you with, my child.&rdquo; &ldquo;Grandmother, what big hands you have!&rdquo; &ldquo;The better to hug you with, my child.&rdquo; &ldquo;Grandmother, what a terrible big mouth you have!&rdquo; &ldquo;The better to&hellip; to&hellip;&rdquo; But before the wolf could finish, Little Red Riding Hood cried out: &ldquo;That is not my grandmother at all!&rdquo; And she stepped back bravely, and the wolf jumped out from under the bed, looking very sheepish.",
-      "Just then the grandmother came in from the garden, where she had been picking herbs, and she saw the wolf standing in her cottage. &ldquo;Oh!&rdquo; she said, stamping her foot. &ldquo;You are not welcome here!&rdquo; And she waved her walking stick so fiercely that the wolf turned tail and ran out of the door, through the wood, and away over the hills, and he was never seen in those parts again.",
-      "The grandmother ate the cake and drank the wine and was soon strong again, and Little Red Riding Hood promised, as she skipped home, that she would always do what her mother told her, and never leave the path again."
+      "Little Red Riding Hood set off, and in the wood she met a wolf, who greeted her politely and asked where she was going. &ldquo;To my grandmother's cottage, at the other end of the wood,&rdquo; she said. &ldquo;And see,&rdquo; said the wolf, pointing, &ldquo;what beautiful flowers grow over there. Your grandmother would be so pleased with a bunch.&rdquo; And while the little girl stopped to gather them, the wolf ran on to the cottage as fast as he could and knocked at the door. &ldquo;Lift the latch,&rdquo; called the grandmother, &ldquo;I am too weak to get up.&rdquo; The wolf lifted the latch, and without one word he sprang upon the poor old woman and swallowed her down. Then he put on her nightcap and her nightgown, drew the curtains close, and lay himself in her bed to wait.",
+      "When Little Red Riding Hood arrived she found the door open, and went in. &ldquo;Grandmother, what big ears you have!&rdquo; she said. &ldquo;The better to hear you with, my child.&rdquo; &ldquo;Grandmother, what big eyes you have!&rdquo; &ldquo;The better to see you with, my child.&rdquo; &ldquo;Grandmother, what big hands you have!&rdquo; &ldquo;The better to hug you with, my child.&rdquo; &ldquo;Grandmother, what a terrible big mouth you have!&rdquo; &ldquo;The better to eat you with!&rdquo; And no sooner had the wolf said it than he leapt out of the bed and swallowed up poor Little Red Riding Hood in one gulp.",
+      "When his supper was inside him the wolf lay down in the bed again and fell fast asleep, and began to snore very loudly. A huntsman was passing the cottage and thought: how the old woman is snoring &mdash; I must see if anything ails her. So he went in, and there lay the wolf, whom he had been hunting a long while. He was raising his gun when it came into his head that the wolf might have swallowed the grandmother, and that she might yet be saved. So he took a pair of scissors instead, and began to cut open the sleeping wolf&rsquo;s stomach.",
+      "When he had made two snips he saw the little red riding-hood shining, and after two snips more the little girl sprang out crying: &ldquo;Oh, how frightened I have been! How dark it was inside the wolf!&rdquo; And then the old grandmother came out alive too, though she could hardly breathe. Little Red Riding Hood ran and fetched great heavy stones, and they filled the wolf&rsquo;s body with them; and when he woke and tried to spring up, the stones were so heavy that he fell down at once and lay quite still.",
+      "Then all three were glad. The huntsman took the wolf&rsquo;s skin home with him; the grandmother ate the cake and drank the wine and was soon strong again; and Little Red Riding Hood said to herself: &ldquo;As long as I live, I will never leave the path to run into the wood, when my mother has forbidden me to do so.&rdquo;"
     ]
   },
   {
@@ -1615,14 +1631,15 @@ const STORIES = [
     subtitle: "The day the sky fell down",
     minutes: 2,
     tint: "#CFE3EC",
-    excerpt: "Something bonks Chicken Little on the head, and off she runs to tell the king that the sky is falling &mdash; taking the whole farmyard with her.",
-    moral: "Look carefully before you believe a tale.",
+    excerpt: "Something bonks Chicken Little on the head, and off she runs to tell the king that the sky is falling &mdash; taking the whole farmyard with her, straight past a fox.",
+    moral: "Look carefully before you believe a tale &mdash; or before you follow one.",
     pullAfter: 1,
     pull: "The sky is falling! I must go and tell the king!",
     body: [
       "One day Chicken Little was scratching about in the woods when an acorn fell from an oak tree and hit her on the head. &ldquo;Goodness gracious me!&rdquo; cried Chicken Little. &ldquo;The sky is falling! I must go and tell the king!&rdquo;",
       "Off she ran, and on the way she met Henny Penny. &ldquo;Where are you going, Chicken Little?&rdquo; asked Henny Penny. &ldquo;Oh, the sky is falling,&rdquo; said Chicken Little, &ldquo;and I am going to tell the king.&rdquo; &ldquo;Then I will come with you,&rdquo; said Henny Penny. And they went on, and met Cocky Locky, and Ducky Lucky, and Goosey Loosey, and Turkey Lurkey, and every one of them said the sky was falling, and joined the procession to tell the king.",
-      "Presently they met Foxy Loxy. &ldquo;Where are you all going in such a hurry?&rdquo; he asked. &ldquo;The sky is falling, and we are going to tell the king,&rdquo; they all cried. &ldquo;Why, then,&rdquo; said Foxy Loxy, &ldquo;I will show you a much shorter way to the king. Follow me.&rdquo; And he led them down a dark and narrow lane, and into his den. But just as Foxy Loxy was about to lock the door, Chicken Little looked up and saw &mdash; not the sky falling, but a little brown acorn, still stuck to the branch of the oak tree where it had fallen from. &ldquo;Oh!&rdquo; said Chicken Little. &ldquo;It was only an acorn! The sky is not falling after all!&rdquo; And all the birds turned and walked right back out of the fox's den. Foxy Loxy was not pleased at all."
+      "Presently they met Foxy Loxy. &ldquo;Where are you all going in such a hurry?&rdquo; he asked. &ldquo;The sky is falling, and we are going to tell the king,&rdquo; they all cried. &ldquo;Why, then,&rdquo; said Foxy Loxy, &ldquo;I will show you a much shorter way to the king. Follow me.&rdquo; And he led them off the road, and down a dark and narrow lane, and in at the mouth of a cave &mdash; which was Foxy Loxy&rsquo;s den. In they went, one behind the other, and the fox came in last of all and shut the door behind him. And there, in the dark, he ate up Turkey Lurkey, and Goosey Loosey, and Ducky Lucky, and Cocky Locky, and Henny Penny, and Chicken Little too, every single one of them.",
+      "So the king never heard that the sky was falling. And it never did fall, either &mdash; for it had only ever been an acorn."
     ]
   },
   {
@@ -1632,15 +1649,15 @@ const STORIES = [
     subtitle: "A joke that stopped being funny",
     minutes: 3,
     tint: "#F4E6C8",
-    excerpt: "A shepherd boy cries wolf for fun, twice, and the villagers come running. When a wolf truly comes, nobody believes him at all.",
+    excerpt: "A shepherd boy cries wolf for fun, twice, and the villagers come running. When a wolf truly comes, nobody believes him &mdash; and nobody comes.",
     moral: "Nobody believes a liar, even when he tells the truth.",
     pullAfter: 2,
     pull: "Wolf! Wolf! The wolf is here!",
     body: [
       "There was once a shepherd boy who kept his sheep on a hill just outside the village, where he could be seen by everyone below. One day, finding the hours long and dull, he thought to amuse himself, and cried out at the top of his voice: &ldquo;Wolf! Wolf! The wolf is carrying off the sheep!&rdquo;",
       "The villagers dropped their work and ran up the hill, ready to help, only to find no wolf at all. The boy laughed until the tears ran down his cheeks, and the villagers went home shaking their heads. A second time, a few days later, he played the same trick, and again they all came running, and again they found nothing but the boy laughing at them. &ldquo;Do not call us again unless it is true,&rdquo; they said, and went away in anger.",
-      "But one day a wolf really did come slinking out of the trees. The boy screamed &ldquo;Wolf! Wolf!&rdquo; as loudly as he could, again and again. But the villagers heard his cries and only shrugged, remembering how often they had been deceived. &ldquo;That boy,&rdquo; they said, &ldquo;cries wolf when there is no wolf.&rdquo; And not a single soul came to help. The wolf chased the sheep all over the hillside, and though the boy gathered them back one by one, it took him all day and he was very tired and very sorry.",
-      "And this is the moral of the tale: a liar is not believed even when he speaks the truth. But the boy learned his lesson, and from that day on he was the most honest shepherd in all the village."
+      "But one day a wolf really did come slinking out of the trees. The boy screamed &ldquo;Wolf! Wolf!&rdquo; as loudly as he could, again and again. But the villagers heard his cries and only shrugged, remembering how often they had been deceived. &ldquo;That boy,&rdquo; they said, &ldquo;cries wolf when there is no wolf.&rdquo; And not a single soul came to help. So the wolf went about his business at his leisure, and killed and ate the sheep one after another, while the boy watched from the top of a rock and cried, and nobody heard him at all.",
+      "In the evening the boy went down to the village with an empty crook and no flock behind him, and told them what had happened. An old man laid a hand on his shoulder and said: &ldquo;Nobody believes a liar, even when he tells the truth.&rdquo; And that is the moral of the tale."
     ]
   },
   {
@@ -1705,119 +1722,153 @@ const MULTI_IMAGES = {
 };
 
 /* ============================================================
-   GOLDEN INK CURTAIN REVEAL
-   A canvas overlay sweeps golden ink across the plate from left
-   to right — the curtain drawing shut — then draws the curtain
-   open the same way, uncovering the illustration left-to-right.
-   Every reveal is seeded differently, so no two are alike.
+   INDIA INK BLOOM
+   ------------------------------------------------------------
+   Every plate starts as a blank sheet of warm paper. When it
+   scrolls into view a drop of dark India ink lands in the middle
+   and spreads outward — a dense wet blot that puts out capillary
+   fingers as it goes — and behind its travelling edge it leaves
+   the picture, as though the ink itself had printed it.
+
+   Each frame of the canvas is built up in four passes:
+     1. an opaque sheet of paper over the whole plate
+     2. a soft ink halo creeping a little ahead of the wet front
+     3. the dense body of the ink, a disc out to the front
+     4. a hole punched back out of all of it, a band's width
+        inside the front — which is where the picture appears
+
+   So the paper is drunk away from the middle out, the ink rides
+   the rim of the hole, and the two of them walk off the plate
+   together. One bloom, centre out, about a second and a half.
    ============================================================ */
 const InkWash = (function () {
-  const DURATION   = 1500;   // ms, whole cycle
-  const SWEEP_END  = 0.42;   // ink has swept across the full plate
-  const HOLD_END   = 0.46;   // wet pause before the curtain lifts
-  const TAU        = Math.PI * 2;
+  const DURATION = 1700;                        // ms, drop to dry
+  const TAU      = Math.PI * 2;
+  const PAPER    = "#F5E9D3";                   // --paper-warm: the plate reads as blank stock
+  const INK_CORE = "rgba(38, 24, 16, 0.95)";    // dense India ink
+  const INK_EDGE = "rgba(26, 16, 11, 0.30)";    // what the fibres wick ahead of it
 
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // does this browser support ctx.filter? (Safari < 16.4 does not)
+  /* Safari before 16.4 has no ctx.filter; without it the ink still
+     blooms, it just has a crisper edge than a real wash would. */
   const canFilter = (function () {
-    const c = document.createElement("canvas").getContext("2d");
-    if (!c) return false;
-    c.filter = "blur(2px)";
-    return c.filter === "blur(2px)";
+    const probe = document.createElement("canvas").getContext("2d");
+    if (!probe) return false;
+    probe.filter = "blur(2px)";
+    return probe.filter === "blur(2px)";
   })();
 
-  const ease    = function (p) { return 1 - Math.pow(1 - p, 3); };       // out-cubic
-  const easeIO  = function (p) { return p < .5 ? 2*p*p : 1 - Math.pow(-2*p + 2, 2)/2; };
-  const clamp   = function (v) { return v < 0 ? 0 : v > 1 ? 1 : v; };
-  const invEase = function (p) { return 1 - Math.pow(1 - p, 1 / 3); };   // inverse of ease
+  const clamp = function (v) { return v < 0 ? 0 : v > 1 ? 1 : v; };
 
-  /* a fixed set of radius multipliers gives each blob a stable
-     wobbly outline that grows without wriggling about */
-  function makeShape(points) {
-    const s = [];
-    for (let i = 0; i < points; i++) s.push(0.68 + Math.random() * 0.5);
-    return s;
-  }
+  /* Ink into paper opens quickly and then keeps creeping, so the
+     blot has a splat at the start and a long slow settle. Gentle
+     enough that the wet edge stays readable most of the way. */
+  const spread = function (p) { return 1 - Math.pow(1 - p, 1.9); };
 
-  /* wobbly closed blob, drawn through the midpoints so it stays smooth */
-  function blob(ctx, x, y, r, shape, rot) {
-    const n = shape.length;
-    const px = [], py = [];
-    for (let i = 0; i < n; i++) {
-      const a = rot + (i / n) * TAU;
-      const rr = r * shape[i];
-      px.push(x + Math.cos(a) * rr);
-      py.push(y + Math.sin(a) * rr);
-    }
-    ctx.beginPath();
-    ctx.moveTo((px[n - 1] + px[0]) / 2, (py[n - 1] + py[0]) / 2);
-    for (let i = 0; i < n; i++) {
-      const j = (i + 1) % n;
-      ctx.quadraticCurveTo(px[i], py[i], (px[i] + px[j]) / 2, (py[i] + py[j]) / 2);
-    }
-    ctx.closePath();
-    ctx.fill();
-  }
-
-  /* the wobbly vertical lip of the curtain at height y. Slow waves
-     stack with faster ripples so the edge breathes as it rolls. */
-  function lip(y, seed, x, w) {
-    const a = w * 0.028;
-    return Math.sin(y * 0.011 + seed) * a * 0.62
-         + Math.sin(y * 0.0043 + seed * 1.9) * a
-         + Math.sin(y * 0.008 + x * 0.05 + seed * 2.7) * a * 0.45;
-  }
-
-  /* fill everything to the left of frontX with ink — the curtain */
-  function curtain(ctx, frontX, w, h, seed) {
-    const seg = 14;
-    ctx.beginPath();
-    ctx.moveTo(-20, -20);
-    ctx.lineTo(frontX, -20);
-    for (let i = 0; i <= seg; i++) {
-      const y = -20 + (h + 40) * (i / seg);
-      ctx.lineTo(frontX + lip(y, seed, frontX, w), y);
-    }
-    ctx.lineTo(-20, h + 20);
-    ctx.closePath();
-    ctx.fill();
-  }
-
-  /* scattered blobs, each woken just as the sweeping front reaches
-     it, so the whole flock tracks the curtain edge. */
-  function seeds(w, h, count, opts) {
-    const out = [];
-    for (let i = 0; i < count; i++) {
-      const x = w * (opts.x[0] + Math.random() * (opts.x[1] - opts.x[0]));
-      const y = h * (opts.y[0] + Math.random() * (opts.y[1] - opts.y[0]));
-      const when = (opts.base || 0)
-                 + invEase(clamp(x / w)) * opts.phase
-                 + (opts.lead || 0)
-                 + opts.jitter * Math.random();
-      out.push({
-        x: x, y: y,
-        r: Math.max(w, h) * (opts.size[0] + Math.random() * (opts.size[1] - opts.size[0])),
-        when: when,
-        rot: Math.random() * TAU,
-        shape: makeShape(opts.points || 13)
+  /* ---- the outline of a blot -------------------------------
+     A handful of sine harmonics around the circle. Summed, they
+     give an edge that is lumpy in a believable way and, because
+     the harmonics never change, stays the SAME lump as the blot
+     grows instead of wriggling about.                          */
+  function makeEdge() {
+    const harmonics = [];
+    for (let i = 0; i < 4; i++) {
+      harmonics.push({
+        k: 2 + i * 2 + Math.floor(Math.random() * 3),
+        a: (0.085 / (i * 0.75 + 1)) * (0.6 + Math.random() * 0.8),
+        p: Math.random() * TAU
       });
     }
-    return out;
+    return harmonics;
+  }
+  function edgeAt(harmonics, angle) {
+    let r = 1;
+    for (let i = 0; i < harmonics.length; i++) {
+      r += harmonics[i].a * Math.sin(harmonics[i].k * angle + harmonics[i].p);
+    }
+    return r;
+  }
+
+  /* ---- capillary fingers -----------------------------------
+     Threads of ink that run ahead of the front along the grain
+     of the paper. Each one wakes at its own moment and reaches
+     out over a narrow wedge of angles.                         */
+  function makeFingers(count) {
+    const fingers = [];
+    for (let i = 0; i < count; i++) {
+      fingers.push({
+        angle: Math.random() * TAU,
+        width: 0.10 + Math.random() * 0.22,
+        reach: 0.10 + Math.random() * 0.20,
+        wakes: 0.08 + Math.random() * 0.55
+      });
+    }
+    return fingers;
+  }
+  function reachAt(fingers, angle, t) {
+    let bump = 0;
+    for (let i = 0; i < fingers.length; i++) {
+      const f = fingers[i];
+      let d = Math.abs(angle - f.angle);
+      if (d > Math.PI) d = TAU - d;
+      if (d >= f.width || t <= f.wakes) continue;
+      const across = 0.5 + 0.5 * Math.cos(Math.PI * d / f.width);
+      const grown  = spread(Math.min(1, (t - f.wakes) / 0.45));
+      bump += f.reach * across * across * grown;
+    }
+    return bump;
+  }
+
+  /* The wet front at time t, inset by a band of dry pixels.
+     The plates are wide, and a perfectly round front would reach
+     the top and bottom edges long before the two ends, leaving
+     most of the bloom happening off in the corners. o.sx / o.sy
+     lean the front towards the shape of the plate — only part of
+     the way, so it still reads as a blot and not an ellipse. */
+  function frontPath(ctx, o, base, t, inset) {
+    const steps = 176;
+    ctx.beginPath();
+    for (let i = 0; i <= steps; i++) {
+      const a = (i / steps) * TAU;
+      const r = Math.max(0, base * (edgeAt(o.edge, a) + reachAt(o.fingers, a, t)) - inset);
+      const x = o.cx + Math.cos(a) * r * o.sx;
+      const y = o.cy + Math.sin(a) * r * o.sy;
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+  }
+
+  /* ---- spatter ---------------------------------------------
+     Specks thrown clear of the drop. They sit on dry paper until
+     the front catches up and swallows them.                    */
+  function makeSpatter(count, maxR) {
+    const specks = [];
+    for (let i = 0; i < count; i++) {
+      specks.push({
+        angle: Math.random() * TAU,
+        dist: maxR * (0.22 + Math.random() * 0.95),
+        size: maxR * (0.012 + Math.random() * 0.035),
+        edge: makeEdge()
+      });
+    }
+    return specks;
   }
 
   function run(frame, art) {
     if (frame.dataset.inked === "1") return;
     frame.dataset.inked = "1";
 
+    const reveal = function () {
+      art.classList.add("ink-revealed");
+      frame.classList.remove("is-wet");
+    };
+
     const w = frame.clientWidth;
     const h = frame.clientHeight;
 
-    // no geometry, or the reader prefers stillness: just show the picture
-    if (reduced || !w || !h) {
-      art.classList.add("ink-revealed");
-      return;
-    }
+    // nothing to draw on, or the reader asked for stillness
+    if (reduced || !w || !h) { reveal(); return; }
 
     const dpr    = Math.min(window.devicePixelRatio || 1, 2);
     const canvas = document.createElement("canvas");
@@ -1827,126 +1878,110 @@ const InkWash = (function () {
     canvas.height = Math.round(h * dpr);
 
     const ctx = canvas.getContext("2d");
-    if (!ctx) { art.classList.add("ink-revealed"); return; }
+    if (!ctx) { reveal(); return; }
+
+    // where the drop lands — near the middle, never exactly on it
+    const cx = w * (0.42 + Math.random() * 0.16);
+    const cy = h * (0.42 + Math.random() * 0.16);
+
+    // lean the front towards the plate's own proportions — half
+    // way there, which keeps the area of the blot the same
+    const sx = Math.pow(w / h, 0.45);
+    const sy = 1 / sx;
+
+    // the furthest corner from the drop, measured on those axes:
+    // how far the ink has to travel
+    const reachTo = function (x, y) { return Math.hypot((x - cx) / sx, (y - cy) / sy); };
+    const maxR = Math.max(reachTo(0, 0), reachTo(w, 0), reachTo(0, h), reachTo(w, h));
+
+    const o = { cx: cx, cy: cy, sx: sx, sy: sy, edge: makeEdge(), fingers: makeFingers(7) };
+    const spatter  = makeSpatter(9, maxR);
+    const minSide  = Math.min(w, h);
+    const bandPx   = Math.max(20, minSide * 0.14);   // width of the wet rim
+    const softBlur = canFilter ? Math.max(3, minSide * 0.030) : 0;
+    const haloBlur = canFilter ? Math.max(8, minSide * 0.085) : 0;
+    const haloPx   = minSide * 0.06;
+
+    // 1.30 puts the lumpiest part of the front clear of the far
+    // corner, so the plate really does finish bare
+    const travel = maxR * 1.30;
+
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    frame.appendChild(canvas);
 
-    const seed = Math.random() * TAU;
+    function paint(t) {
+      const base = travel * spread(t);
+      const band = bandPx * (0.35 + 0.65 * Math.min(1, spread(t) * 2.2));
 
-    // trailing blobs: wet patches left in the wake of the leading edge
-    const drift = seeds(w, h, 14, { x: [0.05, 0.72], y: [0.08, 0.92], size: [0.05, 0.14], phase: SWEEP_END, jitter: 0.04, points: 11 });
-
-    // tendrils: little satellites that creep out just ahead of the wet edge
-    const tendrils = seeds(w, h, 16, { x: [0.05, 0.95], y: [0.06, 0.94], size: [0.04, 0.11], phase: SWEEP_END, lead: -0.04, jitter: 0.05, points: 9 });
-
-    // golden dust: bright flecks sparkling along the wet edge
-    const dust = seeds(w, h, 26, { x: [0.02, 0.98], y: [0.05, 0.95], size: [0.015, 0.045], phase: SWEEP_END, lead: -0.05, jitter: 0.05, points: 6 });
-
-    // the lift: erosion blobs that eat the ink away from the left
-    const lift = seeds(w, h, 20, { x: [0.02, 0.92], y: [0.06, 0.94], size: [0.13, 0.30], base: HOLD_END, phase: 1 - HOLD_END, jitter: 0.05, points: 12 });
-
-    // fringe blobs pushed just past the lift edge to finish the right side
-    const fringe = seeds(w, h, 16, { x: [0.03, 0.96], y: [0.06, 0.94], size: [0.06, 0.15], base: HOLD_END, phase: 1 - HOLD_END, lead: 0.04, jitter: 0.07, points: 8 });
-
-    const blurCore = canFilter ? Math.max(2, w * 0.02) : 0;
-    const blurEdge = canFilter ? Math.max(5, w * 0.06) : 0;
-
-    let revealed = false;
-    const start = performance.now();
-
-    function grow(list, t) {
-      const drawn = [];
-      for (let i = 0; i < list.length; i++) {
-        const s = list[i];
-        if (t <= s.when) continue;
-        const p = ease(clamp((t - s.when) / (1 - s.when)));
-        drawn.push({ s: s, r: s.r * p, p: p });
-      }
-      return drawn;
-    }
-
-    function frameStep(now) {
-      const t = clamp((now - start) / DURATION);
-
-      ctx.clearRect(0, 0, w, h);
       ctx.globalCompositeOperation = "source-over";
+      ctx.filter = "none";
+      ctx.clearRect(0, 0, w, h);
 
-      /* ---- flood: the curtain draws across, left -> right ---- */
-      // overshoots the right edge so the lip can wobble past it
-      const frontX = w * (0.02 + 1.08 * ease(clamp(t / SWEEP_END)));
+      /* 1 — blank paper */
+      ctx.fillStyle = PAPER;
+      ctx.fillRect(0, 0, w, h);
 
-      // soft bleed halo first, so edges look like paper drinking golden ink
-      if (canFilter) ctx.filter = "blur(" + blurEdge + "px)";
-      ctx.fillStyle = "rgba(217, 164, 65, 0.34)";
-      curtain(ctx, frontX, w, h, seed);
-      const wetTend = grow(tendrils, t);
-      for (let i = 0; i < wetTend.length; i++) {
-        blob(ctx, wetTend[i].s.x, wetTend[i].s.y, wetTend[i].r * 1.5, wetTend[i].s.shape, wetTend[i].s.rot);
-      }
+      /* 2 — the halo wicking ahead of the front */
+      if (canFilter) ctx.filter = "blur(" + haloBlur + "px)";
+      ctx.fillStyle = INK_EDGE;
+      frontPath(ctx, o, base, t, -haloPx);
+      ctx.fill();
 
-      // then the dense golden body of the ink
-      if (canFilter) ctx.filter = "blur(" + blurCore + "px)";
-      ctx.fillStyle = "rgba(217, 164, 65, 0.97)";
-      curtain(ctx, frontX, w, h, seed);
-      ctx.fillStyle = "rgba(197, 140, 40, 0.82)";
-      const wetDrift = grow(drift, t);
-      for (let i = 0; i < wetDrift.length; i++) {
-        blob(ctx, wetDrift[i].s.x, wetDrift[i].s.y, wetDrift[i].r, wetDrift[i].s.shape, wetDrift[i].s.rot);
-      }
-      for (let i = 0; i < wetTend.length; i++) {
-        blob(ctx, wetTend[i].s.x, wetTend[i].s.y, wetTend[i].r, wetTend[i].s.shape, wetTend[i].s.rot);
-      }
+      /* 3 — the body of the ink, plus the specks still on dry paper */
+      if (canFilter) ctx.filter = "blur(" + softBlur + "px)";
+      ctx.fillStyle = INK_CORE;
+      frontPath(ctx, o, base, t, 0);
+      ctx.fill();
 
-      // golden dust flecks sparkling along the wet edge
-      if (canFilter) ctx.filter = "none";
-      ctx.fillStyle = "rgba(255, 224, 130, 0.9)";
-      const sparkle = grow(dust, t);
-      for (let i = 0; i < sparkle.length; i++) {
-        blob(ctx, sparkle[i].s.x, sparkle[i].s.y, sparkle[i].r, sparkle[i].s.shape, sparkle[i].s.rot);
-      }
-
-      /* ---- the lift: the curtain draws open, left -> right ---- */
-      if (t > HOLD_END) {
-        if (!revealed) {
-          revealed = true;
-          art.classList.add("ink-revealed");
+      for (let i = 0; i < spatter.length; i++) {
+        const s = spatter[i];
+        if (s.dist > base * 1.55) continue;          // the drop has not thrown this far yet
+        const sx = cx + Math.cos(s.angle) * s.dist * o.sx;
+        const sy = cy + Math.sin(s.angle) * s.dist * o.sy;
+        ctx.beginPath();
+        for (let j = 0; j <= 24; j++) {
+          const a = (j / 24) * TAU;
+          const r = s.size * edgeAt(s.edge, a * 3);
+          const px = sx + Math.cos(a) * r, py = sy + Math.sin(a) * r;
+          if (j === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
         }
-        const liftT = easeIO(clamp((t - HOLD_END) / (1 - HOLD_END)));
-        // a fresh wavefront, overshooting the right edge so no ink is stranded
-        const dryX = w * (0.02 + 1.08 * ease(liftT));
-        ctx.globalCompositeOperation = "destination-out";
-
-        if (canFilter) ctx.filter = "blur(" + blurEdge + "px)";
-        ctx.fillStyle = "rgba(0,0,0,1)";
-        curtain(ctx, dryX, w, h, seed + 3.1);
-
-        const dry = grow(lift, t);
-        for (let i = 0; i < dry.length; i++) {
-          blob(ctx, dry[i].s.x, dry[i].s.y, dry[i].r * 1.12, dry[i].s.shape, dry[i].s.rot);
-        }
-        const dryFringe = grow(fringe, t);
-        for (let i = 0; i < dryFringe.length; i++) {
-          blob(ctx, dryFringe[i].s.x, dryFringe[i].s.y, dryFringe[i].r * 1.35, dryFringe[i].s.shape, dryFringe[i].s.rot);
-        }
+        ctx.closePath();
+        ctx.fill();
       }
 
-      if (canFilter) ctx.filter = "none";
+      /* 4 — punch the picture back out, a band inside the front */
+      ctx.globalCompositeOperation = "destination-out";
+      if (canFilter) ctx.filter = "blur(" + softBlur + "px)";
+      ctx.fillStyle = "#000";
+      frontPath(ctx, o, base, t, band);
+      ctx.fill();
 
-      if (t < 1) {
-        requestAnimationFrame(frameStep);
-      } else {
-        art.classList.add("ink-revealed");
-        canvas.classList.add("is-fading");
-        setTimeout(function () { canvas.remove(); }, 520);
-      }
+      ctx.filter = "none";
+      ctx.globalCompositeOperation = "source-over";
     }
 
-    requestAnimationFrame(frameStep);
+    // paint the blank sheet before the canvas is ever composited,
+    // so the picture underneath is covered without a flicker
+    paint(0);
+    frame.appendChild(canvas);
+    reveal();
+
+    const start = performance.now();
+    function step(now) {
+      const t = clamp((now - start) / DURATION);
+      paint(t);
+      if (t < 1) {
+        requestAnimationFrame(step);
+      } else {
+        canvas.classList.add("is-fading");
+        setTimeout(function () { canvas.remove(); }, 420);
+      }
+    }
+    requestAnimationFrame(step);
   }
 
-  /* ---- watch for plates entering the viewport ---- */
+  /* ---- watch for plates coming into view ---- */
   let observer = null;
-  if ("IntersectionObserver" in window) {
+  if (!reduced && "IntersectionObserver" in window) {
     observer = new IntersectionObserver(function (entries) {
       let queued = 0;
       entries.forEach(function (entry) {
@@ -1955,11 +1990,12 @@ const InkWash = (function () {
         observer.unobserve(frame);
         const art = frame.querySelector(".illus-art");
         if (!art) return;
-        const wait = queued * 110;
+        // a plate at a time, so a whole row does not bloom in unison
+        const wait = queued * 130;
         queued++;
         setTimeout(function () { run(frame, art); }, wait);
       });
-    }, { threshold: 0.22, rootMargin: "0px 0px -6% 0px" });
+    }, { threshold: 0.2, rootMargin: "0px 0px -6% 0px" });
   }
 
   return {
@@ -1968,12 +2004,21 @@ const InkWash = (function () {
       frames.forEach(function (frame) {
         if (frame.dataset.watched === "1") return;
         frame.dataset.watched = "1";
-        if (observer) {
-          observer.observe(frame);
-        } else {
-          const art = frame.querySelector(".illus-art");
+        const art = frame.querySelector(".illus-art");
+        if (!observer) {
           if (art) run(frame, art);
+          return;
         }
+        // hold the plate blank until its ink arrives
+        frame.classList.add("is-wet");
+        observer.observe(frame);
+        // and never leave it blank if the observer somehow never fires
+        setTimeout(function () {
+          if (frame.dataset.inked !== "1" && art) {
+            art.classList.add("ink-revealed");
+            frame.classList.remove("is-wet");
+          }
+        }, 8000);
       });
     }
   };
@@ -1987,7 +2032,6 @@ const InkWash = (function () {
   const ROMAN = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
 
   const grid        = document.getElementById("storyGrid");
-  const tocList     = document.getElementById("tocList");
   const libraryView = document.getElementById("view-library");
   const readerView  = document.getElementById("view-reader");
   const masthead    = document.getElementById("masthead");
@@ -2059,7 +2103,6 @@ const InkWash = (function () {
   /* ---------- the shelf ---------- */
   function renderLibrary() {
     const cards = document.createDocumentFragment();
-    const items = document.createDocumentFragment();
 
     STORIES.forEach(function (story, i) {
       const card = document.createElement("article");
@@ -2077,20 +2120,9 @@ const InkWash = (function () {
       card.appendChild(body);
       cards.appendChild(card);
 
-      const li = document.createElement("li");
-      li.className = "toc__item";
-      li.innerHTML =
-        '<a class="toc__link" href="#story/' + story.id + '">' +
-          '<span class="toc__num" aria-hidden="true">' + ROMAN[i + 1] + '</span>' +
-          '<span class="toc__name">' + story.title + '</span>' +
-          '<span class="toc__leader" aria-hidden="true"></span>' +
-          '<span class="toc__time">' + story.minutes + ' min</span>' +
-        '</a>';
-      items.appendChild(li);
     });
 
     grid.appendChild(cards);
-    tocList.appendChild(items);
   }
 
   /* ---------- the reading page ---------- */
