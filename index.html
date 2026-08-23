@@ -1699,176 +1699,6 @@ const MULTI_IMAGES = {
 };
 
 /* ============================================================
-   INK REVEAL — DARK INDIA INK LEFT-TO-RIGHT
-   ------------------------------------------------------------
-   A dark ink wall covers each image. It sweeps left to right,
-   revealing the photograph underneath as it passes. Organic
-   bleeding edges are pre-computed (no Math.random per frame)
-   for a smooth, jitter-free animation.
-   ============================================================ */
-const InkWash = (function () {
-  const DURATION = 1700;
-  const EDGE_WIDTH = 90;
-  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  /* Pre-compute blob positions ONCE — these define the organic
-     bleeding edge shape. No randomness at draw time. */
-  function precomputeBlobs(h) {
-    var blobs = [];
-    var spacing = 22;
-    var count = Math.ceil(h / spacing) + 2;
-    // Use a seeded pseudo-random so blobs are deterministic per-frame
-    var seed = 1;
-    function rand() {
-      seed = (seed * 16807 + 0) % 2147483647;
-      return (seed - 1) / 2147483646;
-    }
-    for (var i = 0; i < count; i++) {
-      blobs.push({
-        y: i * spacing,
-        radius: 28 + rand() * 38,
-        offsetX: (rand() - 0.5) * 50,
-        offsetY: (rand() - 0.5) * 14,
-        opacity: 0.45 + rand() * 0.45
-      });
-    }
-    return blobs;
-  }
-
-  /* Draw one frame of the ink reveal.
-     sweepX = the x-position of the reveal boundary.
-     Left of sweepX = clear (image revealed).
-     Right of sweepX = covered in dark ink.
-     Blobs create organic bleeding along the boundary. */
-  function drawFrame(ctx, w, h, sweepX, blobs) {
-    ctx.clearRect(0, 0, w, h);
-
-    // Solid ink fill from well past the edge to right side
-    var solidStart = sweepX + EDGE_WIDTH * 0.35;
-    if (solidStart < w) {
-      ctx.fillStyle = "rgba(38, 24, 16, 0.94)";
-      ctx.fillRect(Math.max(0, solidStart), 0, w - Math.max(0, solidStart), h);
-    }
-
-    // Soft gradient edge for the bleeding transition
-    var gradLeft = sweepX - EDGE_WIDTH;
-    var gradRight = sweepX + EDGE_WIDTH * 0.35;
-    if (gradRight > 0 && gradLeft < w) {
-      var edgeGrad = ctx.createLinearGradient(gradLeft, 0, gradRight, 0);
-      edgeGrad.addColorStop(0, "rgba(38, 24, 16, 0)");
-      edgeGrad.addColorStop(0.3, "rgba(38, 24, 16, 0.25)");
-      edgeGrad.addColorStop(0.6, "rgba(38, 24, 16, 0.6)");
-      edgeGrad.addColorStop(1, "rgba(38, 24, 16, 0.94)");
-      ctx.fillStyle = edgeGrad;
-      ctx.fillRect(gradLeft, 0, gradRight - gradLeft, h);
-    }
-
-    // Pre-computed organic blobs along the sweep boundary
-    for (var i = 0; i < blobs.length; i++) {
-      var b = blobs[i];
-      var bx = sweepX + b.offsetX;
-      var by = b.y + b.offsetY;
-      // Skip blobs that are entirely off-canvas
-      if (by + b.radius < 0 || by - b.radius > h) continue;
-      if (bx + b.radius < 0 || bx - b.radius > w) continue;
-
-      var grad = ctx.createRadialGradient(bx, by, 0, bx, by, b.radius);
-      grad.addColorStop(0, "rgba(38, 24, 16, " + b.opacity + ")");
-      grad.addColorStop(0.55, "rgba(38, 24, 16, " + (b.opacity * 0.35) + ")");
-      grad.addColorStop(1, "rgba(38, 24, 16, 0)");
-      ctx.fillStyle = grad;
-      ctx.beginPath();
-      ctx.arc(bx, by, b.radius, 0, Math.PI * 2);
-      ctx.fill();
-    }
-  }
-
-  function run(frame) {
-    if (frame.dataset.inked === "1") return;
-    frame.dataset.inked = "1";
-
-    var w = frame.offsetWidth;
-    var h = frame.offsetHeight;
-    if (w === 0 || h === 0) return;
-
-    var canvas = document.createElement("canvas");
-    canvas.className = "ink-wash-canvas";
-    canvas.width = w;
-    canvas.height = h;
-    canvas.style.width = w + "px";
-    canvas.style.height = h + "px";
-    frame.appendChild(canvas);
-
-    var ctx = canvas.getContext("2d");
-    var blobs = precomputeBlobs(h);
-
-    // sweepX starts at left edge (everything covered)
-    // ends past right edge (everything revealed)
-    var startX = -EDGE_WIDTH * 1.2;
-    var endX = w + EDGE_WIDTH * 1.2;
-    var startTime = performance.now();
-
-    function animate(now) {
-      var elapsed = now - startTime;
-      var t = Math.min(elapsed / DURATION, 1);
-      // Smooth ease-in-out
-      var eased = t < 0.5
-        ? 4 * t * t * t
-        : 1 - Math.pow(-2 * t + 2, 3) / 2;
-      var sweepX = startX + (endX - startX) * eased;
-
-      drawFrame(ctx, w, h, sweepX, blobs);
-
-      if (t < 1) {
-        requestAnimationFrame(animate);
-      } else {
-        // Reveal complete — remove canvas so image is clean
-        canvas.remove();
-      }
-    }
-
-    requestAnimationFrame(animate);
-  }
-
-  /* ---- watch for plates coming into view ---- */
-  var observer = null;
-  if (!reduced && "IntersectionObserver" in window) {
-    observer = new IntersectionObserver(function (entries) {
-      var queued = 0;
-      entries.forEach(function (entry) {
-        if (!entry.isIntersecting) return;
-        var frame = entry.target;
-        observer.unobserve(frame);
-        var wait = queued * 180;
-        queued++;
-        setTimeout(function () { run(frame); }, wait);
-      });
-    }, { threshold: 0.2, rootMargin: "0px 0px -6% 0px" });
-  }
-
-  return {
-    watch: function (root) {
-      var frames = (root || document).querySelectorAll(".ink-frame");
-      frames.forEach(function (frame) {
-        if (frame.dataset.watched === "1") return;
-        frame.dataset.watched = "1";
-        if (!observer) {
-          run(frame);
-          return;
-        }
-        observer.observe(frame);
-        // Fallback: never leave it stuck if observer somehow never fires
-        setTimeout(function () {
-          if (frame.dataset.inked !== "1") {
-            run(frame);
-          }
-        }, 8000);
-      });
-    }
-  };
-})();
-
-/* ============================================================
    THE BOOK ITSELF
    Rendering, routing between the shelf and the reading page.
    ============================================================ */
@@ -1916,7 +1746,7 @@ const InkWash = (function () {
     const idx = byId[story.id] ? byId[story.id].index : -1;
     const num = idx + 1;
     const img = document.createElement("img");
-    img.className = "story-image";
+    img.className = "story-image ink-processed";
     img.src = "img/story-" + num + ".webp";
     img.alt = IMAGE_ALTS[story.id] || ("Illustration for " + story.title);
     img.loading = "lazy";
@@ -2022,7 +1852,7 @@ const InkWash = (function () {
           inlineFrame.className = "inline-illustration ink-frame";
           inlineFrame.style.setProperty("--tint", story.tint);
           const img = document.createElement("img");
-          img.className = "story-image";
+          img.className = "story-image ink-processed";
           img.src = info.src;
           img.alt = info.alt;
           img.loading = "lazy";
@@ -2086,7 +1916,6 @@ const InkWash = (function () {
     if (restore !== false && !firstRoute) {
       window.scrollTo({ top: libraryScroll, behavior: "auto" });
     }
-    InkWash.watch(libraryView);
   }
 
   function openStory(id) {
@@ -2107,7 +1936,6 @@ const InkWash = (function () {
     document.title = entry.story.title + " · The Little Lamplight Book";
     live.textContent = "Now reading: " + entry.story.title;
 
-    InkWash.watch(readerView);
   }
 
   /* ---------- routing ---------- */
@@ -2200,7 +2028,6 @@ const InkWash = (function () {
 
   /* ---------- go ---------- */
   renderLibrary();
-  InkWash.watch(document);
   route();
 
   /* once the first opening has played, switch off the stagger and
@@ -2215,6 +2042,235 @@ const InkWash = (function () {
       if (veil) veil.remove();
       document.body.classList.add("entered");
     }, 1750);
+  }
+})();
+</script>
+<script>
+/* Ink reveal — ported from blog with left-to-right sweep and India ink brown */
+(function() {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    requestAnimationFrame(init);
+  }
+
+  var processed = new WeakSet();
+
+  function init() {
+    var VS = 'attribute vec2 a_pos;void main(){gl_Position=vec4(a_pos,0.0,1.0);}';
+    var FS =
+      'precision mediump float;' +
+      'uniform float u_progress;uniform float u_seed;uniform vec2 u_size;' +
+      'float hash(float n){return fract(sin(n)*43758.5453);}' +
+      'float hash2(vec2 p){return hash(dot(p,vec2(12.9898,78.233)));}' +
+      'float smoothNoise(vec2 p){' +
+      '  vec2 i=floor(p);vec2 f=fract(p);f=f*f*(3.0-2.0*f);' +
+      '  float a=hash2(i);float b=hash2(i+vec2(1.0,0.0));' +
+      '  float c=hash2(i+vec2(0.0,1.0));float d=hash2(i+vec2(1.0,1.0));' +
+      '  return mix(mix(a,b,f.x),mix(c,d,f.x),f.y);' +
+      '}' +
+      'float fbm(vec2 p){float v=0.0;float a=0.5;float f=1.0;' +
+      '  for(int i=0;i<5;i++){v+=a*smoothNoise(p*f);a*=0.5;f*=2.1;}' +
+      '  return v;}' +
+      'void main(){' +
+      '  vec2 uv=gl_FragCoord.xy/u_size;' +
+      '  vec2 suv=uv;' +
+      '  float diag=suv.x;' +
+      '  vec2 nuv=uv*3.0+vec2(u_seed*0.001,u_seed*0.7);' +
+      '  float nv=fbm(nuv);' +
+      '  float raw=abs(nv-0.5);' +
+      '  float s2=(nv-0.5>=0.0)?1.0:-1.0;' +
+      '  float jag=s2*pow(raw,0.4)*0.15;' +
+      '  float threshold=u_progress+jag;' +
+      '  float ink=smoothstep(threshold-0.01,threshold+0.01,diag);' +
+      '  gl_FragColor=vec4(vec3(38.0/255.0,24.0/255.0,16.0/255.0),ink);' +
+      '}';
+
+    scanImages();
+    new MutationObserver(function() { scanImages(); }).observe(document.body, { childList: true, subtree: true });
+
+    function scanImages() {
+      var images = document.querySelectorAll('img.ink-processed');
+      for (var i = 0; i < images.length; i++) {
+        if (!processed.has(images[i])) {
+          var rect = images[i].getBoundingClientRect();
+          var vh = window.innerHeight;
+          if (rect.top < vh * 0.8 && rect.bottom > 0 && rect.height > 0) {
+            runInk(images[i]);
+          }
+        }
+      }
+    }
+
+    var lastScroll = 0;
+    window.addEventListener('scroll', function() {
+      if (Date.now() - lastScroll < 200) return;
+      lastScroll = Date.now();
+      scanImages();
+    }, { passive: true });
+
+    if ('IntersectionObserver' in window) {
+      var ioObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            try {
+              var img = entry.target;
+              if (document.body.contains(img) && !processed.has(img)) {
+                var h = img.getBoundingClientRect().height;
+                if (h > 0) {
+                  runInk(img);
+                } else {
+                  img.addEventListener('load', function() {
+                    if (!processed.has(img)) runInk(img);
+                  });
+                }
+              }
+              ioObserver.unobserve(img);
+            } catch(e) { console.error('ink-reveal IO error:', e); }
+          }
+        });
+      }, { rootMargin: '0px' });
+
+      var images = document.querySelectorAll('img.ink-processed');
+      for (var j = 0; j < images.length; j++) {
+        if (!processed.has(images[j])) {
+          ioObserver.observe(images[j]);
+        }
+      }
+
+      new MutationObserver(function(mutations) {
+        mutations.forEach(function(m) {
+          m.addedNodes.forEach(function(node) {
+            if (node.nodeType !== 1) return;
+            if (node.matches && node.matches('img.ink-processed') && !processed.has(node)) {
+              var rect = node.getBoundingClientRect();
+              if (rect.top < window.innerHeight * 0.8 && rect.bottom > 0 && rect.height > 0) {
+                runInk(node);
+              } else {
+                ioObserver.observe(node);
+              }
+            } else if (node.nodeType === 1 && node.querySelectorAll) {
+              var newImgs = node.querySelectorAll('img.ink-processed');
+              for (var k = 0; k < newImgs.length; k++) {
+                if (!processed.has(newImgs[k])) {
+                  var r = newImgs[k].getBoundingClientRect();
+                  if (r.top < window.innerHeight * 0.8 && r.bottom > 0 && r.height > 0) {
+                    runInk(newImgs[k]);
+                  } else {
+                    ioObserver.observe(newImgs[k]);
+                  }
+                }
+              }
+            }
+          });
+        });
+      }).observe(document.body, { childList: true, subtree: true });
+    }
+
+    function runInk(imgEl) {
+      if (processed.has(imgEl)) return;
+      processed.add(imgEl);
+
+      var parent = imgEl.parentElement;
+      if (!parent) { showImage(imgEl); return; }
+      if (getComputedStyle(parent).position === 'static') parent.style.position = 'relative';
+
+      var bounds = imgEl.getBoundingClientRect();
+      var w = Math.round(bounds.width);
+      var h = Math.round(bounds.height);
+      if (w < 50 || h < 10) { showImage(imgEl); return; }
+
+      var canvas = parent.querySelector('canvas.ink-canvas');
+      if (!canvas) {
+        canvas = document.createElement('canvas');
+        canvas.className = 'ink-canvas';
+        canvas.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:2;';
+        parent.appendChild(canvas);
+      }
+      canvas.width = w;
+      canvas.height = h;
+      imgEl.style.zIndex = '1';
+
+      var gl = canvas.getContext('webgl', { premultipliedAlpha: false, alpha: true });
+      if (!gl) { canvas.remove(); showImage(imgEl); return; }
+
+      var vs = gl.createShader(gl.VERTEX_SHADER);
+      gl.shaderSource(vs, VS);
+      gl.compileShader(vs);
+      if (!gl.getShaderParameter(vs, gl.COMPILE_STATUS)) { canvas.remove(); showImage(imgEl); return; }
+
+      var fs = gl.createShader(gl.FRAGMENT_SHADER);
+      gl.shaderSource(fs, FS);
+      gl.compileShader(fs);
+      if (!gl.getShaderParameter(fs, gl.COMPILE_STATUS)) {
+        var log = gl.getShaderInfoLog(fs);
+        canvas.remove();
+        showImage(imgEl);
+        return;
+      }
+
+      var program = gl.createProgram();
+      gl.attachShader(program, vs);
+      gl.attachShader(program, fs);
+      gl.linkProgram(program);
+      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) { canvas.remove(); showImage(imgEl); return; }
+
+      gl.useProgram(program);
+
+      var buf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,-1,1,1,-1,1,1]), gl.STATIC_DRAW);
+      var aPos = gl.getAttribLocation(program, 'a_pos');
+      gl.enableVertexAttribArray(aPos);
+      gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+
+      var uProgress = gl.getUniformLocation(program, 'u_progress');
+      var uSeed = gl.getUniformLocation(program, 'u_seed');
+      var uSize = gl.getUniformLocation(program, 'u_size');
+      var seed = Math.random() * 1000;
+      gl.uniform1f(uSeed, seed);
+      gl.uniform2f(uSize, w, h);
+
+      var duration = Math.max(500, Math.min(1200, Math.round(h * 2.5)));
+      var startTime = null;
+      var animating = true;
+
+      function animate(now) {
+        if (!animating) return;
+        if (!startTime) {
+          startTime = now;
+          setTimeout(function() { showImage(imgEl); }, duration * 0.3);
+        }
+        var progress = Math.min((now - startTime) / duration, 1);
+        gl.viewport(0, 0, w, h);
+        gl.clearColor(0, 0, 0, 0);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        gl.enable(gl.BLEND);
+        gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+        gl.uniform1f(uProgress, progress);
+        gl.drawArrays(gl.TRIANGLES, 0, 6);
+        if (progress >= 1) {
+          animating = false;
+          canvas.style.transition = 'opacity 0.5s ease-out';
+          canvas.style.opacity = '0';
+          setTimeout(function() {
+            canvas.remove();
+            imgEl.style.zIndex = '';
+            gl.deleteProgram(program);
+            gl.deleteShader(vs);
+            gl.deleteShader(fs);
+            gl.deleteBuffer(buf);
+          }, 600);
+          return;
+        }
+        requestAnimationFrame(animate);
+      }
+      requestAnimationFrame(animate);
+    }
+
+    function showImage(imgEl) {
+      imgEl.classList.add('ink-revealed');
+    }
   }
 })();
 </script>
