@@ -1,2 +1,4 @@
 .wrangler/
 node_modules/
+batch_generate.py
+run_batch.py
