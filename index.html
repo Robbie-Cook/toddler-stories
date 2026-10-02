@@ -919,6 +919,77 @@ body.entered .fade-item, body.entered .card-enter {
 .aside-plate::after { background: none; }
 .aside-plate .illus-art svg { width: 100%; height: 100%; }
 
+/* ============================================================
+   18. SONGS — a quieter, greener identity for the sing-alongs
+   ------------------------------------------------------------
+   Stories keep their gold-and-ink identity; songs pick up the
+   evening greens already in the palette (forest + sky), a
+   music-note badge pinned to every song plate, centred verses
+   in the reader and a soft meadow wash behind the songs panel.
+   Deliberately additive — nothing above is restyled.
+   ============================================================ */
+
+/* the Songs tab lights up forest green instead of ink */
+.tab[data-tab="songs"][aria-selected="true"] { background: var(--forest); }
+
+/* a soft evening-meadow wash behind the whole songs panel */
+#panel-songs {
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(ellipse 70% 45% at 10% 0%,   rgba(169, 199, 216, .18), transparent 66%),
+    radial-gradient(ellipse 60% 50% at 96% 8%,   rgba(127, 164, 146, .14), transparent 66%),
+    radial-gradient(ellipse 80% 40% at 50% 100%, rgba(243, 224, 174, .18), transparent 70%);
+  padding-bottom: clamp(1.6rem, 4vw, 2.6rem);
+}
+
+/* song cards: same bones, a different coat — a forest top strip and
+   green-tinted edge so a song reads as a song at a glance */
+.card--song {
+  border-color: rgba(47, 93, 78, .32);
+}
+.card--song::before {
+  content: "";
+  position: absolute; top: 0; left: 0; right: 0; z-index: 7;
+  height: 3px;
+  background: linear-gradient(90deg, var(--forest), var(--forest-soft));
+  pointer-events: none;
+}
+.card--song .card__kicker b { color: var(--forest); }
+.card--song:hover, .card--song:focus-visible {
+  border-color: rgba(47, 93, 78, .5);
+  box-shadow: 0 0 0 1px rgba(47,93,78,.28), 0 10px 22px rgba(44,24,16,.10), 0 30px 70px rgba(47,93,78,.22);
+}
+.card--song:hover .card__title { color: var(--forest); }
+.card--song:hover .card__cta { color: var(--forest); }
+
+/* the little music-note badge pinned to every song plate */
+.song-note {
+  position: absolute; top: .8rem; right: .8rem; z-index: 5;
+  width: 2.1rem; height: 2.1rem;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  background: rgba(251, 244, 230, .93);
+  color: var(--forest);
+  border: 1px solid rgba(47, 93, 78, .38);
+  box-shadow: 0 2px 9px rgba(44, 24, 16, .2);
+  pointer-events: none;
+}
+.song-note svg { width: 1.05rem; height: 1.05rem; }
+
+/* song reader: centred verses, no drop cap, green accents */
+.reader--song .reader__kicker b { color: var(--forest); }
+.reader--song .reader__sub { color: var(--forest); }
+.reader--song .reader__body { line-height: 1.95; }
+.reader--song .reader__body p { text-align: center; }
+.reader--song .reader__body p:first-of-type::first-letter {
+  float: none;
+  font-size: inherit;
+  font-weight: 600;
+  line-height: inherit;
+  color: inherit;
+  padding: 0;
+}
+
 </style>
 </head>
 <body>
@@ -1010,6 +1081,7 @@ body.entered .fade-item, body.entered .card-enter {
         </div>
         <ul class="hero__meta fade-item">
           <li>15 stories</li>
+          <li>20 songs</li>
           <li>2&ndash;3 minutes each</li>
           <li>Ages 2&ndash;4</li>
           <li>Public domain</li>
@@ -1046,7 +1118,7 @@ body.entered .fade-item, body.entered .card-enter {
     <div class="shell tab-panel" id="panel-songs" role="tabpanel" aria-labelledby="tab-songs" hidden>
       <div class="section-head fade-item" id="songsContents">
         <p class="eyebrow ornament">The songs</p>
-        <h2 class="section-head__title">Fifteen old songs, ready to sing</h2>
+        <h2 class="section-head__title">Twenty old songs, ready to sing</h2>
         <p class="section-head__note">
           Traditional nursery rhymes and folk songs &mdash; the kind sung
           at bedsides for generations, with a little something for small
@@ -2381,6 +2453,107 @@ const SONGS = [
     body: [
       "This little piggy went to market,<br>This little piggy stayed home,<br>This little piggy had roast beef,<br>This little piggy had none,<br>And this little piggy went &ldquo;wee, wee, wee&rdquo;<br>All the way home."
     ]
+  },
+  {
+    id: "sing-a-song-of-sixpence",
+    title: "Sing a Song of Sixpence",
+    subtitle: "A pie with a very surprising surprise inside",
+    minutes: 2,
+    tint: "#F3E0AE",
+    excerpt: "A king, a queen, a maid in the garden, and a pie that was not quite what it seemed.",
+    actions: "Count on your fingers &mdash; four and twenty is a lot of counting, so count fast and giggle.",
+    moral: "Flap your arms like the blackbirds when the pie is opened &mdash; twenty-four birds is a great flapping.",
+    pullAfter: 0,
+    pull: "Wasn&rsquo;t that a dainty dish to set before the king?",
+    body: [
+      "Sing a song of sixpence,<br>A pocket full of rye.<br>Four and twenty blackbirds<br>Baked in a pie.<br>When the pie was opened<br>The birds began to sing;<br>Wasn&rsquo;t that a dainty dish<br>To set before the king?",
+      "The king was in his counting-house,<br>Counting out his money;<br>The queen was in the parlour,<br>Eating bread and honey.<br>The maid was in the garden,<br>Hanging out the clothes;<br>Along came a blackbird<br>And pecked off her nose!"
+    ]
+  },
+  {
+    id: "little-bo-peep",
+    title: "Little Bo Peep",
+    subtitle: "A patient shepherdess who waits for her woolly flock",
+    minutes: 2,
+    tint: "#EAD9BC",
+    excerpt: "Little Bo Peep has lost her sheep &mdash; but the old rhyme says if you leave them alone, they always come home.",
+    actions: "Baa gently like a sheep every time somebody comes home.",
+    moral: "Bo Peep finds her sheep in the end &mdash; count how many woolly ones you can spot on your walks.",
+    pullAfter: 1,
+    pull: "Leave them alone, and they&rsquo;ll come home, wagging their tails behind them.",
+    body: [
+      "Little Bo-Peep has lost her sheep,<br>And can&rsquo;t tell where to find them;<br>Leave them alone, and they&rsquo;ll come home,<br>Wagging their tails behind them.",
+      "Little Bo-Peep fell fast asleep,<br>And dreamt she heard them bleating;<br>But when she awoke, she found it a joke,<br>For they were still a-fleeting.",
+      "Then up she took her little crook,<br>Determined for to find them;<br>She found them indeed, but it made her heart bleed,<br>For they&rsquo;d left their tails behind them.",
+      "It happened one day, as Bo-Peep did stray<br>Into a meadow hard by,<br>There she espied their tails side by side,<br>All hung on a tree to dry.",
+      "She heaved a sigh and wiped her eye,<br>And over the hillocks went rambling,<br>And tried what she could, as a shepherdess should,<br>To tack each again to its lambkin."
+    ]
+  },
+  {
+    id: "ten-in-the-bed",
+    title: "Ten in the Bed",
+    subtitle: "A counting song that empties the bed one rollover at a time",
+    minutes: 2,
+    tint: "#7FA492",
+    excerpt: "Ten snug in one little bed, and the little one keeps shouting &ldquo;Roll over!&rdquo; &mdash; until there is just one left.",
+    actions: "Hold up ten fingers and fold one down every time somebody falls out of the bed.",
+    moral: "The littlest one gets the best ending &mdash; a whole bed all to stretch out in.",
+    pullAfter: 0,
+    pull: "Ten in the bed and the little one said, &ldquo;Roll over! Roll over!&rdquo;",
+    body: [
+      "Ten in the bed<br>And the little one said,<br>&ldquo;Roll over! Roll over!&rdquo;<br>So they all rolled over<br>And one fell out.<br>Nine in the bed.",
+      "Nine in the bed<br>And the little one said,<br>&ldquo;Roll over! Roll over!&rdquo;<br>So they all rolled over<br>And one fell out.<br>Eight in the bed.",
+      "Eight in the bed<br>And the little one said,<br>&ldquo;Roll over! Roll over!&rdquo;<br>So they all rolled over<br>And one fell out.<br>Seven in the bed.",
+      "Seven in the bed<br>And the little one said,<br>&ldquo;Roll over! Roll over!&rdquo;<br>So they all rolled over<br>And one fell out.<br>Six in the bed.",
+      "Six in the bed<br>And the little one said,<br>&ldquo;Roll over! Roll over!&rdquo;<br>So they all rolled over<br>And one fell out.<br>Five in the bed.",
+      "Five in the bed<br>And the little one said,<br>&ldquo;Roll over! Roll over!&rdquo;<br>So they all rolled over<br>And one fell out.<br>Four in the bed.",
+      "Four in the bed<br>And the little one said,<br>&ldquo;Roll over! Roll over!&rdquo;<br>So they all rolled over<br>And one fell out.<br>Three in the bed.",
+      "Three in the bed<br>And the little one said,<br>&ldquo;Roll over! Roll over!&rdquo;<br>So they all rolled over<br>And one fell out.<br>Two in the bed.",
+      "Two in the bed<br>And the little one said,<br>&ldquo;Roll over! Roll over!&rdquo;<br>So they all rolled over<br>And one fell out.<br>One in the bed.",
+      "One in the bed<br>And the little one said,<br>&ldquo;Good night!&rdquo;"
+    ]
+  },
+  {
+    id: "farmer-in-the-dell",
+    title: "The Farmer in the Dell",
+    subtitle: "A procession song where everyone joins the farmer, one by one",
+    minutes: 2,
+    tint: "#F7E9CD",
+    excerpt: "The farmer takes a wife, the wife takes a child, the child takes a nurse &mdash; all the way down to the cheese.",
+    actions: "Walk in a little circle like the game does &mdash; one more friend joins the line with every verse.",
+    moral: "At the very end the cheese stands alone &mdash; give it a little clap of its own.",
+    pullAfter: 0,
+    pull: "Hi-ho the derry-o, the farmer in the dell!",
+    body: [
+      "The farmer in the dell,<br>The farmer in the dell,<br>Hi-ho, the derry-o,<br>The farmer in the dell.",
+      "The farmer takes a wife,<br>The farmer takes a wife,<br>Hi-ho, the derry-o,<br>The farmer takes a wife.",
+      "The wife takes a child,<br>The wife takes a child,<br>Hi-ho, the derry-o,<br>The wife takes a child.",
+      "The child takes a nurse,<br>The child takes a nurse,<br>Hi-ho, the derry-o,<br>The child takes a nurse.",
+      "The nurse takes a cow,<br>The nurse takes a cow,<br>Hi-ho, the derry-o,<br>The nurse takes a cow.",
+      "The cow takes a dog,<br>The cow takes a dog,<br>Hi-ho, the derry-o,<br>The cow takes a dog.",
+      "The dog takes a cat,<br>The dog takes a cat,<br>Hi-ho, the derry-o,<br>The dog takes a cat.",
+      "The cat takes a rat,<br>The cat takes a rat,<br>Hi-ho, the derry-o,<br>The cat takes a rat.",
+      "The rat takes the cheese,<br>The rat takes the cheese,<br>Hi-ho, the derry-o,<br>The rat takes the cheese.",
+      "The cheese stands alone,<br>The cheese stands alone,<br>Hi-ho, the derry-o,<br>The cheese stands alone."
+    ]
+  },
+  {
+    id: "north-wind-doth-blow",
+    title: "The North Wind Doth Blow",
+    subtitle: "A winter rhyme about how the animals keep warm, poor things",
+    minutes: 2,
+    tint: "#A9C7D8",
+    excerpt: "Snow is coming, and robin, honey bee and dormouse each have their own clever way of keeping warm.",
+    actions: "Shiver your shoulders for the cold north wind, then tuck your hands under your arms like a bird hiding under its wing.",
+    moral: "Everyone has their own way to keep warm &mdash; ask which one your little one would pick.",
+    pullAfter: 2,
+    pull: "He&rsquo;ll sit in a barn, and keep himself warm, and hide his head under his wing, poor thing.",
+    body: [
+      "The north wind doth blow,<br>And we shall have snow,<br>And what will poor robin do then, poor thing?<br>He&rsquo;ll sit in a barn,<br>And keep himself warm,<br>And hide his head under his wing, poor thing!",
+      "The north wind doth blow,<br>And we shall have snow,<br>And what will the honey bee do, poor thing?<br>In his hive he will stay,<br>Till the cold&rsquo;s passed away,<br>And then he&rsquo;ll come out in the spring, poor thing!",
+      "The north wind doth blow,<br>And we shall have snow,<br>And what will the dormouse do then, poor thing?<br>Rolled up in a ball,<br>In his nest snug and small,<br>He&rsquo;ll sleep till warm weather comes in, poor thing!",
+      "The north wind doth blow,<br>And we shall have snow,<br>And what will the children do then, poor things?<br>When lessons are done,<br>They&rsquo;ll jump, skip and run,<br>And that&rsquo;s how they keep themselves warm, poor things!"
+    ]
   }
 ];
 
@@ -2410,12 +2583,42 @@ const SONG_ART =
   '</g>' +
   '</svg>';
 
+/* the badge icon pinned on every song plate */
+const SONG_NOTE_MARK =
+  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" ' +
+  'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+  '<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>';
+
+/* alt text for the twenty painted song plates (img/song-1..20.webp) */
+const SONG_IMAGE_ALTS = {
+  "twinkle-twinkle":          "A sleepy baby in a cot by an open window looking up at a crescent moon and golden stars over quiet rooftops",
+  "baa-baa-black-sheep":      "A friendly black sheep with three bulging wool sacks on a country lane, hills and a village behind",
+  "itsy-bitsy-spider":        "A cheerful little spider climbing a rain spout while gentle rain falls and a rainbow arcs over the garden",
+  "row-row-row-your-boat":    "Two children rowing a little wooden boat down a calm stream beneath a weeping willow, ducks alongside",
+  "old-macdonald":            "A jolly farmer by a red barn with a cow, a pig, a duck and a dog around him",
+  "humpty-dumpty":            "A smiling egg character in a little jacket sitting on a tall brick wall, the king's horses behind",
+  "wheels-on-the-bus":        "A cheerful round-nosed city bus rolling down a friendly street with children waving from the windows",
+  "hickory-dickory-dock":     "A small grey mouse scampering down the face of a tall wooden grandfather clock in a lamplit cottage",
+  "mary-had-a-little-lamb":   "A little girl in a sunbonnet walking to a red schoolhouse with a fluffy white lamb trotting behind",
+  "london-bridge":            "A grand old stone bridge with towers over a wide river, boats below and children dancing in a meadow",
+  "jack-and-jill":            "A boy and a girl climbing a grassy hill toward an old well, carrying one pail between them",
+  "five-little-ducks":        "A mother duck with five ducklings waddling across rolling green hills toward a pond",
+  "head-shoulders-knees-toes": "A happy toddler in a sunny playroom giggling with both hands on top of their head",
+  "rock-a-bye-baby":          "A woven cradle hanging from a bough of a tall oak tree under the first stars of evening",
+  "this-little-piggy":        "Five cheerful little pigs in a row on a country road, one carrying a market basket, one waving goodbye",
+  "sing-a-song-of-sixpence":  "Blackbirds flying out of a golden pie on a royal banquet table where a king and queen look on",
+  "little-bo-peep":           "A shepherdess with a crook in a flowery meadow as her white sheep come bounding home over the hill",
+  "ten-in-the-bed":           "Ten teddy bears snuggled in one big bed under a patchwork quilt, one tumbling over the edge, in a moonlit room",
+  "farmer-in-the-dell":       "A farmer and his wife leading a line of friends and farm animals across a green valley, a cheese at the end",
+  "north-wind-doth-blow":     "A little robin sheltering in a cozy barn doorway from falling snow, warm lamplight glowing from inside"
+};
+
 /* ============================================================
    THE BOOK ITSELF
    Rendering, routing between the shelf and the reading page.
    ============================================================ */
 (function () {
-  const ROMAN = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV"];
+  const ROMAN = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "XIX", "XX"];
 
   const grid        = document.getElementById("storyGrid");
   const songGrid    = document.getElementById("songGrid");
@@ -2477,6 +2680,26 @@ const SONG_ART =
       img.decoding = "async";
       img.addEventListener("load", function () { frame.classList.add("has-photo"); });
       frame.appendChild(img);
+    } else {
+      /* songs carry their own painted plates — img/song-<n>.webp by position
+         in SONGS. The shared SONG_ART SVG underneath stays as the fallback
+         for any plate that has not been generated (or fails to load). */
+      const songIdx = songById[item.id] ? songById[item.id].index : -1;
+      const img = document.createElement("img");
+      img.className = "story-image ink-processed";
+      img.src = "img/song-" + (songIdx + 1) + ".webp";
+      img.alt = SONG_IMAGE_ALTS[item.id] || ("Illustration for " + item.title);
+      img.loading = "lazy";
+      img.decoding = "async";
+      img.addEventListener("load", function () { frame.classList.add("has-photo"); });
+      frame.appendChild(img);
+
+      /* the music-note badge — a song is instantly tellable from a story */
+      const note = document.createElement("span");
+      note.className = "song-note";
+      note.setAttribute("aria-hidden", "true");
+      note.innerHTML = SONG_NOTE_MARK;
+      frame.appendChild(note);
     }
 
     const art = document.createElement("div");
@@ -2533,7 +2756,7 @@ const SONG_ART =
 
     SONGS.forEach(function (song, i) {
       const card = document.createElement("article");
-      card.className = "card card-enter";
+      card.className = "card card--song card-enter";
       card.style.animationDelay = (0.05 + i * 0.09).toFixed(2) + "s";
       card.appendChild(makePlate(song, "figure", "card__figure", "song"));
 
@@ -2556,6 +2779,7 @@ const SONG_ART =
   function buildReader(item, index, kind) {
     readerView.innerHTML = "";
     const isSong = kind === "song";
+    readerView.classList.toggle("reader--song", isSong);
     const collection = isSong ? SONGS : STORIES;
     const backHash = isSong ? "#songs" : "#contents";
     const backLabel = isSong ? "All the songs" : "All the stories";
