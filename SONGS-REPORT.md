@@ -71,6 +71,13 @@ commercial lyrics were added** — nothing uncertain was included.
 - Scripts added to the repo: `batch_songs.py` (Firefox variant, parked),
   `batch_songs_agy.py` (active), `resume_songs_plates.sh` (quota-reset finisher).
 
+## Plates complete — 2026-10-03
+
+All 20/20 song plates now live. The missing 9 (song-3, song-12–20) were
+converted from regenerated Nano Banana PNGs to webp, visually verified
+(child-appropriate, correct subjects: song-3 is a spider, not a bee), and
+deployed. Live site serves all 20 with HTTP 200.
+
 ## MEDIA
 - /tmp/songs-shots/live-songs-1440.png (LIVE production site, songs tab)
 - /tmp/songs-shots/songs-vs-stories-1440.png (songs vs stories, one-glance test)
@@ -79,3 +86,4 @@ commercial lyrics were added** — nothing uncertain was included.
 - /tmp/songs-shots/song-reader-390.png (mobile song reader, centred lyrics)
 - /tmp/songs-shots/stories-1440.png (stories regression check)
 - /tmp/song-plates/contact-sheet-1.png (plate QA contact sheet)
+- img/contact-sheet-new-9.png (9 new plates: song-3, song-12–20)
