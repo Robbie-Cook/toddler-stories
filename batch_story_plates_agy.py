@@ -4,7 +4,7 @@ Run with /home/robbie/.venvs/nanobanana/bin/python3 (PIL). Existing PNGs >100KB 
 import json, os, subprocess, sys
 HOME = "/home/robbie/.hermes/profiles/hermes2/home"
 AGY = HOME + "/.local/bin/agy"
-MODEL = "gemini-3.8-flash-medium"
+MODEL = "gemini-3.8-flash-high"
 WORKDIR = "/tmp/story-plates"
 IMG_DIR = "/home/robbie/projects/toddler-stories/img"
 STYLE = ("Soft watercolor children's book illustration, warm golden light, "
@@ -26,6 +26,17 @@ PLATES = {
  "story-15": "A golden ball tumbling into a deep forest spring with a green frog watching from a lily pad, a young princess in a gown at the edge of the water, dappled forest light",
  "story-15-2": "A friendly green frog sitting at a royal dining table beside a princess's golden dinner plate, a king and the princess looking on, warm candlelit castle dining hall",
  "story-15-3": "A handsome young prince with kind eyes in royal clothes standing beside a princess in a castle garden, a few sparkles in the air, a golden carriage waiting, warm light",
+ "story-4-2": "The tall-eared brown hare sprinting far ahead along a winding country racecourse through green meadows, dust kicking up behind him, a small slow tortoise visible tiny and far behind in the distance, sunny sky with plain clouds",
+ "story-5-3": "A sly orange fox swimming across a wide river with a little gingerbread man cookie riding on his nose, the gingerbread man with icing buttons and a worried smile, riverbanks with reeds, warm light",
+ "story-6-2": "A big grey wolf wearing a frilly white nightcap and little spectacles lying in grandmother's cozy bed with the quilt pulled up to his chin, sharp teeth showing in a sly grin, a small cottage bedroom with a window, a little girl in a red hooded cape standing at the bedside",
+ "story-6-3": "A kind huntsman with an axe and green coat standing in a cottage bedroom beside a big grey wolf lying fast asleep on the floor, freeing a little girl in a red hooded cape and her old grandmother in a shawl who are climbing out, the huntsman helping them, warm lamplight",
+ "story-7-2": "A small young billy goat, the smallest of the three, trip-trapping carefully across a wooden plank bridge over a rushing stream, green meadow beyond, a hint of a grumpy troll's eyes peeking from beneath the bridge, sunny day",
+ "story-7-3": "A huge big billy goat with great curved horns standing bravely on a wooden bridge facing a hulking grumpy green troll with a lumpy nose who rises from beneath, the goat lowering his horns to charge, rocky stream below",
+ "story-8-3": "A sly red fox with a bushy tail leading a line of a little hen, a duck, a goose and a turkey along a forest path toward the dark mouth of his den in a hillside, the fox looking back with a sly smile, the animals trusting and following, dusk light",
+ "story-9-2": "A group of villagers, men and women with sticks and pitchforks, running up a green hillside toward a flock of sheep, a young shepherd boy on the hilltop waving his arms and shouting, village in the valley below, afternoon light",
+ "story-9-3": "A big grey wolf leaping in among a flock of frightened sheep scattering in every direction across a hillside at dusk, a young shepherd boy on the hill looking terrified, alone with nobody else near, dramatic but storybook-gentle",
+ "story-10-2": "A small grey ugly duckling alone and shivering on a frozen pond in winter, ice and snow all around, bare trees, snowflakes falling, cold blue light, the duckling looking sad and tiny",
+ "story-10-3": "A lovely young white swan, the former ugly duckling, gazing at its own beautiful reflection in a clear pond at sunrise, surrounded by graceful swans gliding past, golden pink dawn light, reeds and water lilies",
 }
 SIZES = {}  # name -> (w,h)
 def size_for(n): return (1024, 572)
