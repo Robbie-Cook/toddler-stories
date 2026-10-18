@@ -1,0 +1,12 @@
+node_modules/
+build/
+.DS_Store
+*.log
+
+# Xcode
+ios/App/build/
+ios/App/App/public/
+ios/App/Pods/
+xcuserdata/
+*.xcuserstate
+DerivedData/

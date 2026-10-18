@@ -1,0 +1,22 @@
+{
+  "name": "baby-stories-ios",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Free Baby Stories — iOS shell for toddler-stories.robbie.digital (fifteen classic tales to read aloud)",
+  "type": "module",
+  "scripts": {
+    "sync": "cap sync ios",
+    "open": "cap open ios",
+    "build:sim": "xcodebuild -project ios/App/App.xcodeproj -scheme App -sdk iphonesimulator -configuration Debug -destination 'generic/platform=iOS Simulator' -derivedDataPath build build"
+  },
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@capacitor/core": "^8.5.3",
+    "@capacitor/ios": "^8.5.3",
+    "@capacitor/splash-screen": "^8.0.2",
+    "@capacitor/status-bar": "^8.0.4"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.5.3"
+  }
+}

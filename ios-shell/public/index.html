@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Free Baby Stories</title>
+<meta name="theme-color" content="#FBF4E6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1B140E" media="(prefers-color-scheme: dark)">
+<style>
+  :root {
+    --paper: #FBF4E6;
+    --ink: #2C1810;
+    --red: #B23A2E;
+    --muted: rgba(44, 24, 16, .58);
+    --hairline: rgba(44, 24, 16, .14);
+    color-scheme: light dark;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #1B140E;
+      --ink: #F2E7D3;
+      --red: #E08A78;
+      --muted: rgba(242, 231, 211, .55);
+      --hairline: rgba(242, 231, 211, .16);
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: calc(env(safe-area-inset-top) + 2rem) 1.5rem calc(env(safe-area-inset-bottom) + 2rem);
+    font-family: ui-serif, Iowan Old Style, Georgia, Cambria, "Times New Roman", serif;
+  }
+  main { width: 100%; max-width: 21rem; text-align: center; }
+  .mark { margin: 0 auto 1.5rem; width: 64px; height: 64px; border: 1px solid var(--hairline); border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 1.75rem; }
+  h1 { font-size: 1.6rem; font-weight: 600; letter-spacing: -.015em; line-height: 1.2; }
+  p { margin-top: .75rem; font-size: 1rem; line-height: 1.65; color: var(--muted); }
+  button {
+    -webkit-appearance: none;
+    font: inherit; font-size: .95rem;
+    margin-top: 1.75rem;
+    padding: .75rem 1.6rem;
+    border: 1px solid var(--hairline);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--red);
+    cursor: pointer;
+    transition: background-color .2s;
+  }
+  button:active { background: color-mix(in srgb, var(--red) 10%, transparent); }
+  button[disabled] { opacity: .5; }
+  .fine { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-top: 2rem; }
+</style>
+</head>
+<body>
+<main>
+  <div class="mark" aria-hidden="true">&#128214;</div>
+  <h1>The stories are out of reach</h1>
+  <p>Free Baby Stories needs a connection the first time it opens. Check your signal, then try again.</p>
+  <button id="retry" type="button">Try again</button>
+  <p class="fine">Fifteen tales &middot; Read aloud</p>
+</main>
+<script>
+  var btn = document.getElementById('retry');
+  btn.addEventListener('click', function () {
+    btn.disabled = true;
+    btn.textContent = 'Opening the book…';
+    location.href = 'https://toddler-stories.robbie.digital';
+  });
+</script>
+</body>
+</html>
