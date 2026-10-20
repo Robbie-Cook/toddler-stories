@@ -990,6 +990,101 @@ body.entered .fade-item, body.entered .card-enter {
   padding: 0;
 }
 
+
+/* ============================================================
+   READING PROGRESS + RESUME
+   ============================================================ */
+.read-progress {
+  position: fixed; top: 0; left: 0; right: 0; height: 5px; z-index: 120;
+  background: rgba(44,24,16,.08);
+  opacity: 0; pointer-events: none;
+  transition: opacity .25s var(--ease);
+}
+.read-progress.is-on { opacity: 1; }
+.read-progress__fill {
+  display: block; height: 100%; width: 100%;
+  background: linear-gradient(90deg, var(--gold) 0%, var(--amber) 55%, var(--red) 100%);
+  transform-origin: 0 50%; transform: scaleX(0);
+  transition: transform .18s linear;
+  border-radius: 0 3px 3px 0;
+  box-shadow: 0 0 8px rgba(217,164,65,.55);
+}
+.read-progress__pct {
+  position: fixed; top: 76px; right: 12px; z-index: 55;
+  font-size: .72rem; font-weight: 800; letter-spacing: .08em;
+  padding: .22rem .6rem; border-radius: 999px;
+  background: var(--paper-card); color: var(--ink-soft);
+  border: 1px solid var(--rule); box-shadow: var(--shadow-sm);
+  opacity: 0; pointer-events: none; transition: opacity .25s var(--ease);
+}
+.read-progress__pct.is-on { opacity: 1; }
+
+.resume-panel { margin-bottom: clamp(1.4rem, 3vw, 2.2rem); }
+.resume-panel[hidden] { display: none; }
+.resume-card {
+  display: flex; align-items: center; gap: clamp(.9rem, 2vw, 1.4rem);
+  padding: .8rem clamp(.8rem, 2vw, 1.2rem) .8rem .8rem;
+  background: var(--paper-card);
+  border: 1px solid rgba(217,164,65,.55);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  color: var(--ink); text-decoration: none;
+}
+.resume-card__thumb {
+  flex: none; width: clamp(72px, 16vw, 132px); aspect-ratio: 8 / 5;
+  border-radius: calc(var(--radius-lg) - 6px);
+  background: var(--tint, var(--paper-warm)) center / cover no-repeat;
+}
+.resume-card__text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .3rem; }
+.resume-card__label {
+  font-size: .7rem; font-weight: 800; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--gold-ink);
+}
+.resume-card__title {
+  font-family: var(--font-display); font-weight: 700; line-height: 1.16;
+  font-size: clamp(1.1rem, 2.4vw, 1.4rem);
+}
+.resume-card__meter { height: 6px; border-radius: 3px; background: var(--rule); overflow: hidden; max-width: 22rem; }
+.resume-card__meter i { display: block; height: 100%; background: linear-gradient(90deg, var(--gold), var(--red)); }
+.resume-card__btn {
+  flex: none; display: inline-flex; align-items: center; gap: .45rem;
+  padding: .6rem 1.05rem; border-radius: 999px; font-weight: 800; font-size: .88rem;
+  background: var(--ink); color: var(--paper-card); white-space: nowrap;
+}
+.resume-card__btn svg { width: 1em; height: 1em; }
+.resume-card:hover .resume-card__btn, .resume-card:focus-visible .resume-card__btn { background: var(--red); }
+@media (max-width: 520px) {
+  .resume-card { flex-wrap: wrap; }
+  .resume-card__btn { width: 100%; justify-content: center; }
+}
+.card__progress { position: absolute; left: 0; right: 0; bottom: 0; height: 5px; background: var(--rule); }
+.card__progress i { display: block; height: 100%; background: linear-gradient(90deg, var(--gold), var(--red)); }
+.card__status {
+  margin-left: auto; font-size: .68rem; font-weight: 800; letter-spacing: .1em;
+  padding: .15rem .55rem; border-radius: 999px;
+  background: var(--gold-soft); color: var(--gold-ink);
+}
+.card__status--done { background: var(--forest); color: #fff; }
+.read-tally { margin: .5rem 0 0; font-size: .85rem; font-weight: 700; color: var(--ink-faint); }
+.resume-toast {
+  position: fixed; left: 50%; bottom: 1.1rem; z-index: 130;
+  transform: translate(-50%, 1.5rem); opacity: 0; pointer-events: none;
+  display: flex; align-items: center; gap: .8rem;
+  max-width: calc(100vw - 1.5rem);
+  padding: .6rem .7rem .6rem 1rem; border-radius: 999px;
+  background: var(--ink); color: var(--paper-card);
+  font-size: .85rem; font-weight: 700; box-shadow: var(--shadow-md);
+  transition: opacity .3s var(--ease), transform .3s var(--ease);
+}
+.resume-toast.is-on { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+.resume-toast button {
+  font: inherit; font-weight: 800; cursor: pointer;
+  padding: .3rem .8rem; border-radius: 999px; border: 0;
+  background: var(--gold); color: var(--ink);
+}
+@media (prefers-reduced-motion: reduce) {
+  .read-progress__fill, .resume-toast { transition: none; }
+}
 </style>
 </head>
 <body>
@@ -1039,6 +1134,9 @@ body.entered .fade-item, body.entered .card-enter {
   </div>
 </header>
 
+<div class="read-progress" id="readProgress" role="progressbar" aria-label="Reading progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="read-progress__fill" id="readProgressFill"></span></div>
+<span class="read-progress__pct" id="readProgressPct" aria-hidden="true">0%</span>
+<div class="resume-toast" id="resumeToast" role="status"><span id="resumeToastText"></span><button type="button" id="resumeToastBtn">Start over</button></div>
 <main id="main">
 
   <!-- =======================================================
@@ -1089,6 +1187,8 @@ body.entered .fade-item, body.entered .card-enter {
       </div>
     </div>
 
+    <div class="shell resume-panel" id="resumePanel" hidden></div>
+
     <div class="shell tabs-row fade-item">
       <div class="tabs" role="tablist" aria-label="Choose a section" id="sectionTabs">
         <button class="tab" type="button" role="tab" id="tab-stories" aria-controls="panel-stories" aria-selected="true" tabindex="0" data-tab="stories">
@@ -1110,6 +1210,7 @@ body.entered .fade-item, body.entered .card-enter {
           Dark India ink washes across each picture left to right &mdash;
           organic, bleeding edges like pigment drinking into paper.
         </p>
+        <p class="read-tally" id="readTally"></p>
       </div>
 
       <div class="grid" id="storyGrid"></div>
@@ -2636,6 +2737,151 @@ const SONG_IMAGE_ALTS = {
   const byId = {};
   STORIES.forEach(function (s, i) { byId[s.id] = { story: s, index: i }; });
 
+  /* Shelf order. STORIES stays in its original order because plate numbers
+     (img/story-N.webp) follow that position; the shelf only decides what the
+     reader sees. Newest tales lead (added 27 Aug 2026, plates refreshed
+     14 Oct); the ten original first-draft tales sit at the bottom. Any story
+     added later and not listed here goes to the very top, newest first. */
+  const SHELF_IDS = [
+    "frog-prince", "elves-and-shoemaker", "jack-and-beanstalk",
+    "emperors-new-clothes", "princess-and-pea",
+    "three-little-pigs", "goldilocks", "little-red-hen", "tortoise-and-hare",
+    "gingerbread-man", "red-riding-hood", "billy-goats-gruff",
+    "chicken-little", "boy-who-cried-wolf", "ugly-duckling"
+  ];
+  const SHELF = STORIES.filter(function (s) { return SHELF_IDS.indexOf(s.id) === -1; }).reverse()
+    .concat(SHELF_IDS.filter(function (id) { return byId[id]; }).map(function (id) { return byId[id].story; }));
+  SHELF.forEach(function (s, i) { byId[s.id].shelf = i; });
+
+  /* ---------- reading progress (localStorage) ---------- */
+  const PROGRESS_KEY = "fbs-progress-v1";
+  const DONE_AT = 0.97;
+  const progressBar = document.getElementById("readProgress");
+  const progressFill = document.getElementById("readProgressFill");
+  const progressPct = document.getElementById("readProgressPct");
+  const resumePanel = document.getElementById("resumePanel");
+  const readTally = document.getElementById("readTally");
+  const toast = document.getElementById("resumeToast");
+  const toastText = document.getElementById("resumeToastText");
+  const toastBtn = document.getElementById("resumeToastBtn");
+  const cardRefs = {};
+  let readingId = null;
+  let restoring = false;
+  let toastTimer = 0;
+
+  function loadProgress() {
+    try {
+      const raw = JSON.parse(localStorage.getItem(PROGRESS_KEY) || "{}");
+      if (!raw || typeof raw !== "object" || Array.isArray(raw)) return {};
+      const out = {};
+      Object.keys(raw).forEach(function (id) {
+        const r = raw[id];
+        if (!byId[id] || !r || typeof r !== "object") return;
+        const p = Number(r.p);
+        if (!isFinite(p)) return;
+        out[id] = { p: Math.min(1, Math.max(0, p)), t: Number(r.t) || 0, done: r.done === true };
+      });
+      return out;
+    } catch (e) { return {}; }
+  }
+  function saveProgress(all) {
+    try { localStorage.setItem(PROGRESS_KEY, JSON.stringify(all)); } catch (e) {}
+  }
+  function resumable(r) { return r && !r.done && r.p >= 0.02 && r.p < DONE_AT; }
+
+  /* how far down the page counts as "read": the top of the closing block */
+  function readRange() {
+    const end = readerView.querySelector(".reader__end");
+    const endTop = end ? end.getBoundingClientRect().top + window.scrollY : document.documentElement.scrollHeight;
+    return Math.max(1, endTop - window.innerHeight * 0.55);
+  }
+  function currentFraction() {
+    return Math.min(1, Math.max(0, window.scrollY / readRange()));
+  }
+  function paintBar(f) {
+    progressFill.style.transform = "scaleX(" + f.toFixed(4) + ")";
+    const pct = Math.round(f * 100);
+    progressBar.setAttribute("aria-valuenow", String(pct));
+    progressPct.textContent = pct + "%";
+  }
+  function trackReading() {
+    if (!readingId) return;
+    /* the browser jumps to the #contents anchor before our hashchange runs;
+       that jump to the top must not overwrite the saved spot */
+    if (window.location.hash !== "#story/" + readingId) return;
+    const f = currentFraction();
+    paintBar(f);
+    if (restoring) return;
+    const all = loadProgress();
+    const prev = all[readingId] || { p: 0, t: 0, done: false };
+    prev.p = f; prev.t = Date.now();
+    if (f >= DONE_AT) prev.done = true;
+    all[readingId] = prev;
+    saveProgress(all);
+  }
+  function showToast(text, withBtn) {
+    toastText.textContent = text;
+    toastBtn.hidden = !withBtn;
+    toast.classList.add("is-on");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toast.classList.remove("is-on"); }, 6000);
+  }
+  /* put the reader back where they were; lazy plates above can shift the
+     page as they load, so re-aim for a short while until layout settles */
+  function restoreScroll(id, saved) {
+    restoring = true;
+    let tries = 0;
+    function aim() {
+      window.scrollTo({ top: saved.p * readRange(), behavior: "auto" });
+      paintBar(currentFraction());
+      if (++tries < 12) setTimeout(aim, 150);
+      else restoring = false;
+    }
+    aim();
+    showToast("Picked up where you left off \u00b7 " + Math.round(saved.p * 100) + "%", true);
+    toastBtn.onclick = function () {
+      restoring = false; tries = 99;
+      window.scrollTo({ top: 0, behavior: "auto" });
+      toast.classList.remove("is-on");
+      trackReading();
+    };
+  }
+  const userIntent = function () { restoring = false; };
+  ["wheel", "touchstart", "keydown", "mousedown"].forEach(function (ev) {
+    window.addEventListener(ev, userIntent, { passive: true });
+  });
+
+  function updateProgressUI() {
+    const all = loadProgress();
+    let doneCount = 0, best = null;
+    SHELF.forEach(function (s) {
+      const r = all[s.id], ref = cardRefs[s.id];
+      if (r && r.done) doneCount++;
+      if (resumable(r) && (!best || r.t > all[best.id].t)) best = s;
+      if (!ref) return;
+      ref.bar.hidden = !(r && (r.done || r.p >= 0.02));
+      ref.fill.style.width = Math.round(((r && (r.done ? 1 : r.p)) || 0) * 100) + "%";
+      ref.status.hidden = ref.bar.hidden;
+      ref.status.className = "card__status" + (r && r.done ? " card__status--done" : "");
+      ref.status.textContent = r && r.done ? "Read \u2713" : (r ? Math.round(r.p * 100) + "% read" : "");
+      ref.cta.firstChild.nodeValue = r && r.done ? "Read again " : (resumable(r) ? "Resume reading " : "Read story ");
+    });
+    readTally.textContent = doneCount ? doneCount + " of " + SHELF.length + " read" : "";
+    if (!best) { resumePanel.hidden = true; resumePanel.innerHTML = ""; return; }
+    const pct = Math.round(all[best.id].p * 100);
+    resumePanel.hidden = false;
+    resumePanel.innerHTML =
+      '<a class="resume-card" id="resumeCard" href="#story/' + best.id + '">' +
+        '<span class="resume-card__thumb" style="--tint:' + best.tint + ';background-image:url(img/story-' + (byId[best.id].index + 1) + '.webp)"></span>' +
+        '<span class="resume-card__text">' +
+          '<span class="resume-card__label">Continue reading</span>' +
+          '<span class="resume-card__title">' + best.title + '</span>' +
+          '<span class="resume-card__meter" aria-hidden="true"><i style="width:' + pct + '%"></i></span>' +
+        '</span>' +
+        '<span class="resume-card__btn">Resume &middot; ' + pct + '% ' + ARROW + '</span>' +
+      '</a>';
+  }
+
   const songById = {};
   SONGS.forEach(function (s, i) { songById[s.id] = { story: s, index: i }; });
 
@@ -2730,7 +2976,7 @@ const SONG_IMAGE_ALTS = {
   function renderLibrary() {
     const cards = document.createDocumentFragment();
 
-    STORIES.forEach(function (story, i) {
+    SHELF.forEach(function (story, i) {
       const card = document.createElement("article");
       card.className = "card card-enter";
       card.style.animationDelay = (0.05 + i * 0.09).toFixed(2) + "s";
@@ -2744,6 +2990,15 @@ const SONG_IMAGE_ALTS = {
         '<p class="card__excerpt">' + story.excerpt + '</p>' +
         '<span class="card__cta" aria-hidden="true">Read story ' + ARROW + '</span>';
       card.appendChild(body);
+      const kick = body.querySelector(".card__kicker");
+      const status = document.createElement("span");
+      status.className = "card__status"; status.hidden = true;
+      kick.appendChild(status);
+      const pbar = document.createElement("div");
+      pbar.className = "card__progress"; pbar.hidden = true;
+      pbar.innerHTML = "<i></i>";
+      card.appendChild(pbar);
+      cardRefs[story.id] = { bar: pbar, fill: pbar.firstChild, status: status, cta: body.querySelector(".card__cta") };
       cards.appendChild(card);
 
     });
@@ -2780,7 +3035,8 @@ const SONG_IMAGE_ALTS = {
     readerView.innerHTML = "";
     const isSong = kind === "song";
     readerView.classList.toggle("reader--song", isSong);
-    const collection = isSong ? SONGS : STORIES;
+    const collection = isSong ? SONGS : SHELF;
+    const pos = isSong ? index : byId[item.id].shelf;
     const backHash = isSong ? "#songs" : "#contents";
     const backLabel = isSong ? "All the songs" : "All the stories";
     const unitLabel = isSong ? "Song " : "Story ";
@@ -2802,7 +3058,7 @@ const SONG_IMAGE_ALTS = {
     const hero = document.createElement("header");
     hero.className = "reader__hero";
     hero.innerHTML =
-      '<p class="reader__kicker"><b>' + unitLabel + ROMAN[index + 1] + '</b><span>' + item.minutes + durationLabel + '</span></p>' +
+      '<p class="reader__kicker"><b>' + unitLabel + ROMAN[pos + 1] + '</b><span>' + item.minutes + durationLabel + '</span></p>' +
       '<h1 class="reader__title" id="readerTitle">' + item.title + '</h1>' +
       '<p class="reader__sub">' + item.subtitle + '</p>' +
       (isSong && item.actions ? '<p class="reader__hint">' + item.actions + '</p>' : '');
@@ -2877,7 +3133,7 @@ const SONG_IMAGE_ALTS = {
     shell.appendChild(bodyEl);
 
     const prev = collection[(index - 1 + collection.length) % collection.length];
-    const next = collection[(index + 1) % collection.length];
+    const next = collection[(pos + 1) % collection.length];
     const hashPrefix = isSong ? "#song/" : "#story/";
     const navLabel = isSong ? "More songs" : "More stories";
     const beforeLabel = isSong ? "Song before" : "Story before";
@@ -2927,6 +3183,10 @@ const SONG_IMAGE_ALTS = {
   function showLibrary(restore, section) {
     readerView.classList.remove("is-active");
     libraryView.classList.add("is-active");
+    readingId = null;
+    progressBar.classList.remove("is-on"); progressPct.classList.remove("is-on");
+    toast.classList.remove("is-on");
+    updateProgressUI();
     setSection(section || currentSection);
     document.title = currentSection === "songs"
       ? "Free Baby Stories · Songs to Sing at Bedtime"
@@ -2948,6 +3208,19 @@ const SONG_IMAGE_ALTS = {
 
     window.scrollTo({ top: 0, behavior: "auto" });
     readerView.focus({ preventScroll: true });
+
+    toast.classList.remove("is-on");
+    if (kind === "song") {
+      readingId = null;
+      progressBar.classList.remove("is-on"); progressPct.classList.remove("is-on");
+    } else {
+      readingId = entry.story.id;
+      progressBar.classList.add("is-on"); progressPct.classList.add("is-on");
+      paintBar(0);
+      const saved = loadProgress()[readingId];
+      restoring = false;
+      if (resumable(saved)) restoreScroll(readingId, saved);
+    }
 
     document.title = entry.story.title + " · Free Baby Stories";
     live.textContent = "Now reading: " + entry.story.title;
@@ -3058,7 +3331,8 @@ const SONG_IMAGE_ALTS = {
     const hash = window.location.hash;
     let collection, entry, prefix;
     if (hash.indexOf("#story/") === 0) {
-      collection = STORIES; entry = byId[hash.slice(7)]; prefix = "#story/";
+      collection = SHELF; entry = byId[hash.slice(7)]; prefix = "#story/";
+      if (entry) entry = { story: entry.story, index: entry.shelf };
     } else if (hash.indexOf("#song/") === 0) {
       collection = SONGS; entry = songById[hash.slice(6)]; prefix = "#song/";
     } else {
@@ -3087,6 +3361,7 @@ const SONG_IMAGE_ALTS = {
       const y = window.scrollY;
       masthead.classList.toggle("is-stuck", y > 12);
       toTop.classList.toggle("is-visible", y > 640);
+      trackReading();
       ticking = false;
     });
   }, { passive: true });
