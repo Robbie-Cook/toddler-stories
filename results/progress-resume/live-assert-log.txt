@@ -1,0 +1,16 @@
+390 order: The Frog Prince | The Elves and the Shoemaker | Jack and the Beanstalk | The Emperor’s New Clothes | The Princess and the Pea | The Three Little Pigs | Goldilocks and the Three Bears | The Little Red Hen | The Tortoise and the Hare | The Gingerbread Man | Little Red Riding Hood | The Three Billy Goats Gruff | Chicken Little | The Boy Who Cried Wolf | The Ugly Duckling | Twinkle, Twinkle, Little Star | Baa, Baa, Black Sheep | The Itsy Bitsy Spider | Row, Row, Row Your Boat | Old MacDonald Had a Farm | Humpty Dumpty | The Wheels on the Bus | Hickory Dickory Dock | Mary Had a Little Lamb | London Bridge Is Falling Down | Jack and Jill | Five Little Ducks | Head, Shoulders, Knees and Toes | Rock-a-bye Baby | This Little Piggy | Sing a Song of Sixpence | Little Bo Peep | Ten in the Bed | The Farmer in the Dell | The North Wind Doth Blow
+390 bar width 0.0 -> 184.2 (vw 390); scrollY 2500; ls {"frog-prince":{"p":0.4721613658683992,"t":1792493999982,"done":false}}
+390 resume panel: CONTINUE READING / The Frog Prince / Resume · 47%
+390 after reload+resume scrollY 2500 (saved 2500) diff 0
+390 hard reload on story hash scrollY 2500
+390 after finishing: resume hidden | tally 1 of 15 read
+390 garbage ls ok, cards=35 errs=0
+390 invalid entries ok, errs=0 resume=true
+1440 order: The Frog Prince | The Elves and the Shoemaker | Jack and the Beanstalk | The Emperor’s New Clothes | The Princess and the Pea | The Three Little Pigs | Goldilocks and the Three Bears | The Little Red Hen | The Tortoise and the Hare | The Gingerbread Man | Little Red Riding Hood | The Three Billy Goats Gruff | Chicken Little | The Boy Who Cried Wolf | The Ugly Duckling | Twinkle, Twinkle, Little Star | Baa, Baa, Black Sheep | The Itsy Bitsy Spider | Row, Row, Row Your Boat | Old MacDonald Had a Farm | Humpty Dumpty | The Wheels on the Bus | Hickory Dickory Dock | Mary Had a Little Lamb | London Bridge Is Falling Down | Jack and Jill | Five Little Ducks | Head, Shoulders, Knees and Toes | Rock-a-bye Baby | This Little Piggy | Sing a Song of Sixpence | Little Bo Peep | Ten in the Bed | The Farmer in the Dell | The North Wind Doth Blow
+1440 bar width 63.8 -> 850.6 (vw 1440); scrollY 2500; ls {"frog-prince":{"p":0.5906500103363752,"t":1792494024034,"done":false}}
+1440 resume panel: CONTINUE READING / The Frog Prince / Resume · 59%
+1440 after reload+resume scrollY 2500 (saved 2500) diff 0
+1440 hard reload on story hash scrollY 2500
+1440 after finishing: resume hidden | tally 1 of 15 read
+1440 garbage ls ok, cards=35 errs=0
+1440 invalid entries ok, errs=0 resume=true
