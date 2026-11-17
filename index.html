@@ -3365,7 +3365,7 @@ const SONG_IMAGE_ALTS = {
     resumePanel.hidden = false;
     resumePanel.innerHTML =
       '<a class="resume-card" id="resumeCard" href="#story/' + best.id + '">' +
-        '<span class="resume-card__thumb" style="--tint:' + best.tint + ';background-image:url(img/story-' + (byId[best.id].index + 1) + '.webp)"></span>' +
+        '<span class="resume-card__thumb" style="--tint:' + best.tint + ';background-image:url(' + cardSrc(byId[best.id].index) + ')"></span>' +
         '<span class="resume-card__text">' +
           '<span class="resume-card__label">Continue reading</span>' +
           '<span class="resume-card__title">' + best.title + '</span>' +
@@ -3402,6 +3402,11 @@ const SONG_IMAGE_ALTS = {
     '<path d="M120 40c0-10 10-14 16-8s-2 16-16 8zM480 40c0-10-10-14-16-8s2 16 16 8z" fill="#C9A85E"/>' +
     '</svg>';
 
+  /* card image for story index: MULTI_IMAGES[idx][0] (stories 16-25 use story-36..45), else story-<n>.webp */
+  function cardSrc(idx) {
+    return (MULTI_IMAGES[idx] && MULTI_IMAGES[idx][0]) ? MULTI_IMAGES[idx][0].src : "img/story-" + (idx + 1) + ".webp";
+  }
+
   /* ---------- plates ---------- */
   function makePlate(item, tag, className, kind) {
     const frame = document.createElement(tag);
@@ -3413,7 +3418,7 @@ const SONG_IMAGE_ALTS = {
       const num = idx + 1;
       const img = document.createElement("img");
       img.className = "story-image ink-processed";
-      img.src = "img/story-" + num + ".webp";
+      img.src = cardSrc(idx);
       img.alt = IMAGE_ALTS[item.id] || ("Illustration for " + item.title);
       img.loading = "lazy";
       img.decoding = "async";
